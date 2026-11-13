@@ -21,3 +21,6 @@ node_modules/
 
 # Configuración local de Claude Code
 .claude/settings.local.json
+
+# Claude Code (skills, agentes y hooks locales)
+.claude/

@@ -1,0 +1,461 @@
+import {
+  cloneElement, useEffect, useId, useRef, useState,
+  type AnchorHTMLAttributes, type ButtonHTMLAttributes, type InputHTMLAttributes, type KeyboardEvent, type ReactElement, type ReactNode,
+  type SelectHTMLAttributes, type TextareaHTMLAttributes,
+} from 'react'
+import './ui.css'
+
+const cx = (...a: (string | false | null | undefined)[]) => a.filter(Boolean).join(' ')
+
+/* ═════════════ ÁTOMOS ═════════════ */
+
+export function Icon({ name, size = 24, className }: { name: string; size?: number; className?: string }) {
+  return <span className={cx('ds-icon', className)} style={{ fontSize: size }} aria-hidden="true">{name}</span>
+}
+
+export type ButtonVariant = 'fill' | 'outline' | 'text' | 'flat' | 'raised'
+export type Size = 'small' | 'medium' | 'big'
+
+export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?: ButtonVariant
+  size?: Size
+  tone?: 'primary' | 'error'
+  icon?: string
+  iconEnd?: string
+  block?: boolean
+}
+export function Button({ variant = 'fill', size = 'medium', tone = 'primary', icon, iconEnd, block, className, children, type = 'button', ...rest }: ButtonProps) {
+  return (
+    <button type={type} className={cx('ds-btn', `ds-btn--${variant}`, size !== 'medium' && `ds-btn--${size}`, tone === 'error' && 'ds-btn--error', block && 'ds-btn--block', className)} {...rest}>
+      {icon && <Icon name={icon} size={18} />}
+      {children}
+      {iconEnd && <Icon name={iconEnd} size={18} />}
+    </button>
+  )
+}
+
+export function IconButton({ icon, label, primary, className, ...rest }: { icon: string; label: string; primary?: boolean } & ButtonHTMLAttributes<HTMLButtonElement>) {
+  return (
+    <button type="button" aria-label={label} title={label} className={cx('ds-iconbtn', primary && 'ds-iconbtn--primary', className)} {...rest}>
+      <Icon name={icon} />
+    </button>
+  )
+}
+
+export function Link({ quiet, className, ...rest }: { quiet?: boolean } & AnchorHTMLAttributes<HTMLAnchorElement>) {
+  return <a className={cx('ds-link', quiet && 'ds-link--quiet', className)} {...rest} />
+}
+
+export function Kbd({ children }: { children: ReactNode }) { return <kbd className="ds-kbd">{children}</kbd> }
+
+export function Divider({ label, vertical }: { label?: string; vertical?: boolean }) {
+  if (vertical) return <span className="ds-divider ds-divider--vertical" role="separator" aria-orientation="vertical" />
+  if (label) return <div className="ds-divider--label t-label-md" role="separator">{label}</div>
+  return <hr className="ds-divider" />
+}
+
+/* Campos */
+interface FieldShellProps {
+  label?: string; help?: string; error?: string; required?: boolean; disabled?: boolean; id: string; children: ReactNode; className?: string
+}
+function FieldShell({ label, help, error, required, disabled, id, children, className }: FieldShellProps) {
+  return (
+    <div className={cx('ds-field', error && 'ds-field--error', disabled && 'ds-field--disabled', className)}>
+      {label && <label className="ds-field__label" htmlFor={id}>{label}{required && <span className="ds-field__req" aria-hidden="true">*</span>}</label>}
+      {children}
+      {(error || help) && <span className="ds-field__help" id={`${id}-help`} role={error ? 'alert' : undefined}>{error ?? help}</span>}
+    </div>
+  )
+}
+
+export interface TextFieldProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> {
+  label?: string; help?: string; error?: string; icon?: string; trailingIcon?: string; size?: Size
+}
+export function TextField({ label, help, error, icon, trailingIcon, size = 'small', required, disabled, id, className, ...rest }: TextFieldProps) {
+  const uid = useId(); const fid = id ?? uid
+  return (
+    <FieldShell {...{ label, help, error, required, disabled }} id={fid} className={className}>
+      <div className={cx('ds-control', size !== 'small' && `ds-control--${size}`)}>
+        {icon && <Icon name={icon} size={20} />}
+        <input id={fid} required={required} disabled={disabled} aria-invalid={!!error} aria-describedby={error || help ? `${fid}-help` : undefined} {...rest} />
+        {trailingIcon && <Icon name={trailingIcon} size={20} />}
+      </div>
+    </FieldShell>
+  )
+}
+
+export function PasswordField({ label, help, error, size = 'small', required, disabled, id, className, autoComplete = 'current-password', ...rest }:
+  Omit<TextFieldProps, 'type' | 'trailingIcon' | 'icon'>) {
+  const [show, setShow] = useState(false)
+  const uid = useId(); const fid = id ?? uid
+  return (
+    <FieldShell {...{ label, help, error, required, disabled }} id={fid} className={className}>
+      <div className={cx('ds-control', size !== 'small' && `ds-control--${size}`)}>
+        <Icon name="lock" size={20} />
+        <input id={fid} type={show ? 'text' : 'password'} required={required} disabled={disabled} autoComplete={autoComplete}
+          aria-invalid={!!error} aria-describedby={error || help ? `${fid}-help` : undefined} {...rest} />
+        <button type="button" className="ds-iconbtn ds-iconbtn--inset" disabled={disabled} aria-label={show ? 'Ocultar contraseña' : 'Mostrar contraseña'} aria-pressed={show} onClick={() => setShow(!show)}>
+          <Icon name={show ? 'visibility_off' : 'visibility'} size={20} />
+        </button>
+      </div>
+    </FieldShell>
+  )
+}
+
+export interface TextAreaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> { label?: string; help?: string; error?: string }
+export function TextArea({ label, help, error, required, disabled, id, className, ...rest }: TextAreaProps) {
+  const uid = useId(); const fid = id ?? uid
+  return (
+    <FieldShell {...{ label, help, error, required, disabled }} id={fid} className={className}>
+      <div className="ds-control ds-control--textarea">
+        <textarea id={fid} required={required} disabled={disabled} aria-invalid={!!error} {...rest} />
+      </div>
+    </FieldShell>
+  )
+}
+
+export interface SelectProps extends Omit<SelectHTMLAttributes<HTMLSelectElement>, 'size'> {
+  label?: string; help?: string; error?: string; size?: Size; options: { value: string; label: string }[]; placeholder?: string
+}
+export function Select({ label, help, error, size = 'small', options, placeholder, required, disabled, id, className, ...rest }: SelectProps) {
+  const uid = useId(); const fid = id ?? uid
+  return (
+    <FieldShell {...{ label, help, error, required, disabled }} id={fid} className={className}>
+      <div className={cx('ds-control', size !== 'small' && `ds-control--${size}`)}>
+        <select id={fid} required={required} disabled={disabled} aria-invalid={!!error} {...rest}>
+          {placeholder && <option value="">{placeholder}</option>}
+          {options.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+        </select>
+        <Icon name="expand_more" size={20} />
+      </div>
+    </FieldShell>
+  )
+}
+
+export function Checkbox({ label, indeterminate, disabled, className, ...rest }: { label: string; indeterminate?: boolean } & InputHTMLAttributes<HTMLInputElement>) {
+  const ref = useRef<HTMLInputElement>(null)
+  useEffect(() => { if (ref.current) ref.current.indeterminate = !!indeterminate }, [indeterminate])
+  return (
+    <label className={cx('ds-choice', disabled && 'ds-choice--disabled', className)}>
+      <input ref={ref} type="checkbox" disabled={disabled} {...rest} />
+      <span className="ds-choice__box"><Icon name={indeterminate ? 'remove' : 'check'} size={16} /></span>
+      {label}
+    </label>
+  )
+}
+
+export function Radio({ label, disabled, className, ...rest }: { label: string } & InputHTMLAttributes<HTMLInputElement>) {
+  return (
+    <label className={cx('ds-choice ds-choice--radio', disabled && 'ds-choice--disabled', className)}>
+      <input type="radio" disabled={disabled} {...rest} />
+      <span className="ds-choice__box" />
+      {label}
+    </label>
+  )
+}
+
+export function Switch({ label, disabled, className, ...rest }: { label: string } & InputHTMLAttributes<HTMLInputElement>) {
+  return (
+    <label className={cx('ds-choice', disabled && 'ds-choice--disabled', className)}>
+      <input type="checkbox" role="switch" disabled={disabled} {...rest} />
+      <span className="ds-switch__track" />
+      {label}
+    </label>
+  )
+}
+
+/* Etiquetas de estado */
+export type TagType = 'general' | 'success' | 'prevent' | 'error' | 'draft'
+export type TagColor = 'red' | 'green' | 'blue' | 'orange' | 'teal' | 'indigo'
+export function StatusTag({ type, color, grey, dot, shape = 'circle', children }: {
+  type?: TagType; color?: TagColor; grey?: boolean; dot?: boolean; shape?: 'circle' | 'square'; children: ReactNode
+}) {
+  const kind = grey ? 'grey' : (color ?? type ?? 'general')
+  return (
+    <span className={cx('ds-tag', `ds-tag--${kind}`)}>
+      {dot && <span className={cx('ds-tag__dot', shape === 'square' && 'ds-tag__dot--square')} />}
+      {children}
+    </span>
+  )
+}
+
+export function Badge({ count, max = 99 }: { count: number; max?: number }) {
+  return <span className="ds-badge" aria-label={`${count} pendientes`}>{count > max ? `${max}+` : count}</span>
+}
+
+export function Chip({ active, small, primitive, icon, onClick, children }: {
+  active?: boolean; small?: boolean; primitive?: boolean; icon?: string; onClick?: () => void; children: ReactNode
+}) {
+  return (
+    <button type="button" aria-pressed={!!active} onClick={onClick}
+      className={cx('ds-chip', small && 'ds-chip--small', primitive && 'ds-chip--primitive', active && 'ds-chip--active')}>
+      {active ? <Icon name="check" size={18} /> : icon && <Icon name={icon} size={18} />}
+      {children}
+    </button>
+  )
+}
+
+export function Avatar({ name, src, size = 40 }: { name: string; src?: string; size?: number }) {
+  const initials = name.split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0]!.toUpperCase()).join('')
+  return (
+    <span className="ds-avatar" style={{ ['--s' as string]: `${size}px` }} role="img" aria-label={name}>
+      {src ? <img src={src} alt="" /> : initials}
+    </span>
+  )
+}
+
+export function Spinner({ size = 24, label = 'Cargando' }: { size?: number; label?: string }) {
+  return <span className="ds-spinner" style={{ ['--s' as string]: `${size}px` }} role="status" aria-label={label} />
+}
+
+export function ProgressBar({ value, vertical, label }: { value: number; vertical?: boolean; label?: string }) {
+  const v = Math.max(0, Math.min(100, value))
+  return (
+    <div className={cx('ds-progress', vertical && 'ds-progress--vertical')} role="progressbar" aria-valuenow={v} aria-valuemin={0} aria-valuemax={100} aria-label={label}>
+      <span style={vertical ? { height: `${v}%` } : { width: `${v}%` }} />
+    </div>
+  )
+}
+
+/** El hijo debe ser un único elemento enfocable: recibe aria-describedby. Escape cierra el tip sin mover el foco (WCAG 1.4.13). */
+export function Tooltip({ text, children }: { text: string; children: ReactElement<{ 'aria-describedby'?: string }> }) {
+  const id = useId()
+  const [dismissed, setDismissed] = useState(false)
+  return (
+    <span className={cx('ds-tooltip', dismissed && 'ds-tooltip--dismissed')}
+      onMouseLeave={() => setDismissed(false)} onBlur={() => setDismissed(false)}
+      onKeyDown={(e) => { if (e.key === 'Escape') setDismissed(true) }}>
+      {cloneElement(children, { 'aria-describedby': id })}
+      <span className="ds-tooltip__tip"><span className="ds-tooltip__text" role="tooltip" id={id}>{text}</span></span>
+    </span>
+  )
+}
+
+/* ═════════════ MOLÉCULAS ═════════════ */
+
+export type MessageType = 'primary' | 'error' | 'prevent' | 'success'
+const messageIcon: Record<MessageType, string> = { primary: 'info', error: 'error', prevent: 'warning', success: 'check_circle' }
+
+export function Message({ type = 'primary', title, children, onClose }: { type?: MessageType; title?: string; children?: ReactNode; onClose?: () => void }) {
+  return (
+    <div className={cx('ds-message', `ds-message--${type}`)} role={type === 'error' ? 'alert' : 'status'}>
+      <Icon name={messageIcon[type]} size={22} />
+      <div className="ds-message__body">
+        {title && <div className="ds-message__title">{title}</div>}
+        {children && <div className="t-body-md">{children}</div>}
+      </div>
+      {onClose && <IconButton icon="close" label="Cerrar" onClick={onClose} style={{ width: 28, height: 28, color: 'inherit' }} />}
+    </div>
+  )
+}
+
+export function Snackbar({ type, children, action, onAction }: { type?: 'error' | 'prevent'; children: ReactNode; action?: string; onAction?: () => void }) {
+  return (
+    <div className={cx('ds-snackbar', type && `ds-snackbar--${type}`)} role="status">
+      <span className="t-body-md">{children}</span>
+      {action && <Button variant="text" size="small" onClick={onAction}>{action}</Button>}
+    </div>
+  )
+}
+
+/** Patrón APG: una sola pestaña en el orden de tabulación; ←/→/Inicio/Fin mueven y activan. Con `idPrefix`, enlaza cada pestaña con su <TabPanel>. */
+export function Tabs({ tabs, value, onChange, pill, label, idPrefix }: {
+  tabs: { id: string; label: string; disabled?: boolean }[]; value: string; onChange: (id: string) => void; pill?: boolean; label?: string; idPrefix?: string
+}) {
+  const refs = useRef<Record<string, HTMLButtonElement | null>>({})
+  const enabled = tabs.filter((t) => !t.disabled)
+  const onKey = (e: KeyboardEvent<HTMLButtonElement>) => {
+    const i = enabled.findIndex((t) => t.id === value)
+    let next: number | null = null
+    if (e.key === 'ArrowRight') next = (i + 1) % enabled.length
+    else if (e.key === 'ArrowLeft') next = (i - 1 + enabled.length) % enabled.length
+    else if (e.key === 'Home') next = 0
+    else if (e.key === 'End') next = enabled.length - 1
+    if (next === null) return
+    e.preventDefault()
+    const t = enabled[next]!
+    onChange(t.id); refs.current[t.id]?.focus()
+  }
+  return (
+    <div className={cx('ds-tabs', pill && 'ds-tabs--pill')} role="tablist" aria-label={label}>
+      {tabs.map((t) => (
+        <button key={t.id} ref={(el) => { refs.current[t.id] = el }} type="button" role="tab" className="ds-tab"
+          id={idPrefix ? `${idPrefix}-tab-${t.id}` : undefined} aria-controls={idPrefix ? `${idPrefix}-panel-${t.id}` : undefined}
+          aria-selected={value === t.id} tabIndex={value === t.id ? 0 : -1} disabled={t.disabled} onKeyDown={onKey} onClick={() => onChange(t.id)}>{t.label}</button>
+      ))}
+    </div>
+  )
+}
+
+export function TabPanel({ idPrefix, id, value, children }: { idPrefix: string; id: string; value: string; children: ReactNode }) {
+  return <div role="tabpanel" id={`${idPrefix}-panel-${id}`} aria-labelledby={`${idPrefix}-tab-${id}`} hidden={value !== id} tabIndex={0}>{children}</div>
+}
+
+export function Pagination({ page, pages, onChange }: { page: number; pages: number; onChange: (p: number) => void }) {
+  const items: (number | '…')[] = []
+  for (let p = 1; p <= pages; p++) {
+    if (p === 1 || p === pages || Math.abs(p - page) <= 1) items.push(p)
+    else if (items[items.length - 1] !== '…') items.push('…')
+  }
+  return (
+    <nav className="ds-pagination" aria-label="Paginación">
+      <IconButton icon="chevron_left" label="Anterior" disabled={page === 1} onClick={() => onChange(page - 1)} />
+      {items.map((it, i) => it === '…'
+        ? <span key={`e${i}`} className="t-body-md" style={{ padding: '0 4px' }}>…</span>
+        : <button key={it} type="button" className="ds-page" aria-current={it === page ? 'page' : undefined} onClick={() => onChange(it)}>{it}</button>)}
+      <IconButton icon="chevron_right" label="Siguiente" disabled={page === pages} onClick={() => onChange(page + 1)} />
+    </nav>
+  )
+}
+
+export function Card({ title, children, media, horizontal, interactive, actions, onClick }: {
+  title: string; children?: ReactNode; media?: ReactNode; horizontal?: boolean; interactive?: boolean; actions?: ReactNode; onClick?: () => void
+}) {
+  return (
+    <article className={cx('ds-card', horizontal && 'ds-card--horizontal', interactive && 'ds-card--interactive')} tabIndex={interactive ? 0 : undefined}
+      role={interactive ? 'link' : undefined} onClick={onClick} onKeyDown={interactive ? (e) => { if (e.key === 'Enter') onClick?.() } : undefined}>
+      {media && <div className="ds-card__media">{media}</div>}
+      <div className="ds-card__body">
+        <h3 className="t-title-md">{title}</h3>
+        {children && <p className="t-body-md">{children}</p>}
+        {actions && <div className="ds-card__actions" style={{ padding: 0, marginTop: 'auto' }}>{actions}</div>}
+      </div>
+    </article>
+  )
+}
+
+export function MenuItem({ icon, children, active, disabled, small, badge, onClick }: {
+  icon?: string; children: ReactNode; active?: boolean; disabled?: boolean; small?: boolean; badge?: number; onClick?: () => void
+}) {
+  return (
+    <button type="button" className={cx('ds-menuitem', small && 'ds-menuitem--small')} aria-current={active ? 'page' : undefined} disabled={disabled} onClick={onClick} title={typeof children === 'string' ? children : undefined}>
+      {icon && <Icon name={icon} />}
+      <span className="ds-menuitem__label">{children}</span>
+      {badge ? <Badge count={badge} /> : null}
+    </button>
+  )
+}
+
+export function Accordion({ title, defaultOpen, children }: { title: string; defaultOpen?: boolean; children: ReactNode }) {
+  const [open, setOpen] = useState(!!defaultOpen)
+  const id = useId()
+  return (
+    <div className="ds-accordion">
+      <button type="button" className="ds-accordion__head" aria-expanded={open} aria-controls={id} onClick={() => setOpen(!open)}>
+        {title}<Icon name="expand_more" />
+      </button>
+      {open && <div className="ds-accordion__panel" id={id}>{children}</div>}
+    </div>
+  )
+}
+
+export function Breadcrumb({ items }: { items: (string | { label: string; href: string })[] }) {
+  const list = items.map((it) => (typeof it === 'string' ? { label: it, href: '#' } : it))
+  return (
+    <nav aria-label="Ruta de navegación">
+      <ol className="ds-breadcrumb">
+        {list.map((it, i) => (
+          <li key={it.label} style={{ display: 'contents' }}>
+            {i === list.length - 1
+              ? <span aria-current="page">{it.label}</span>
+              : <><a href={it.href} onClick={it.href === '#' ? (e) => e.preventDefault() : undefined}>{it.label}</a><Icon name="chevron_right" size={16} /></>}
+          </li>
+        ))}
+      </ol>
+    </nav>
+  )
+}
+
+export function ProgressSteps({ steps, current }: { steps: string[]; current: number }) {
+  return (
+    <ol className="ds-steps" aria-label="Progreso">
+      {steps.map((s, i) => (
+        <li key={s} className="ds-steps__item">
+          <div className={cx('ds-step', i < current && 'ds-step--done', i === current && 'ds-step--current')} aria-current={i === current ? 'step' : undefined}>
+            <span className="ds-step__dot">{i < current ? <Icon name="check" size={16} /> : i + 1}</span><span className="ds-step__label">{s}</span>
+          </div>
+          {i < steps.length - 1 && <span className={cx('ds-step__line', i < current && 'ds-step__line--done')} />}
+        </li>
+      ))}
+    </ol>
+  )
+}
+
+export function ItemList({ items }: { items: { title: string; meta: string; tag?: ReactNode }[] }) {
+  return (
+    <ul className="ds-itemlist">
+      {items.map((it) => (
+        <li key={it.title}>
+          <div className="ds-itemlist__main"><strong className="t-title-sm">{it.title}</strong><span>{it.meta}</span></div>
+          {it.tag}
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+/* ═════════════ ORGANISMOS ═════════════ */
+
+export function Modal({ open, title, onClose, children, footer, small }: {
+  open: boolean; title: string; onClose: () => void; children: ReactNode; footer?: ReactNode; small?: boolean
+}) {
+  const id = useId()
+  const ref = useRef<HTMLDialogElement>(null)
+  useEffect(() => {
+    const d = ref.current
+    if (!d) return
+    if (open && !d.open) d.showModal()
+    if (!open && d.open) d.close()
+  }, [open])
+  return (
+    <dialog ref={ref} className={cx('ds-modal', small && 'ds-modal--small')} aria-labelledby={id}
+      onCancel={(e) => { e.preventDefault(); onClose() }}
+      onClick={(e) => { if (e.target === e.currentTarget) onClose() }}>
+      {open && (
+        <>
+          <div className="ds-modal__head">
+            <h2 id={id} className="t-headline-sm" style={{ margin: 0 }}>{title}</h2>
+            <IconButton icon="close" label="Cerrar" onClick={onClose} />
+          </div>
+          <div className="ds-modal__body t-body-md">{children}</div>
+          {footer && <div className="ds-modal__foot">{footer}</div>}
+        </>
+      )}
+    </dialog>
+  )
+}
+
+export function ConfirmDialog({ open, title, message, confirmLabel = 'Confirmar', cancelLabel = 'Cancelar', danger, onConfirm, onCancel }: {
+  open: boolean; title: string; message: string; confirmLabel?: string; cancelLabel?: string; danger?: boolean; onConfirm: () => void; onCancel: () => void
+}) {
+  return (
+    <Modal open={open} small title={title} onClose={onCancel}
+      footer={<><Button variant="text" onClick={onCancel}>{cancelLabel}</Button><Button tone={danger ? 'error' : 'primary'} onClick={onConfirm}>{confirmLabel}</Button></>}>
+      {message}
+    </Modal>
+  )
+}
+
+export function Navbar({ items, active, onSelect, compress, brand = 'Kanoa Lab' }: {
+  items: { id: string; icon: string; label: string; badge?: number }[]; active: string; onSelect: (id: string) => void; compress?: boolean; brand?: string
+}) {
+  return (
+    <nav className={cx('ds-navbar', compress && 'ds-navbar--compress')} aria-label="Principal">
+      <div className="ds-navbar__brand"><Icon name="school" size={28} /><span className="t-title-md ds-navbar__name">{brand}</span></div>
+      {items.map((it) => (
+        <MenuItem key={it.id} icon={it.icon} badge={compress ? undefined : it.badge} active={active === it.id} onClick={() => onSelect(it.id)}>{it.label}</MenuItem>
+      ))}
+    </nav>
+  )
+}
+
+export function Header({ title, user, onMenu, actions, titleAs: Title = 'h1' }: { title: string; user?: string; onMenu?: () => void; actions?: ReactNode; titleAs?: 'h1' | 'h2' | 'p' }) {
+  return (
+    <header className="ds-header">
+      {onMenu && <IconButton icon="menu" label="Menú" onClick={onMenu} />}
+      <Title className="ds-header__title t-title-lg" style={{ margin: 0 }}>{title}</Title>
+      {actions}
+      {user && <Avatar name={user} size={36} />}
+    </header>
+  )
+}

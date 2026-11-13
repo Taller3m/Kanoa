@@ -1,0 +1,14 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "overused-font",
+        "value": "roboto",
+        "createdAt": "2026-11-13T21:22:50.927Z",
+        "reason": "Roboto es la familia única definida por el sistema StudIA 2.0 (Tokens/DESIGN 1.md §4); decisión del sistema de diseño, no confirmada por el usuario en esta sesión"
+      }
+    ]
+  }
+}

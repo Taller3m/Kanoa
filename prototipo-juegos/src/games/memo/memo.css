@@ -1,0 +1,89 @@
+/* Editor de Memoria — solo tokens del sistema */
+.me { container-type: inline-size; display: flex; flex-direction: column; gap: var(--space-6); color: var(--on-surface); }
+.me h2, .me h3, .me p { margin: 0; }
+.me-h2 { color: var(--title); }
+.me-group { display: flex; flex-direction: column; gap: var(--space-2); }
+.me-label { color: var(--on-surface); }
+.me-req { color: var(--error); }
+.me-help { color: var(--muted); max-width: 80ch; text-wrap: pretty; }
+.me-muted { color: var(--on-surface-variant); font-weight: 400; }
+.me-row-wrap { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); }
+.me-split { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-4); }
+.me-inline { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
+.me-grow { flex: 1; min-width: 0; }
+.me-w-select { width: 160px; }
+.me-w-num { width: 96px; }
+
+.me-sr { position: absolute; opacity: 0; width: 1px; height: 1px; margin: 0; pointer-events: none; }
+
+/* Paneles de primer nivel (sin anidar tarjetas) */
+.me-panel { display: flex; flex-direction: column; gap: var(--space-3); padding: var(--space-4) var(--space-5);
+  border: 1px solid var(--outline-variant); border-radius: var(--radius-md); background: var(--surface-container-low); }
+
+.me-grid { display: grid; gap: var(--space-3); }
+.me-grid--modos { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+.me-grid--rep { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); max-width: 640px; }
+.me-grid--cfg { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-4); }
+
+/* Opciones (radios nativos) */
+.me-opt { position: relative; cursor: pointer; display: inline-flex; align-items: center; gap: var(--space-2);
+  border: 1px solid var(--outline-variant); background: var(--surface-container-lowest); color: var(--on-surface);
+  transition: background var(--motion-fast) var(--ease), border-color var(--motion-fast) var(--ease); }
+.me-opt:hover { background: var(--surface-tint-8-); }
+.me-opt:has(input:checked) { background: var(--secondary-container); color: var(--on-secondary-container); border-color: var(--primary); box-shadow: 0 0 0 1px var(--primary); }
+.me-opt:has(input:focus-visible) { outline: 2px solid var(--primary); outline-offset: 2px; }
+.me-opt:has(input:checked) .me-muted { color: inherit; }
+.me-opt--card { flex-direction: column; align-items: flex-start; gap: var(--space-1); padding: var(--space-4); border-radius: var(--radius-md); }
+.me-opt--pill { min-height: var(--size-button-medium); padding: 0 var(--space-5); border-radius: var(--radius-full); font: 500 14px/20px var(--font-family); color: var(--primary); }
+.me-opt--pill:has(input:checked) { color: var(--on-secondary-container); }
+.me-seg { display: inline-flex; gap: var(--space-1); padding: var(--space-1); border: 1px solid var(--outline-variant); border-radius: var(--radius-full); }
+.me-seg .me-opt--pill { border-color: transparent; background: transparent; min-height: 32px; padding: 0 var(--space-4); }
+.me-seg .me-opt--pill:hover { background: var(--surface-tint-8-); }
+.me-seg .me-opt--pill:has(input:checked) { background: var(--secondary-container); border-color: transparent; box-shadow: none; }
+
+/* Tabla de parejas */
+.me-table { border: 1px solid var(--outline-variant); border-radius: var(--radius-md); overflow: hidden; background: var(--surface-container-lowest); }
+.me-tr { display: grid; grid-template-columns: 96px minmax(200px, 1fr) minmax(200px, 1fr); gap: var(--space-4); align-items: center;
+  padding: var(--space-3) var(--space-5); border-top: 1px solid var(--outline-variant); }
+.me-table--cada .me-tr { grid-template-columns: 96px minmax(200px, 1fr) minmax(200px, 1fr) minmax(200px, 1fr); }
+.me-tr--head { border-top: 0; background: var(--surface-container); color: var(--on-surface); font: 500 14px/20px var(--font-family); }
+.me-td { min-width: 0; display: flex; flex-direction: column; gap: var(--space-1); }
+.me-td--n { flex-direction: row; align-items: center; gap: var(--space-2); }
+.me-carta { display: flex; align-items: center; gap: var(--space-2); min-width: 0; }
+.me-carta > .ds-field { flex: 1; min-width: 0; }
+.me-lbl { display: none; font: 500 12px/16px var(--font-family); letter-spacing: .5px; color: var(--on-surface-variant); }
+
+.me-dot { width: 10px; height: 10px; border-radius: 50%; flex: none; }
+.me-dot--ok { background: var(--success); }
+.me-dot--no { background: var(--prevent); }
+
+/* Archivo simulado */
+.me-file { display: inline-flex; align-items: center; gap: var(--space-2); flex: 1; min-width: 0; min-height: var(--size-input-small);
+  padding: 0 var(--space-3); border-radius: var(--radius-sm); cursor: pointer; font: 500 13px/20px var(--font-family);
+  border: 1px dashed var(--primary); background: transparent; color: var(--primary); text-align: left; }
+.me-file:hover { background: var(--surface-tint-8-); }
+.me-file:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+.me-file--set { border-style: solid; border-color: var(--outline); background: var(--surface-container-lowest); color: var(--on-surface); font-weight: 400; }
+.me-file--emo { flex: none; max-width: 170px; }
+.me-file__t { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* Emoji de emoción con categoría de color (tonos categóricos del sistema) */
+.me-emo { flex: none; width: 40px; height: 40px; border-radius: var(--radius-sm); display: grid; place-items: center; font-size: 22px; line-height: 1;
+  background: var(--surface-container); color: var(--on-surface); }
+.me-emo--joy { background: var(--prevent-container); color: var(--on-prevent-container); }
+.me-emo--trust { background: var(--green-soft); color: var(--on-green-soft); }
+.me-emo--fear { background: var(--teal-soft); color: var(--on-teal-soft); }
+.me-emo--surprise { background: var(--primary-container); color: var(--on-primary-container); }
+.me-emo--sad { background: var(--blue-soft); color: var(--on-blue-soft); }
+.me-emo--disgust { background: var(--indigo-soft); color: var(--on-indigo-soft); }
+.me-emo--anger { background: var(--red-soft); color: var(--on-red-soft); }
+.me-emo--antic { background: var(--orange-soft); color: var(--on-orange-soft); }
+
+/* Móvil: filas apiladas */
+@container (max-width: 720px) {
+  .me-tr--head { display: none; }
+  .me-tr, .me-table--cada .me-tr { grid-template-columns: 1fr; gap: var(--space-3); padding: var(--space-4); }
+  .me-lbl { display: block; }
+  .me-td--n { padding-bottom: var(--space-1); }
+}
+@media (prefers-reduced-motion: reduce) { .me-opt { transition: none; } }

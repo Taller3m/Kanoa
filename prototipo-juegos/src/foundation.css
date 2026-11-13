@@ -1,0 +1,77 @@
+/* Fundamentos StudIA 2.0 — fuente: Tokens/DESIGN 1.md (§4 tipografía, §5 elevación, §6 forma, §7 espaciado) */
+:root {
+  /* Forma (EfectStyles/border-radius) */
+  --radius-none: 0px;
+  --radius-sm: 4px;      /* almostRounded: inputs, chips pequeños */
+  --radius-md: 20px;     /* semiRounded: cards, modales */
+  --radius-full: 100px;  /* rounded: botones, tags, avatares */
+
+  /* Espaciado (escala 4·8·12·16·24·40) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 40px;
+
+  /* Tamaños de componente (TokensSizes) */
+  --size-icon-small: 12px;
+  --size-icon-medium: 18px;
+  --size-icon-big: 24px;
+  --size-icon-super: 36px;
+  --size-button-small: 40px;   /* 20 de línea + 2×10 */
+  --size-button-medium: 44px;  /* 20 + 2×12 */
+  --size-button-big: 48px;     /* 20 + 2×14 */
+  --size-input-small: 44px;
+  --size-input-medium: 58px;
+  --size-input-big: 70px;
+
+  /* Elevación */
+  --elevation-1: 0 1px 3px 1px rgba(0,0,0,.15), 0 1px 2px rgba(0,0,0,.30);
+  --elevation-2: 0 2px 6px 2px rgba(0,0,0,.15), 0 1px 2px rgba(0,0,0,.30);
+  --shadow-card: 0 8px 18px 1px var(--on-surface---5);
+  --shadow-card-hover: 0 8px 18px 3px var(--on-surface---8);
+
+  /* Movimiento */
+  --motion-fast: 120ms;
+  --motion-base: 200ms;
+  --ease: cubic-bezier(.2, 0, 0, 1);
+
+  /* Tipografía */
+  --font-family: Roboto, system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; font: 400 14px/20px var(--font-family); letter-spacing: .25px;
+  background: var(--background); color: var(--on-background); -webkit-font-smoothing: antialiased; }
+button, input, select, textarea { font-family: inherit; }
+
+.t-display-lg { font: 400 57px/64px var(--font-family); letter-spacing: -.25px; }
+.t-display-md { font: 400 45px/52px var(--font-family); }
+.t-display-sm { font: 400 36px/44px var(--font-family); }
+.t-headline-lg { font: 400 32px/40px var(--font-family); }
+.t-headline-md { font: 400 28px/36px var(--font-family); }
+.t-headline-sm { font: 400 24px/32px var(--font-family); }
+.t-title-lg { font: 400 22px/28px var(--font-family); }
+.t-title-md { font: 500 16px/24px var(--font-family); letter-spacing: .15px; }
+.t-title-sm { font: 500 14px/20px var(--font-family); letter-spacing: .1px; }
+.t-body-lg { font: 400 16px/24px var(--font-family); letter-spacing: .5px; }
+.t-body-md { font: 400 14px/20px var(--font-family); letter-spacing: .25px; }
+.t-body-sm { font: 400 12px/16px var(--font-family); letter-spacing: .4px; }
+.t-label-lg { font: 500 14px/20px var(--font-family); letter-spacing: .1px; }
+.t-label-md { font: 500 12px/16px var(--font-family); letter-spacing: .5px; }
+.t-label-sm { font: 500 11px/16px var(--font-family); letter-spacing: .5px; }
+
+.light { color-scheme: light; }
+.dark { color-scheme: dark; }
+:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+/* Superficies del navegador tematizadas con la paleta */
+::selection { background: var(--primary-container); color: var(--on-primary-container); }
+input, textarea { caret-color: var(--primary); }
+* { scrollbar-color: var(--outline-variant) transparent; }
+/* Movimiento reducido: se quitan transiciones y entradas; el spinner conserva su giro porque comunica «cargando» */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: .01ms !important; }
+  .ds-modal[open] { animation: none; }
+  .ds-spinner { animation-duration: 1.6s; }
+}
