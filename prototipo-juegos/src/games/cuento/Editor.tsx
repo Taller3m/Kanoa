@@ -109,10 +109,10 @@ export function CuentoEditor({ game, update, toast }: EditorProps) {
               <div className="t-label-lg" id={`${uid}-img`}>Ilustración <span className="cu__req" aria-hidden="true">*</span></div>
               {!p.img ? (
                 <>
-                  <button type="button" className={`cu-drop${drag ? ' is-over' : ''}`} aria-labelledby={`${uid}-img`} aria-describedby={`${uid}-imgh`}
+                  <button type="button" className={`cu-drop${drag ? ' is-over' : ''}`} aria-labelledby={`${uid}-imgm ${uid}-imgh`} aria-describedby={`${uid}-img`}
                     onClick={() => imgRef.current?.click()}
                     onDragOver={(e) => { e.preventDefault(); setDrag(true) }} onDragLeave={() => setDrag(false)} onDrop={onDrop}>
-                    <span className="cu-drop__main t-label-lg"><Icon name="add_photo_alternate" size={20} />Añadir imagen</span>
+                    <span className="cu-drop__main t-label-lg" id={`${uid}-imgm`}><Icon name="add_photo_alternate" size={20} />Añadir imagen</span>
                     <span className="t-body-sm cu__muted" id={`${uid}-imgh`}>.jpg, .jpeg o .png · hasta 10 MB · también puedes arrastrarla aquí</span>
                   </button>
                   <input ref={imgRef} type="file" className="cu__hidden" tabIndex={-1} aria-hidden="true" accept=".jpg,.jpeg,.png,image/jpeg,image/png" onChange={onImgChange} />

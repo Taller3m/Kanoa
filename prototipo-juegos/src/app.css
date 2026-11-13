@@ -1,4 +1,5 @@
 /* Shell y pantallas del prototipo — solo tokens del sistema StudIA 2.0 */
+:root { --content-max: 1280px; }
 .app { display: grid; grid-template-columns: 88px minmax(0, 1fr); min-height: 100vh; background: var(--background); }
 
 /* Riel de navegación */
@@ -15,13 +16,13 @@
 .rail__label { text-align: center; padding: 0 2px; }
 
 /* Contenido */
-.main { min-width: 0; display: flex; flex-direction: column; padding: var(--space-5) var(--space-6) 96px; gap: var(--space-4); }
+.main { width: 100%; max-width: var(--content-max); margin-inline: auto; container-type: inline-size; container-name: main; min-width: 0; display: flex; flex-direction: column; padding: var(--space-5) var(--space-6) 96px; gap: var(--space-4); }
 .crumbs { color: var(--on-surface-variant); }
 .band { display: flex; align-items: center; gap: var(--space-4); flex-wrap: wrap; padding: var(--space-5) var(--space-5);
   border-radius: var(--radius-md); background: var(--primary-container); color: var(--on-primary-container); }
 .band__title { flex: 1; min-width: 200px; display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap; margin: 0; color: var(--on-primary-container); }
 .band__actions { display: flex; align-items: center; gap: var(--space-2); }
-.band .ds-btn--outline { border-color: var(--primary); }
+.band .ds-btn--outline { color: var(--on-primary-container); border-color: var(--on-primary-container); } /* texto sobre el contenedor primario usa su par on-* */
 
 .screen { display: flex; flex-direction: column; gap: var(--space-5); }
 .screen__lead { margin: 0; color: var(--paragraph); max-width: 70ch; }
@@ -60,14 +61,20 @@
 .menu .ds-menuitem--danger { color: var(--error); }
 
 /* Selección de tipo */
-.options { display: flex; flex-direction: column; gap: var(--space-2); max-width: 720px; }
-.option { display: flex; align-items: center; gap: var(--space-4); width: 100%; padding: var(--space-3) var(--space-4); text-align: left; cursor: pointer;
-  border: 1px solid var(--outline-variant); border-radius: var(--radius-md); background: var(--surface-container-lowest); color: var(--on-surface);
-  transition: background var(--motion-fast) var(--ease), border-color var(--motion-fast) var(--ease); }
-.option:hover { background: var(--surface-tint-8-); border-color: var(--primary); }
+.options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4); }
+.option { --tone-bg: var(--blue-soft); --tone-fg: var(--on-blue-soft); display: flex; align-items: center; gap: var(--space-4); width: 100%; min-height: 0; padding: var(--space-4);
+  text-align: left; cursor: pointer; border: 1px solid var(--outline-variant); border-radius: var(--radius-md); background: var(--surface-container-lowest); color: var(--on-surface);
+  transition: background var(--motion-fast) var(--ease), border-color var(--motion-fast) var(--ease), box-shadow var(--motion-fast) var(--ease); }
+.option:hover { background: var(--surface-tint-8-); border-color: var(--tone-fg); box-shadow: var(--shadow-card); }
+.option--blue { --tone-bg: var(--blue-soft); --tone-fg: var(--on-blue-soft); }
+.option--orange { --tone-bg: var(--orange-soft); --tone-fg: var(--on-orange-soft); }
+.option--indigo { --tone-bg: var(--indigo-soft); --tone-fg: var(--on-indigo-soft); }
+.option--green { --tone-bg: var(--green-soft); --tone-fg: var(--on-green-soft); }
+.option__icon { display: grid; place-items: center; flex: none; width: 52px; height: 52px; border-radius: var(--radius-md); background: var(--tone-bg); color: var(--tone-fg); }
+.option__text { display: flex; flex-direction: column; gap: var(--space-1); min-width: 0; }
 .option strong { display: block; color: var(--title); font-weight: 500; }
 .option span.desc { color: var(--paragraph); }
-.option .ds-icon:last-child { margin-left: auto; color: var(--on-surface-variant); }
+.option > .ds-icon { margin-left: auto; color: var(--on-surface-variant); }
 
 /* Asistente */
 .stepper { display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap; }
@@ -104,3 +111,14 @@
 
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 .filters__search { min-width: 280px; }
+
+/* Responsive por ancho del contenedor (no del viewport): los componentes se adaptan al espacio que realmente tienen */
+@container main (max-width: 720px) {
+  .options { grid-template-columns: 1fr; }
+  .filters .ds-field, .filters__search { min-width: 0; flex: 1 1 100%; }
+  .screen__bar { align-items: stretch; }
+  .screen__bar .ds-btn { width: 100%; }
+  .band { padding: var(--space-4); }
+  .band__actions { width: 100%; justify-content: flex-end; }
+  .form__actions .ds-btn { width: 100%; }
+}

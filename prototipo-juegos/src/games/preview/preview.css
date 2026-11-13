@@ -1,0 +1,10 @@
+/* Vista previa de juegos — solo tokens StudIA 2.0 */
+.pv-head { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); padding-bottom: var(--space-3); margin-bottom: var(--space-4); border-bottom: 1px solid var(--outline-variant); }
+.pv-head__tipo { color: var(--on-surface-variant); }
+.pv-head__nombre { color: var(--title); }
+.pv-center { display: flex; flex-direction: column; align-items: center; gap: var(--space-3); text-align: center; padding: var(--space-5) var(--space-3); max-width: 560px; margin: 0 auto; }
+.pv-title { margin: 0; color: var(--title); }
+.pv-text { margin: 0; color: var(--paragraph); }
+.pv-muted { margin: 0; color: var(--muted); }
+.pv-actions { display: flex; flex-wrap: wrap; gap: var(--space-3); justify-content: center; margin-top: var(--space-2); }
+.pv-stage { min-width: 0; }

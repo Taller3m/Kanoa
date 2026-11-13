@@ -32,11 +32,11 @@ export function Asistente({ game, paso, setPaso, nombreErr, update, toast, clear
         <div className="form">
           <h2 className="t-headline-sm">Detalles del juego</h2>
           <TextField label="Nombre del juego" required maxLength={80} placeholder="Ej. El café colombiano" value={game.nombre}
-            error={nombreErr ? 'El nombre es obligatorio (mínimo 3 caracteres).' : undefined}
-            help={`${game.nombre.length}/80`}
+            error={nombreErr ? (game.nombre.trim() ? 'La información ingresada en este campo debe contener al menos 3 caracteres.' : 'La información de este campo es obligatoria.') : undefined}
+            counter={`${game.nombre.length}/80`}
             onChange={(e) => { const v = e.target.value; update((d) => { d.nombre = v }); clearNombreErr() }} />
           <TextArea label="Instrucciones para el jugador (opcional)" maxLength={300} rows={3} placeholder="Ej. Lee cada pista y escribe la palabra en el tablero."
-            value={game.desc} help={`${game.desc.length}/300`} onChange={(e) => { const v = e.target.value; update((d) => { d.desc = v }) }} />
+            value={game.desc} counter={`${game.desc.length}/300`} onChange={(e) => { const v = e.target.value; update((d) => { d.desc = v }) }} />
           <TextField label="Mensaje de cierre (opcional)" maxLength={150} placeholder="¡Gracias por jugar! Sigue explorando esta sección."
             value={game.cierre} help="Se muestra al terminar el juego, junto a los botones VOLVER A JUGAR e IR AL INICIO. Si lo dejas vacío, se usa el mensaje por defecto."
             onChange={(e) => { const v = e.target.value; update((d) => { d.cierre = v }) }} />

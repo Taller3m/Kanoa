@@ -1,0 +1,49 @@
+.ccp { display: flex; flex-direction: column; gap: var(--space-4); color: var(--on-surface); }
+.ccp-top { display: flex; justify-content: space-between; align-items: center; gap: var(--space-3); flex-wrap: wrap; }
+.ccp-top__t { font-size: 0.95rem; font-weight: 700; }
+.ccp-note { text-align: center; color: var(--muted); font-size: 0.875rem; margin: var(--space-3) 0 0; }
+.ccp-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+.ccp-day { height: 8px; border-radius: var(--radius-full); background: var(--surface-container-high); overflow: hidden; }
+.ccp-day__fill { height: 100%; background: var(--secondary-container); transition: width 0.5s linear; }
+.ccp-day__fill--night { background: var(--on-indigo-soft); }
+
+.ccp-scene { position: relative; min-height: 280px; border-radius: var(--radius-md); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--space-3); overflow: hidden;
+  background: var(--blue-soft); color: var(--on-blue-soft); }
+.ccp-scene--night { background: var(--on-indigo-soft); color: var(--indigo-soft); }
+.ccp-sky { position: absolute; top: var(--space-3); right: var(--space-4); font-size: 26px; }
+.ccp-bubble-slot { position: absolute; top: var(--space-4); left: 0; right: 0; display: flex; justify-content: center; padding: 0 var(--space-3); pointer-events: none; }
+.ccp-bubble { background: var(--surface-container-lowest); color: var(--on-surface); border: 1px solid var(--outline-variant); border-radius: var(--radius-md); padding: var(--space-2) var(--space-4); font-size: 0.875rem; font-weight: 700; text-align: center; }
+.ccp-being { line-height: 1; transition: font-size 0.4s; }
+.ccp-being--0 { font-size: 64px; }
+.ccp-being--1 { font-size: 92px; }
+.ccp-being--2 { font-size: 116px; }
+.ccp-being--bad { filter: grayscale(0.7) brightness(0.85); }
+.ccp-stage-name { font-size: 0.8125rem; font-weight: 700; color: var(--on-surface); background: var(--surface-container-lowest); border-radius: var(--radius-full); padding: var(--space-1) var(--space-3); }
+
+.ccp-ov { position: absolute; inset: 0; background: var(--on-surface---30); display: flex; align-items: center; justify-content: center; padding: var(--space-5); }
+.ccp-ov__card { background: var(--surface-container-lowest); color: var(--on-surface); border-radius: var(--radius-md); padding: var(--space-5); max-width: 380px; text-align: center; display: flex; flex-direction: column; gap: var(--space-3); align-items: center; }
+.ccp-ov__t { margin: 0; font-size: 1.2rem; font-weight: 800; }
+.ccp-ov__d { margin: 0; font-size: 0.875rem; line-height: 1.5; color: var(--paragraph); }
+
+.ccp-final { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); flex-wrap: wrap; padding: var(--space-4) var(--space-5);
+  background: var(--success-surface); color: var(--on-surface); border: 1px solid var(--success); border-radius: var(--radius-md); }
+.ccp-final__txt { display: flex; flex-direction: column; gap: var(--space-1); min-width: 0; flex: 1; }
+.ccp-final__t { font-size: 1.1rem; font-weight: 800; }
+.ccp-final__d { font-size: 0.875rem; line-height: 1.5; }
+
+.ccp-inds { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--space-3); }
+.ccp-ind { display: flex; flex-direction: column; gap: 6px; }
+.ccp-ind__h { display: flex; justify-content: space-between; font-size: 0.8125rem; font-weight: 700; }
+.ccp-ind__s { display: flex; align-items: center; gap: var(--space-1); font-size: 0.75rem; color: var(--on-surface-variant); }
+.ccp-bar { height: 10px; border-radius: var(--radius-full); background: var(--surface-container-high); overflow: hidden; }
+.ccp-bar__fill { height: 100%; background: var(--success); transition: width 0.4s; }
+.ccp-ind--hi .ccp-bar__fill, .ccp-ind--lo .ccp-bar__fill { background: var(--orange); }
+.ccp-ind--vlo .ccp-bar__fill { background: var(--error); }
+
+.ccp-btns { display: flex; gap: var(--space-3); flex-wrap: wrap; }
+.ccp-btn--dis { opacity: 0.6; border-style: dashed; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ccp-day__fill, .ccp-bar__fill, .ccp-being { transition: none; }
+}

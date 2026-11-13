@@ -1,0 +1,77 @@
+/* Vista previa de Memoria — solo tokens */
+.mep-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.mep-play { display: flex; flex-direction: column; gap: var(--space-4); }
+.mep-stats { display: flex; flex-wrap: wrap; gap: var(--space-4); align-items: center; justify-content: space-between; color: var(--paragraph); }
+.mep-timer { display: inline-flex; align-items: center; gap: var(--space-1); padding: var(--space-1) var(--space-4); border-radius: var(--radius-full);
+  background: var(--secondary-container); color: var(--on-secondary-container); font: 700 16px/24px var(--font-family); font-variant-numeric: tabular-nums; }
+.mep-timer--warn { background: var(--error-container); color: var(--on-error-container); }
+.mep-bar { height: 6px; border-radius: var(--radius-full); background: var(--surface-container-high); overflow: hidden; }
+.mep-bar > div { height: 100%; background: var(--primary); transition: width 1s linear; }
+.mep-bar--warn > div { background: var(--error); }
+
+.mep-wrap { position: relative; width: 100%; max-width: calc(var(--cols) * 130px); }
+.mep-grid { display: grid; grid-template-columns: repeat(var(--cols), minmax(0, 1fr)); gap: var(--space-3); }
+
+/* Carta con giro 3D */
+.mep-card { all: unset; box-sizing: border-box; aspect-ratio: 3 / 4; perspective: 700px; cursor: pointer; border-radius: var(--radius-md); }
+.mep-card[aria-disabled='true'] { cursor: default; }
+.mep-card:focus-visible { outline: 3px solid var(--primary); outline-offset: 2px; }
+.mep-card__in { position: relative; display: block; width: 100%; height: 100%; transform-style: preserve-3d;
+  transition: transform .45s var(--ease); }
+.mep-card--up .mep-card__in { transform: rotateY(180deg); }
+.mep-face { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--space-2);
+  padding: var(--space-2); text-align: center; border-radius: var(--radius-md); backface-visibility: hidden; -webkit-backface-visibility: hidden;
+  font: 700 14px/1.3 var(--font-family); overflow-wrap: anywhere; }
+.mep-face--back { background: var(--primary); color: var(--on-primary); border: 2px solid var(--primary-container); font-size: 18px; }
+.mep-face--front { transform: rotateY(180deg); color: var(--on-surface); border: 1.5px solid var(--outline); background: var(--surface-container-lowest); }
+.mep-card--ok .mep-face--front { border: 2px solid var(--success); }
+.mep-face__big { font-size: 38px; line-height: 1; }
+.mep-face__ok { position: absolute; top: var(--space-1); right: var(--space-1); color: var(--success); }
+.mep-tone--img { background: var(--secondary-container); color: var(--on-secondary-container); }
+.mep-tone--joy { background: var(--prevent-container); color: var(--on-prevent-container); }
+.mep-tone--trust { background: var(--green-soft); color: var(--on-green-soft); }
+.mep-tone--fear { background: var(--teal-soft); color: var(--on-teal-soft); }
+.mep-tone--surprise { background: var(--primary-container); color: var(--on-primary-container); }
+.mep-tone--sad { background: var(--blue-soft); color: var(--on-blue-soft); }
+.mep-tone--disgust { background: var(--indigo-soft); color: var(--on-indigo-soft); }
+.mep-tone--anger { background: var(--red-soft); color: var(--on-red-soft); }
+.mep-tone--antic { background: var(--orange-soft); color: var(--on-orange-soft); }
+
+/* Mensaje al encontrar pareja */
+.mep-pause { position: absolute; inset: calc(var(--space-1) * -1); display: grid; place-items: center; padding: var(--space-4);
+  background: var(--scrim); border-radius: var(--radius-md); }
+.mep-pause__box { display: flex; flex-direction: column; align-items: center; gap: var(--space-3); text-align: center; max-width: 380px;
+  padding: var(--space-6); border-radius: var(--radius-md); background: var(--surface-container-lowest); color: var(--on-surface); }
+.mep-h { margin: 0; color: var(--title); }
+.mep-p { margin: 0; color: var(--paragraph); }
+.mep-muted { margin: 0; color: var(--muted); }
+
+.mep-banner { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-4);
+  padding: var(--space-4) var(--space-5); border-radius: var(--radius-md); background: var(--success-surface); color: var(--on-surface); border: 1px solid var(--success); }
+.mep-banner__txt { display: flex; align-items: center; gap: var(--space-3); min-width: 0; }
+.mep-banner__txt .ds-icon { color: var(--success); }
+
+/* Medalla (el nombre siempre va en texto) */
+.mep-medalbox { display: flex; flex-direction: column; align-items: center; gap: var(--space-3); }
+.mep-medal { width: 132px; height: 132px; border-radius: 50%; display: grid; place-items: center; box-shadow: 0 0 0 6px var(--surface-container-lowest); }
+.mep-medal--bronce { background: var(--orange-soft); }
+.mep-medal--plata { background: var(--surface-container-high); }
+.mep-medal--oro { background: var(--prevent-container); }
+.mep-medal__in { width: 104px; height: 104px; border-radius: 50%; background: var(--surface-container-lowest); border: 2px dashed var(--outline);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; padding: var(--space-2); color: var(--primary); text-align: center; }
+.mep-medal__in .t-body-sm { font-size: 11px; line-height: 1.25; color: var(--on-surface-variant); }
+.mep-medal__tag { padding: var(--space-1) var(--space-3); border-radius: var(--radius-full); background: var(--surface-container-lowest);
+  border: 1px solid var(--outline-variant); color: var(--primary); }
+.mep-home { max-width: 560px; margin: var(--space-3) auto 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .mep-card__in { transition: none; }
+  .mep-bar > div { transition: none; }
+}
+
+/* La cara oculta no es contenido visible: así el nombre accesible de la carta coincide con lo que se ve (WCAG 2.5.3).
+   Al voltear de vuelta, la cara frontal sigue visible lo que dura el giro. */
+.mep-face--front { visibility: hidden; transition: visibility 0s .35s; }
+.mep-card--up .mep-face--front { visibility: visible; transition-delay: 0s; }
+.mep-face--back[data-mark]::before { content: attr(data-mark); }
+@media (prefers-reduced-motion: reduce) { .mep-face--front { transition-delay: 0s; } }

@@ -37,3 +37,5 @@
 .cc-rules { background: var(--surface-container-low); border: 1px solid var(--outline-variant); border-radius: var(--radius-md); padding: var(--space-4) var(--space-5); display: flex; flex-direction: column; gap: var(--space-2); }
 .cc-rules ul { margin: 0; padding-left: 1.1em; display: flex; flex-direction: column; gap: 6px; font-size: 0.8125rem; line-height: 1.5; }
 @media (max-width: 600px) { .cc-msg { grid-template-columns: 1fr; gap: 6px; } .cc-rules { padding: var(--space-4); } }
+/* En tema oscuro --primary sobre --primary-container da 4.09:1; el texto sobre este contenedor usa su par on-* (WCAG 1.4.3) */
+.cc-ser--on .cc-ser__et, .cc-ser--on .cc-ser__ind { color: var(--on-primary-container); }

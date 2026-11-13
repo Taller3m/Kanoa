@@ -11,9 +11,9 @@ export function Tipo({ onPick }: { onPick: (t: TipoJuego) => void }) {
       </div>
       <div className="options">
         {TIPOS.map((t) => (
-          <button key={t.nombre} type="button" className="option" onClick={() => onPick(t.nombre)}>
-            <span className={`tile tile--lg tile--${t.tone}`}><Icon name={t.icon} size={28} /></span>
-            <span>
+          <button key={t.nombre} type="button" className={'option option--' + t.tone} onClick={() => onPick(t.nombre)}>
+            <span className="option__icon"><Icon name={t.icon} size={28} /></span>
+            <span className="option__text">
               <strong className="t-title-md">{t.nombre}</strong>
               <span className="desc t-body-md">{t.desc}</span>
             </span>

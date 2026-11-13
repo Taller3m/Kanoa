@@ -60,6 +60,8 @@
 .ds-field { display: flex; flex-direction: column; gap: var(--space-1); color: var(--on-surface-variant); min-width: 0; }
 .ds-field__label { font: 500 12px/16px var(--font-family); letter-spacing: .5px; color: var(--on-surface-variant); }
 .ds-field__req { color: var(--error); margin-left: 2px; }
+.ds-field__foot { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--space-3); }
+.ds-field__counter { flex: none; margin-left: auto; font: 400 12px/16px var(--font-family); letter-spacing: .4px; color: var(--muted); }
 .ds-field__help { font: 400 12px/16px var(--font-family); letter-spacing: .4px; color: var(--muted); }
 .ds-field--error .ds-field__help { color: var(--error); }
 .ds-control { --h: var(--size-input-small); display: flex; align-items: center; gap: var(--space-2); min-height: var(--h);
@@ -77,6 +79,10 @@
 .ds-control--textarea { align-items: flex-start; padding: var(--space-3); }
 .ds-control--textarea textarea { resize: vertical; min-height: 80px; height: auto; }
 .ds-control select { appearance: none; cursor: pointer; padding-right: var(--space-2); }
+/* Selector: toda la caja es el área clicable; la flecha es solo decorativa y no intercepta el clic */
+.ds-control--select { position: relative; padding: 0; }
+.ds-control--select select { align-self: stretch; width: 100%; min-width: 120px; height: auto; padding: 0 calc(var(--space-3) + 28px) 0 var(--space-3); }
+.ds-control--select > .ds-icon { position: absolute; right: var(--space-3); top: 50%; transform: translateY(-50%); pointer-events: none; }
 .ds-field--error .ds-control { border-color: var(--error); }
 .ds-field--error .ds-control:focus-within { box-shadow: 0 0 0 1px var(--error); }
 .ds-field--disabled .ds-control { background: var(--on-surface---5); border-color: var(--on-surface---12); color: var(--on-surface---30); pointer-events: none; }
@@ -304,3 +310,12 @@ html:has(dialog.ds-modal[open]) { overflow: hidden; }
   .ds-menuitem--small { height: 44px; }
   .ds-tab { height: 48px; }
 }
+
+/* Pestañas en píldora: el texto no seleccionado usa on-surface; on-surface-variant sobre surface-container da 4.09:1 en tema oscuro (WCAG 1.4.3) */
+.ds-tabs--pill .ds-tab { color: var(--on-surface); }
+.ds-tabs--pill .ds-tab:disabled { color: var(--on-surface---30); }
+.ds-tabs--pill .ds-tab[aria-selected='true'] { color: var(--primary); }
+
+.ds-snackbar--success { background: var(--success-surface-snackbar); color: var(--on-success-surface-snackbar); }
+.ds-snackbar--success .ds-btn--text { color: var(--on-success-surface-snackbar); }
+.ds-modal--wide { width: min(960px, calc(100% - 2 * var(--space-4))); }

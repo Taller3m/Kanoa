@@ -1,11 +1,13 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { Button, ConfirmDialog, Icon, IconButton, Snackbar, StatusTag } from './ui'
+import { Button, ConfirmDialog, Icon, IconButton, Modal, Snackbar, StatusTag } from './ui'
 import { estadoDe, fixGame, reqsOf, seedGames } from './games/registry'
 import { HOY, newGame } from './games/base'
 import type { Game, TipoJuego } from './games/types'
 import { Lista } from './screens/Lista'
 import { Tipo } from './screens/Tipo'
 import { Asistente } from './screens/Asistente'
+import { useRoute } from './router'
+import { PreviewHost, previewBlocker } from './games/PreviewHost'
 import './app.css'
 
 type Screen = 'lista' | 'tipo' | 'editor'
@@ -20,14 +22,16 @@ const RAIL: { label: string; icon: string; on?: boolean }[] = [
 
 export function App() {
   const [games, setGames] = useState<Game[]>(seedGames)
-  const [screen, setScreen] = useState<Screen>('lista')
+  const [route, go] = useRoute()
+  const screen: Screen = route.screen
+  const paso: 1 | 2 = route.screen === 'editor' ? route.paso : 1
   const [draft, setDraft] = useState<Game | null>(null)
   const [orig, setOrig] = useState('')
-  const [paso, setPaso] = useState<1 | 2>(1)
   const [nombreErr, setNombreErr] = useState(false)
   const [q, setQ] = useState(''); const [fTipo, setFTipo] = useState('Todos los tipos'); const [fEstado, setFEstado] = useState('Todos los estados')
   const [toastMsg, setToastMsg] = useState<{ t: string; kind: ToastKind } | null>(null)
   const [confirm, setConfirm] = useState<Confirm | null>(null)
+  const [preview, setPreview] = useState<Game | null>(null)
   const [dark, setDark] = useState(() => document.documentElement.classList.contains('dark'))
   const timer = useRef<number>(0)
   const main = useRef<HTMLElement>(null)
@@ -46,9 +50,40 @@ export function App() {
 
   const update = useCallback((fn: (d: Game) => void) => setDraft((d) => { if (!d) return d; const c = structuredClone(d); fn(c); return c }), [])
 
-  const abrir = (g: Game) => { const d = fixGame(structuredClone(g)); setDraft(d); setOrig(JSON.stringify(d)); setPaso(1); setNombreErr(false); setScreen('editor') }
-  const nuevo = (t: TipoJuego) => abrir(newGame(t))
-  const aLista = () => { setScreen('lista'); setDraft(null); setNombreErr(false) }
+  // El borrador se (re)crea cuando cambia el juego/tipo de la URL, no cuando solo cambia el paso.
+  const editorKey = route.screen === 'editor' ? route.tipo + ':' + (route.id ?? 'nuevo') : ''
+  useEffect(() => {
+    if (route.screen !== 'editor') { setDraft(null); return }
+    let d: Game
+    if (route.id) {
+      const g = games.find((x) => x.id === route.id)
+      if (!g) { go({ screen: 'lista' }, true); return }
+      d = fixGame(structuredClone(g))
+    } else {
+      d = newGame(route.tipo)
+      if (route.paso === 2) go({ ...route, paso: 1 }, true) // un juego nuevo no puede abrirse en Configuración sin nombre
+    }
+    setDraft(d); setOrig(JSON.stringify(d)); setNombreErr(false)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editorKey])
+  useEffect(() => {
+    const t = screen === 'lista' ? 'Juegos' : screen === 'tipo' ? 'Crear juego' : draft ? (draft.id ? 'Editar ' : 'Crear ') + draft.tipo.toLowerCase() : 'Juegos'
+    document.title = t + ' · Kanoa Lab'
+  }, [screen, draft])
+
+  const abrir = (g: Game) => go({ screen: 'editor', tipo: g.tipo, id: g.id, paso: 1 })
+  const nuevo = (t: TipoJuego) => go({ screen: 'editor', tipo: t, id: null, paso: 1 })
+  const setPaso = (p: 1 | 2) => {
+    if (route.screen !== 'editor') return
+    if (p === 2 && (draft?.nombre.trim().length ?? 0) < 3) { setNombreErr(true); go({ ...route, paso: 1 }, true); toast('Diligencia el nombre del juego para continuar con la configuración.', 'err'); return }
+    go({ ...route, paso: p }, true)
+  }
+  const openPreview = (g: Game) => {
+    const why = previewBlocker(g)
+    if (why) { toast(why, 'err'); return }
+    setPreview(fixGame(structuredClone(g)))
+  }
+  const aLista = () => { go({ screen: 'lista' }); setNombreErr(false) }
   const cancelar = () => {
     if (draft && JSON.stringify(draft) !== orig) setConfirm({ title: 'Descartar cambios', msg: 'Hay cambios sin guardar. ¿Deseas descartarlos?', label: 'Descartar', danger: true, yes: aLista })
     else aLista()
@@ -116,13 +151,13 @@ export function App() {
           </h1>
           <div className="band__actions">
             {screen === 'tipo' && <Button variant="outline" onClick={aLista}>Cancelar</Button>}
-            {screen === 'editor' && (<><Button variant="outline" onClick={cancelar}>Cancelar</Button><Button onClick={guardar}>Guardar</Button></>)}
+            {screen === 'editor' && draft && (<><IconButton icon="visibility" label="Vista previa" onClick={() => openPreview(draft)} /><Button variant="outline" onClick={cancelar}>Cancelar</Button><Button onClick={guardar}>Guardar</Button></>)}
           </div>
         </header>
 
         {screen === 'lista' && (
           <Lista games={games} q={q} fTipo={fTipo} fEstado={fEstado} setQ={setQ} setFTipo={setFTipo} setFEstado={setFEstado}
-            onCrear={() => setScreen('tipo')} onEditar={abrir} onEliminar={eliminar} />
+            onCrear={() => go({ screen: 'tipo' })} onEditar={abrir} onVisualizar={openPreview} onEliminar={eliminar} />
         )}
         {screen === 'tipo' && <Tipo onPick={nuevo} />}
         {screen === 'editor' && draft && (
@@ -132,9 +167,12 @@ export function App() {
 
       {toastMsg && (
         <div className="toasts">
-          <Snackbar type={toastMsg.kind === 'err' ? 'error' : undefined}>{toastMsg.t}</Snackbar>
+          <Snackbar type={toastMsg.kind === 'err' ? 'error' : toastMsg.kind === 'ok' ? 'success' : undefined}>{toastMsg.t}</Snackbar>
         </div>
       )}
+      <Modal open={!!preview} wide title="Vista previa · así lo verá el visitante" onClose={() => setPreview(null)}>
+        {preview && <PreviewHost key={JSON.stringify(preview)} game={preview} />}
+      </Modal>
       {confirm && (
         <ConfirmDialog open title={confirm.title} message={confirm.msg} confirmLabel={confirm.label} danger={confirm.danger}
           onCancel={() => setConfirm(null)} onConfirm={() => { const y = confirm.yes; setConfirm(null); y() }} />

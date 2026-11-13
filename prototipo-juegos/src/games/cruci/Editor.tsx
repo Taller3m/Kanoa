@@ -68,12 +68,14 @@ export function CruciEditor({ game, update, toast }: EditorProps) {
       const letter = m ? m.L : (pi >= 0 ? cx.ans[pi] : '')
       const num = starts[k]
       const cls = ['cr-cell', m && 'cr-cell--filled', pi >= 0 && 'cr-cell--path', conf && 'cr-cell--conflict', isSel && 'cr-cell--sel'].filter(Boolean).join(' ')
-      const name = `Fila ${r + 1}, columna ${c + 1}` + (num ? `, inicio de la pregunta ${num}` : '') + (letter ? `, letra ${letter}` : ', vacía') + (conf ? ', letra en conflicto' : '')
+      const desc = ', fila ' + (r + 1) + ', columna ' + (c + 1) + (num ? ', inicio de la pregunta ' + num : '') + (letter ? '' : ', vacía') + (conf ? ', letra en conflicto' : '')
       cells.push(
-        <button key={k} type="button" className={cls} aria-label={name} title={`Fila ${r + 1}, columna ${c + 1}`} aria-pressed={isSel}
+        <button key={k} type="button" className={cls} title={'Fila ' + (r + 1) + ', columna ' + (c + 1)} aria-pressed={isSel}
           onClick={() => patch({ sel: { r, c } })}>
-          {(num || (isSel && !num)) && <span className="cr-cell__num" aria-hidden="true">{num || '·'}</span>}
-          <span aria-hidden="true">{letter}</span>
+          {(num || (isSel && !num)) && <span className="cr-cell__num">{num || '·'}</span>}
+          <span>{letter}</span>
+          {/* El nombre accesible se forma del contenido visible + esta descripción (WCAG 2.5.3 Etiqueta en el nombre) */}
+          <span className="sr-only">{desc}</span>
         </button>,
       )
     }

@@ -1,0 +1,30 @@
+.cup { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: var(--space-5); align-items: stretch; }
+.cup-art { background: var(--primary-container); color: var(--on-primary-container); border-radius: var(--radius-md); min-height: 260px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--space-2); text-align: center; padding: var(--space-4); }
+.cup-art__name { overflow-wrap: anywhere; }
+.cup-body { display: flex; flex-direction: column; gap: var(--space-3); min-width: 0; }
+.cup-page { color: var(--on-surface-variant); }
+.cup-text, .cup-q { margin: 0; }
+.cup-text { color: var(--paragraph); }
+.cup-q { color: var(--title); }
+.cup-opts { display: flex; flex-direction: column; gap: var(--space-2); }
+.cup-opt { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); text-align: left; cursor: pointer;
+  padding: var(--space-3) var(--space-4); border-radius: var(--radius-md); border: 1px solid var(--outline-variant);
+  background: var(--surface-container-lowest); color: var(--on-surface); font: 500 16px/24px var(--font-family); }
+.cup-opt:hover:not([aria-disabled='true']) { background: var(--surface-tint-8-); border-color: var(--primary); }
+.cup-opt[aria-disabled='true'] { cursor: default; }
+.cup-opt:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+.cup-opt.is-ok { background: var(--green-soft); border-color: var(--green); color: var(--on-green-soft); }
+.cup-opt.is-bad { background: var(--red-soft); border-color: var(--red); color: var(--on-red-soft); }
+.cup-fb { display: flex; align-items: center; gap: var(--space-2); padding: var(--space-3) var(--space-4); border-radius: var(--radius-md); }
+.cup-fb.is-ok { background: var(--green-soft); color: var(--on-green-soft); }
+.cup-fb.is-bad { background: var(--red-soft); color: var(--on-red-soft); }
+.cup-actions { display: flex; gap: var(--space-3); justify-content: flex-end; flex-wrap: wrap; }
+.cup-help, .cup-empty, .cup-note { margin: 0; color: var(--paragraph); }
+.cup-empty, .cup-note { text-align: center; padding: var(--space-4); }
+.cup-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+@media (max-width: 720px) {
+  .cup { grid-template-columns: minmax(0, 1fr); gap: var(--space-4); }
+  .cup-art { min-height: 160px; }
+}

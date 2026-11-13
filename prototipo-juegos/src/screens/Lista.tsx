@@ -9,6 +9,7 @@ export interface ListaProps {
   setQ: (v: string) => void; setFTipo: (v: string) => void; setFEstado: (v: string) => void
   onCrear: () => void
   onEditar: (g: Game) => void
+  onVisualizar: (g: Game) => void
   onEliminar: (g: Game) => void
 }
 
@@ -17,7 +18,7 @@ export function EstadoTag({ game }: { game: Game }) {
   return e === 'Completado' ? <StatusTag color="blue" dot>Completado</StatusTag> : <StatusTag type="prevent" dot>Borrador</StatusTag>
 }
 
-function RowMenu({ game, anchor, onClose, onEditar, onEliminar }: { game: Game; anchor: DOMRect; onClose: () => void; onEditar: () => void; onEliminar: () => void }) {
+function RowMenu({ game, anchor, onClose, onEditar, onVisualizar, onEliminar }: { game: Game; anchor: DOMRect; onClose: () => void; onEditar: () => void; onVisualizar: () => void; onEliminar: () => void }) {
   const ref = useRef<HTMLDivElement>(null)
   useEffect(() => {
     ref.current?.querySelector<HTMLButtonElement>('button:not(:disabled)')?.focus()
@@ -32,6 +33,7 @@ function RowMenu({ game, anchor, onClose, onEditar, onEliminar }: { game: Game; 
       <div style={{ position: 'fixed', inset: 0, zIndex: 39 }} onClick={onClose} aria-hidden="true" />
       <div ref={ref} className="menu" role="menu" aria-label={`Acciones de ${game.nombre}`} style={{ top, left }}>
         <button type="button" role="menuitem" className="ds-menuitem" onClick={onEditar}><Icon name="edit" size={20} /><span className="ds-menuitem__label">Editar</span></button>
+        <button type="button" role="menuitem" className="ds-menuitem" onClick={onVisualizar}><Icon name="visibility" size={20} /><span className="ds-menuitem__label">Visualizar</span></button>
         <button type="button" role="menuitem" className="ds-menuitem ds-menuitem--danger" onClick={onEliminar}
           title={game.usos > 0 ? 'No se puede eliminar: está publicado' : undefined}><Icon name="delete" size={20} /><span className="ds-menuitem__label">Eliminar</span></button>
       </div>
@@ -119,6 +121,7 @@ export function Lista(p: ListaProps) {
       {menu && (
         <RowMenu game={menu.game} anchor={menu.rect} onClose={() => setMenu(null)}
           onEditar={() => { const g = menu.game; setMenu(null); p.onEditar(g) }}
+          onVisualizar={() => { const g = menu.game; setMenu(null); p.onVisualizar(g) }}
           onEliminar={() => { const g = menu.game; setMenu(null); p.onEliminar(g) }} />
       )}
     </section>

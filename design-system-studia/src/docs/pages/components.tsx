@@ -54,7 +54,7 @@ export function Atomos() {
         </Demo>
         <PropsTable rows={[
           ['label', 'string', '—', 'Texto visible; entra en el nombre accesible.'], ['help', 'string', '—', 'Ayuda bajo la etiqueta (aria-describedby).'],
-          ['error', 'string', '—', 'Mensaje de error; marca aria-invalid y reemplaza la ayuda.'], ['icon / trailingIcon', 'string', '—', 'Iconos dentro del control.'],
+          ['error', 'string', '—', 'Mensaje de error; marca aria-invalid y reemplaza la ayuda.'], ['counter', 'string', '—', 'Contador alineado a la derecha (p. ej. «12/80»); convive con la ayuda y con el error.'], ['icon / trailingIcon', 'string', '—', 'Iconos dentro del control.'],
           ['size', "'small' | 'medium' | 'big'", "'small'", 'Alto 44 / 58 / 70.'],
         ]} />
       </Section>
@@ -152,7 +152,7 @@ export function Moleculas() {
           <Snackbar action="Deshacer">Juego eliminado</Snackbar><Snackbar type="prevent" action="Reintentar">Conexión inestable</Snackbar><Snackbar type="error">No se pudo subir la imagen</Snackbar>
         </Demo>
         <A11y items={['Message usa role="alert" para error y role="status" para el resto; el anuncio ocurre al montarse, no al cambiar de color.', 'Snackbar usa role="status": no roba el foco. Si tiene acción, debe permanecer visible el tiempo suficiente para alcanzarla con teclado.', 'El tipo nunca se comunica solo con color: cada uno lleva su icono y título.']} />
-        <PropsTable rows={[['type (Message)', "'primary' | 'error' | 'prevent' | 'success'", "'primary'", 'Tipo semántico.'], ['title', 'string', '—', 'Título en negrita.'], ['onClose', '() => void', '—', 'Muestra el botón de cierre.'], ['type (Snackbar)', "'error' | 'prevent'", '—', 'Sin valor = neutro.'], ['action / onAction', 'string / () => void', '—', 'Texto y manejador de la acción.']]} />
+        <PropsTable rows={[['type (Message)', "'primary' | 'error' | 'prevent' | 'success'", "'primary'", 'Tipo semántico.'], ['title', 'string', '—', 'Título en negrita.'], ['onClose', '() => void', '—', 'Muestra el botón de cierre.'], ['type (Snackbar)', "'error' | 'prevent' | 'success'", '—', 'Sin valor = neutro.'], ['action / onAction', 'string / () => void', '—', 'Texto y manejador de la acción.']]} />
       </Section>
 
       <Section id="tabs" title="Tabs" lead="Dos versiones: Material (subrayado) y pill (Shadcn).">
@@ -246,7 +246,7 @@ export function Organismos() {
           <ConfirmDialog open={confirm} danger title="Eliminar juego" message="Esta acción no se puede deshacer." confirmLabel="Eliminar" onCancel={() => setConfirm(false)} onConfirm={() => setConfirm(false)} />
         </Demo>
         <A11y items={['Escape, clic en el fondo o el botón «Cerrar» llaman a onClose; el componente es controlado.', 'El título del diálogo es su nombre accesible (aria-labelledby). Úsalo solo cuando la tarea necesite interrumpir; para avisos usa Message o Snackbar.']} />
-        <PropsTable rows={[['open / onClose', 'boolean / () => void', '—', 'Visibilidad controlada.'], ['title', 'string', '—', 'Título (h2) y nombre accesible.'], ['footer', 'ReactNode', '—', 'Botones de acción.'], ['small', 'boolean', 'false', 'Ancho 400 px en vez de 560.'], ['danger (ConfirmDialog)', 'boolean', 'false', 'Confirmación destructiva en tono error.']]} />
+        <PropsTable rows={[['open / onClose', 'boolean / () => void', '—', 'Visibilidad controlada.'], ['title', 'string', '—', 'Título (h2) y nombre accesible.'], ['footer', 'ReactNode', '—', 'Botones de acción.'], ['small', 'boolean', 'false', 'Ancho 400 px en vez de 560.'], ['wide', 'boolean', 'false', 'Ancho 960 px (vistas previas, contenido amplio).'], ['danger (ConfirmDialog)', 'boolean', 'false', 'Confirmación destructiva en tono error.']]} />
       </Section>
 
       <Section id="navbar" title="Navbar" lead="Navegación lateral con dos modos: expandido (280px) y comprimido (72px, solo iconos con title).">

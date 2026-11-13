@@ -56,25 +56,30 @@ export function Divider({ label, vertical }: { label?: string; vertical?: boolea
 
 /* Campos */
 interface FieldShellProps {
-  label?: string; help?: string; error?: string; required?: boolean; disabled?: boolean; id: string; children: ReactNode; className?: string
+  label?: string; help?: string; error?: string; counter?: string; required?: boolean; disabled?: boolean; id: string; children: ReactNode; className?: string
 }
-function FieldShell({ label, help, error, required, disabled, id, children, className }: FieldShellProps) {
+function FieldShell({ label, help, error, counter, required, disabled, id, children, className }: FieldShellProps) {
   return (
     <div className={cx('ds-field', error && 'ds-field--error', disabled && 'ds-field--disabled', className)}>
       {label && <label className="ds-field__label" htmlFor={id}>{label}{required && <span className="ds-field__req" aria-hidden="true">*</span>}</label>}
       {children}
-      {(error || help) && <span className="ds-field__help" id={`${id}-help`} role={error ? 'alert' : undefined}>{error ?? help}</span>}
+      {(error || help || counter) && (
+        <div className="ds-field__foot">
+          <span className="ds-field__help" id={`${id}-help`} role={error ? 'alert' : undefined}>{error ?? help}</span>
+          {counter && <span className="ds-field__counter">{counter}</span>}
+        </div>
+      )}
     </div>
   )
 }
 
 export interface TextFieldProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> {
-  label?: string; help?: string; error?: string; icon?: string; trailingIcon?: string; size?: Size
+  label?: string; help?: string; error?: string; counter?: string; icon?: string; trailingIcon?: string; size?: Size
 }
-export function TextField({ label, help, error, icon, trailingIcon, size = 'small', required, disabled, id, className, ...rest }: TextFieldProps) {
+export function TextField({ label, help, error, counter, icon, trailingIcon, size = 'small', required, disabled, id, className, ...rest }: TextFieldProps) {
   const uid = useId(); const fid = id ?? uid
   return (
-    <FieldShell {...{ label, help, error, required, disabled }} id={fid} className={className}>
+    <FieldShell {...{ label, help, error, counter, required, disabled }} id={fid} className={className}>
       <div className={cx('ds-control', size !== 'small' && `ds-control--${size}`)}>
         {icon && <Icon name={icon} size={20} />}
         <input id={fid} required={required} disabled={disabled} aria-invalid={!!error} aria-describedby={error || help ? `${fid}-help` : undefined} {...rest} />
@@ -102,11 +107,11 @@ export function PasswordField({ label, help, error, size = 'small', required, di
   )
 }
 
-export interface TextAreaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> { label?: string; help?: string; error?: string }
-export function TextArea({ label, help, error, required, disabled, id, className, ...rest }: TextAreaProps) {
+export interface TextAreaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> { label?: string; help?: string; error?: string; counter?: string }
+export function TextArea({ label, help, error, counter, required, disabled, id, className, ...rest }: TextAreaProps) {
   const uid = useId(); const fid = id ?? uid
   return (
-    <FieldShell {...{ label, help, error, required, disabled }} id={fid} className={className}>
+    <FieldShell {...{ label, help, error, counter, required, disabled }} id={fid} className={className}>
       <div className="ds-control ds-control--textarea">
         <textarea id={fid} required={required} disabled={disabled} aria-invalid={!!error} {...rest} />
       </div>
@@ -121,7 +126,7 @@ export function Select({ label, help, error, size = 'small', options, placeholde
   const uid = useId(); const fid = id ?? uid
   return (
     <FieldShell {...{ label, help, error, required, disabled }} id={fid} className={className}>
-      <div className={cx('ds-control', size !== 'small' && `ds-control--${size}`)}>
+      <div className={cx('ds-control ds-control--select', size !== 'small' && `ds-control--${size}`)}>
         <select id={fid} required={required} disabled={disabled} aria-invalid={!!error} {...rest}>
           {placeholder && <option value="">{placeholder}</option>}
           {options.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
@@ -249,7 +254,7 @@ export function Message({ type = 'primary', title, children, onClose }: { type?:
   )
 }
 
-export function Snackbar({ type, children, action, onAction }: { type?: 'error' | 'prevent'; children: ReactNode; action?: string; onAction?: () => void }) {
+export function Snackbar({ type, children, action, onAction }: { type?: 'error' | 'prevent' | 'success'; children: ReactNode; action?: string; onAction?: () => void }) {
   return (
     <div className={cx('ds-snackbar', type && `ds-snackbar--${type}`)} role="status">
       <span className="t-body-md">{children}</span>
@@ -396,8 +401,8 @@ export function ItemList({ items }: { items: { title: string; meta: string; tag?
 
 /* ═════════════ ORGANISMOS ═════════════ */
 
-export function Modal({ open, title, onClose, children, footer, small }: {
-  open: boolean; title: string; onClose: () => void; children: ReactNode; footer?: ReactNode; small?: boolean
+export function Modal({ open, title, onClose, children, footer, small, wide }: {
+  open: boolean; title: string; onClose: () => void; children: ReactNode; footer?: ReactNode; small?: boolean; wide?: boolean
 }) {
   const id = useId()
   const ref = useRef<HTMLDialogElement>(null)
@@ -408,7 +413,7 @@ export function Modal({ open, title, onClose, children, footer, small }: {
     if (!open && d.open) d.close()
   }, [open])
   return (
-    <dialog ref={ref} className={cx('ds-modal', small && 'ds-modal--small')} aria-labelledby={id}
+    <dialog ref={ref} className={cx('ds-modal', small && 'ds-modal--small', wide && 'ds-modal--wide')} aria-labelledby={id}
       onCancel={(e) => { e.preventDefault(); onClose() }}
       onClick={(e) => { if (e.target === e.currentTarget) onClose() }}>
       {open && (
