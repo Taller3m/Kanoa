@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Play:wght@400;700&amp;display=swap" rel="stylesheet" />
+<style>body { margin:0; background:#1E1B22; } a { color:#7D3693; } a:hover { color:#B53E6B; }</style>
+</helmet>
+<x-import component-from-global-scope="deck-stage" from="./deck-stage.js" width="1920" height="1080" hint-size="100%,100%">
+
+  <section data-label="Portada" data-screen-label="01 Portada" data-speaker-notes="Funcionalidades del Portal Web que, según el cronograma, quedan terminadas con el flujo end to end completo al 6 de noviembre de 2026." style="background:#FFFFFF; font-family:Play, sans-serif; color:#2B2B33; position:relative; overflow:hidden">
+    <div style="position:absolute; left:-180px; top:-180px; width:520px; height:520px; border-radius:50%; background:linear-gradient(200deg, #F7981D 0%, #B53E6B 54%, #7D3693 100%)"></div>
+    <div style="position:absolute; right:120px; top:110px; font-size:34px; letter-spacing:.3em; color:#7D3693">01001001</div>
+    <div style="position:absolute; left:220px; top:350px; display:flex; flex-direction:column; gap:28px; max-width:1450px">
+      <div style="font-size:30px; letter-spacing:.18em; color:#B53E6B; font-weight:700">PROYECTO PORTAL WEB · KANOA LAB</div>
+      <h1 style="margin:0; font-size:96px; line-height:1.05; font-weight:700; color:#2B2B33">Funcionalidades próximas a entregar</h1>
+      <div style="font-size:36px; color:#4A4652">Hero, menús de navegación, cifras destacadas y páginas informativas</div>
+    </div>
+    <div style="position:absolute; left:220px; bottom:120px; font-size:28px; color:#4A4652">End to end completo · Corte del cronograma: 6 de noviembre de 2026</div>
+    <div style="position:absolute; left:0; bottom:0; width:100%; height:16px; background:linear-gradient(90deg, #F7981D, #B53E6B 54%, #7D3693)"></div>
+  </section>
+
+  <section data-label="Resumen" data-screen-label="02 Resumen" data-speaker-notes="Cuatro funcionalidades con 29 historias de usuario. Cada una incluye la administración desde el LMS y la publicación en el Portal WEB." style="background:#FFFFFF; font-family:Play, sans-serif; color:#2B2B33; position:relative; overflow:hidden">
+    <div style="position:absolute; left:120px; top:90px; right:120px; display:flex; justify-content:space-between; align-items:flex-end">
+      <h2 style="margin:0; font-size:64px; font-weight:700">Próximas a entregar al 6 de noviembre</h2>
+      <div style="font-size:30px; color:#4A4652">29 historias de usuario</div>
+    </div>
+    <div style="position:absolute; left:120px; top:200px; width:200px; height:8px; background:linear-gradient(90deg, #F7981D, #B53E6B 54%, #7D3693)"></div>
+    <div style="position:absolute; left:120px; right:120px; top:300px; display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:36px">
+      <div style="border:2px solid #E6E1EA; border-top:10px solid #F7981D; border-radius:16px; padding:40px 36px; display:flex; flex-direction:column; gap:18px; min-height:480px">
+        <div style="font-size:28px; font-weight:700; color:#B5650A">01</div>
+        <div style="font-size:120px; font-weight:700; line-height:1">6</div>
+        <div style="font-size:28px; color:#4A4652">historias</div>
+        <div style="font-size:32px; font-weight:700; line-height:1.25; margin-top:12px">Hero del Home</div>
+        <div style="font-size:26px; color:#4A4652; line-height:1.35">Contenido principal y destacados</div>
+      </div>
+      <div style="border:2px solid #E6E1EA; border-top:10px solid #D9692F; border-radius:16px; padding:40px 36px; display:flex; flex-direction:column; gap:18px; min-height:480px">
+        <div style="font-size:28px; font-weight:700; color:#B5501F">02</div>
+        <div style="font-size:120px; font-weight:700; line-height:1">12</div>
+        <div style="font-size:28px; color:#4A4652">historias</div>
+        <div style="font-size:32px; font-weight:700; line-height:1.25; margin-top:12px">Menús de navegación</div>
+        <div style="font-size:26px; color:#4A4652; line-height:1.35">Cabecera y pie de página</div>
+      </div>
+      <div style="border:2px solid #E6E1EA; border-top:10px solid #B53E6B; border-radius:16px; padding:40px 36px; display:flex; flex-direction:column; gap:18px; min-height:480px">
+        <div style="font-size:28px; font-weight:700; color:#B53E6B">03</div>
+        <div style="font-size:120px; font-weight:700; line-height:1">4</div>
+        <div style="font-size:28px; color:#4A4652">historias</div>
+        <div style="font-size:32px; font-weight:700; line-height:1.25; margin-top:12px">Cifras destacadas</div>
+        <div style="font-size:26px; color:#4A4652; line-height:1.35">Franja de indicadores del Home</div>
+      </div>
+      <div style="border:2px solid #E6E1EA; border-top:10px solid #7D3693; border-radius:16px; padding:40px 36px; display:flex; flex-direction:column; gap:18px; min-height:480px">
+        <div style="font-size:28px; font-weight:700; color:#7D3693">04</div>
+        <div style="font-size:120px; font-weight:700; line-height:1">7</div>
+        <div style="font-size:28px; color:#4A4652">historias</div>
+        <div style="font-size:32px; font-weight:700; line-height:1.25; margin-top:12px">Páginas informativas</div>
+        <div style="font-size:26px; color:#4A4652; line-height:1.35">Páginas independientes y su contenido</div>
+      </div>
+    </div>
+    <div style="position:absolute; left:0; bottom:0; width:100%; height:12px; background:linear-gradient(90deg, #F7981D, #B53E6B 54%, #7D3693)"></div>
+  </section>
+
+  <section data-label="Hero · Configuración" data-screen-label="03 Hero configuración" data-speaker-notes="HU-PW-089 y 091: el Comunicador configura y edita imagen, título, descripción y dos botones opcionales del Hero." style="background:#FFFFFF; font-family:Play, sans-serif; color:#2B2B33; position:relative; overflow:hidden">
+    <div style="position:absolute; left:120px; top:80px; display:flex; flex-direction:column; gap:10px">
+      <div style="font-size:26px; font-weight:700; color:#B5650A; letter-spacing:.12em">FUNCIONALIDAD 1 · 6 HISTORIAS</div>
+      <h2 style="margin:0; font-size:60px; font-weight:700">Parametrización del Hero del Home</h2>
+    </div>
+    <div style="position:absolute; left:120px; top:270px; width:620px; display:flex; flex-direction:column; gap:30px">
+      <p style="margin:0; font-size:30px; line-height:1.45; color:#2B2B33; text-wrap:pretty">El Comunicador define el contenido principal del Hero y lo publica en el Home sin depender del área técnica.</p>
+      <div style="display:flex; flex-direction:column; gap:16px; font-size:26px; color:#4A4652; line-height:1.35">
+        <div style="display:flex; gap:14px"><span style="color:#F7981D; font-weight:700">—</span><span>Imagen, título y descripción con texto enriquecido</span></div>
+        <div style="display:flex; gap:14px"><span style="color:#F7981D; font-weight:700">—</span><span>Botón principal y secundario opcionales, con nombre y link</span></div>
+        <div style="display:flex; gap:14px"><span style="color:#F7981D; font-weight:700">—</span><span>Validación de campos al guardar y confirmación al cancelar</span></div>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:8px; font-size:24px; color:#4A4652; border-top:2px solid #E6E1EA; padding-top:24px">
+        <span style="font-weight:700; color:#2B2B33">HU-PW-089 · Configurar contenido principal del Hero</span>
+        <span style="font-weight:700; color:#2B2B33">HU-PW-091 · Editar contenido principal del Hero</span>
+      </div>
+    </div>
+    <div style="position:absolute; right:120px; top:240px; width:960px; background:#F6F3F8; border-radius:20px; padding:28px; box-sizing:border-box">
+      <img src="assets/deck/hero-admin.png" alt="Configuración del Hero en la administración" style="width:100%; display:block; border-radius:10px; box-shadow:0 10px 30px rgba(43,43,51,.14)" />
+    </div>
+    <div style="position:absolute; left:0; bottom:0; width:100%; height:12px; background:linear-gradient(90deg, #F7981D, #B53E6B 54%, #7D3693)"></div>
+  </section>
+
+  <section data-label="Hero · Destacados" data-screen-label="04 Hero destacados" data-speaker-notes="HU-PW-090, 092, 093 y 096: tres destacados de micrositios o secciones activas; se publican en el Home; un elemento destacado no puede inactivarse mientras esté en el Hero." style="background:#FFFFFF; font-family:Play, sans-serif; color:#2B2B33; position:relative; overflow:hidden">
+    <div style="position:absolute; left:120px; top:80px; display:flex; flex-direction:column; gap:10px">
+      <div style="font-size:26px; font-weight:700; color:#B5650A; letter-spacing:.12em">FUNCIONALIDAD 1 · 6 HISTORIAS</div>
+      <h2 style="margin:0; font-size:60px; font-weight:700">Destacados del Hero y publicación en el Home</h2>
+    </div>
+    <div style="position:absolute; left:120px; right:120px; top:250px; display:grid; grid-template-columns:700px minmax(0,1fr); gap:48px">
+      <div style="display:flex; flex-direction:column; gap:20px">
+        <div style="font-size:26px; font-weight:700; color:#B5650A">Administración</div>
+        <div style="background:#F6F3F8; border-radius:20px; padding:24px">
+          <img src="assets/deck/hero-destacados.png" alt="Configuración de destacados" style="width:100%; display:block; border-radius:10px; box-shadow:0 10px 30px rgba(43,43,51,.14)" />
+        </div>
+        <p style="margin:0; font-size:26px; line-height:1.4; color:#4A4652">Hasta 3 destacados: cada uno es un micrositio o una sección activa.</p>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:20px">
+        <div style="font-size:26px; font-weight:700; color:#B5650A">Portal WEB</div>
+        <div style="background:#F6F3F8; border-radius:20px; padding:24px">
+          <img src="assets/deck/portal-hero.png" alt="Hero publicado en el Home" style="width:100%; display:block; border-radius:10px; box-shadow:0 10px 30px rgba(43,43,51,.14)" />
+        </div>
+        <p style="margin:0; font-size:26px; line-height:1.4; color:#4A4652">Un micrositio o sección destacada no se puede inactivar mientras esté en el Hero.</p>
+      </div>
+    </div>
+    <div style="position:absolute; left:120px; right:120px; bottom:56px; font-size:24px; color:#4A4652; display:flex; gap:36px; flex-wrap:wrap">
+      <span>HU-PW-090 Configurar destacados</span><span>HU-PW-092 Editar destacados</span><span>HU-PW-093 Visualizar Hero</span><span>HU-PW-096 Restringir inactivación</span>
+    </div>
+    <div style="position:absolute; left:0; bottom:0; width:100%; height:12px; background:linear-gradient(90deg, #F7981D, #B53E6B 54%, #7D3693)"></div>
+  </section>
+
+  <section data-label="Menús · Construcción" data-screen-label="05 Menús construcción" data-speaker-notes="HU-PW-103 a 107 y 111: administrar, construir, jerarquizar, validar y editar menús." style="background:#FFFFFF; font-family:Play, sans-serif; color:#2B2B33; position:relative; overflow:hidden">
+    <div style="position:absolute; left:120px; top:80px; display:flex; flex-direction:column; gap:10px">
+      <div style="font-size:26px; font-weight:700; color:#B5501F; letter-spacing:.12em">FUNCIONALIDAD 2 · 12 HISTORIAS</div>
+      <h2 style="margin:0; font-size:60px; font-weight:700">Parametrización de menús de navegación</h2>
+    </div>
+    <div style="position:absolute; left:120px; top:270px; width:620px; display:flex; flex-direction:column; gap:30px">
+      <p style="margin:0; font-size:30px; line-height:1.45; color:#2B2B33; text-wrap:pretty">Los menús de cabecera y pie de página se construyen desde la administración con los elementos activos del portal.</p>
+      <div style="display:flex; flex-direction:column; gap:16px; font-size:26px; color:#4A4652; line-height:1.35">
+        <div style="display:flex; gap:14px"><span style="color:#D9692F; font-weight:700">—</span><span>Micrositios, secciones, páginas informativas, enlaces y botones</span></div>
+        <div style="display:flex; gap:14px"><span style="color:#D9692F; font-weight:700">—</span><span>Orden por arrastre y submenús con la acción Anidar</span></div>
+        <div style="display:flex; gap:14px"><span style="color:#D9692F; font-weight:700">—</span><span>Entre 3 y 7 elementos principales por menú</span></div>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:8px; font-size:24px; color:#4A4652; border-top:2px solid #E6E1EA; padding-top:24px">
+        <span>HU-PW-103 Administrar menús · HU-PW-104 Estructura base</span>
+        <span>HU-PW-105 Elementos especiales · HU-PW-106 Jerarquía</span>
+        <span>HU-PW-107 Validar y almacenar · HU-PW-111 Editar</span>
+      </div>
+    </div>
+    <div style="position:absolute; right:120px; top:240px; width:960px; background:#F6F3F8; border-radius:20px; padding:28px; box-sizing:border-box">
+      <img src="assets/deck/menu-estructura.png" alt="Construcción de un menú" style="width:100%; display:block; border-radius:10px; box-shadow:0 10px 30px rgba(43,43,51,.14)" />
+    </div>
+    <div style="position:absolute; left:0; bottom:0; width:100%; height:12px; background:linear-gradient(90deg, #F7981D, #B53E6B 54%, #7D3693)"></div>
+  </section>
+
+  <section data-label="Menús · Publicación" data-screen-label="06 Menús publicación" data-speaker-notes="HU-PW-108, 112, 113, 114, 115 y 126: ubicación, vista previa, eliminación, publicación y restricciones." style="background:#FFFFFF; font-family:Play, sans-serif; color:#2B2B33; position:relative; overflow:hidden">
+    <div style="position:absolute; left:120px; top:80px; display:flex; flex-direction:column; gap:10px">
+      <div style="font-size:26px; font-weight:700; color:#B5501F; letter-spacing:.12em">FUNCIONALIDAD 2 · 12 HISTORIAS</div>
+      <h2 style="margin:0; font-size:60px; font-weight:700">Vista previa, ubicación y publicación de menús</h2>
+    </div>
+    <div style="position:absolute; left:120px; right:120px; top:250px; display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:48px">
+      <div style="display:flex; flex-direction:column; gap:20px">
+        <div style="font-size:26px; font-weight:700; color:#B5501F">Vista previa en escritorio y móvil</div>
+        <div style="background:#F6F3F8; border-radius:20px; padding:24px">
+          <img src="assets/deck/menu-preview.png" alt="Vista previa del menú" style="width:100%; display:block; border-radius:10px; box-shadow:0 10px 30px rgba(43,43,51,.14)" />
+        </div>
+        <div style="display:flex; flex-direction:column; gap:14px; font-size:26px; color:#4A4652; line-height:1.35; margin-top:8px">
+          <div style="display:flex; gap:14px"><span style="color:#D9692F; font-weight:700">—</span><span>Cada ubicación usa un solo menú a la vez</span></div>
+          <div style="display:flex; gap:14px"><span style="color:#D9692F; font-weight:700">—</span><span>Sin ubicación, el menú queda como borrador de trabajo</span></div>
+          <div style="display:flex; gap:14px"><span style="color:#D9692F; font-weight:700">—</span><span>Restricciones para inactivar elementos usados en menús</span></div>
+        </div>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:20px">
+        <div style="font-size:26px; font-weight:700; color:#B5501F">Cabecera y pie de página en el portal</div>
+        <div style="background:#F6F3F8; border-radius:20px; padding:24px; display:flex; flex-direction:column; gap:20px">
+          <img src="assets/deck/portal-header.png" alt="Menú de cabecera publicado" style="width:100%; display:block; border-radius:10px; box-shadow:0 10px 30px rgba(43,43,51,.14)" />
+          <img src="assets/deck/portal-footer.png" alt="Menú de pie de página publicado" style="width:100%; display:block; border-radius:10px; box-shadow:0 10px 30px rgba(43,43,51,.14)" />
+        </div>
+      </div>
+    </div>
+    <div style="position:absolute; left:120px; right:120px; bottom:56px; font-size:24px; color:#4A4652; display:flex; gap:30px; flex-wrap:wrap">
+      <span>HU-PW-108 Ubicación</span><span>HU-PW-112 Vista previa</span><span>HU-PW-113 Eliminar</span><span>HU-PW-114 Ubicación al editar</span><span>HU-PW-115 Publicar</span><span>HU-PW-126 Restricciones</span>
+    </div>
+    <div style="position:absolute; left:0; bottom:0; width:100%; height:12px; background:linear-gradient(90deg, #F7981D, #B53E6B 54%, #7D3693)"></div>
+  </section>
+
+  <section data-label="Cifras destacadas" data-screen-label="07 Cifras destacadas" data-speaker-notes="HU-PW-116 a 119: entre 3 y 4 cifras con valor y descripción, con vista previa y publicación en la franja del Home." style="background:#FFFFFF; font-family:Play, sans-serif; color:#2B2B33; position:relative; overflow:hidden">
+    <div style="position:absolute; left:120px; top:80px; display:flex; flex-direction:column; gap:10px">
+      <div style="font-size:26px; font-weight:700; color:#B53E6B; letter-spacing:.12em">FUNCIONALIDAD 3 · 4 HISTORIAS</div>
+      <h2 style="margin:0; font-size:60px; font-weight:700">Cifras destacadas en el Home</h2>
+    </div>
+    <div style="position:absolute; left:120px; top:270px; width:560px; display:flex; flex-direction:column; gap:30px">
+      <p style="margin:0; font-size:30px; line-height:1.45; color:#2B2B33; text-wrap:pretty">Las cifras se configuran con su vista previa y se publican en la franja de indicadores del Home.</p>
+      <div style="display:flex; flex-direction:column; gap:16px; font-size:26px; color:#4A4652; line-height:1.35">
+        <div style="display:flex; gap:14px"><span style="color:#B53E6B; font-weight:700">—</span><span>Mínimo 3 y máximo 4 cifras</span></div>
+        <div style="display:flex; gap:14px"><span style="color:#B53E6B; font-weight:700">—</span><span>Cada cifra tiene valor y descripción</span></div>
+        <div style="display:flex; gap:14px"><span style="color:#B53E6B; font-weight:700">—</span><span>Agregar, editar y eliminar desde la misma pantalla</span></div>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:8px; font-size:24px; color:#4A4652; border-top:2px solid #E6E1EA; padding-top:24px">
+        <span>HU-PW-116 Administrar · HU-PW-117 Agregar y editar</span>
+        <span>HU-PW-118 Eliminar · HU-PW-119 Visualizar en el portal</span>
+      </div>
+    </div>
+    <div style="position:absolute; right:120px; top:240px; width:1040px; display:flex; flex-direction:column; gap:22px">
+      <div style="font-size:26px; font-weight:700; color:#B53E6B">Administración</div>
+      <div style="background:#F6F3F8; border-radius:20px; padding:24px">
+        <img src="assets/deck/cifras-admin.png" alt="Administración de cifras destacadas" style="width:100%; display:block; border-radius:10px; box-shadow:0 10px 30px rgba(43,43,51,.14)" />
+      </div>
+      <div style="font-size:26px; font-weight:700; color:#B53E6B; margin-top:8px">Portal WEB</div>
+      <div style="background:#F6F3F8; border-radius:20px; padding:24px">
+        <img src="assets/deck/portal-cifras.png" alt="Cifras publicadas en el Home" style="width:100%; display:block; border-radius:10px; box-shadow:0 10px 30px rgba(43,43,51,.14)" />
+      </div>
+    </div>
+    <div style="position:absolute; left:0; bottom:0; width:100%; height:12px; background:linear-gradient(90deg, #F7981D, #B53E6B 54%, #7D3693)"></div>
+  </section>
+
+  <section data-label="Páginas · Administración" data-screen-label="08 Páginas administración" data-speaker-notes="HU-PW-120 a 123: listado, creación, edición y eliminación de páginas informativas." style="background:#FFFFFF; font-family:Play, sans-serif; color:#2B2B33; position:relative; overflow:hidden">
+    <div style="position:absolute; left:120px; top:80px; display:flex; flex-direction:column; gap:10px">
+      <div style="font-size:26px; font-weight:700; color:#7D3693; letter-spacing:.12em">FUNCIONALIDAD 4 · 7 HISTORIAS</div>
+      <h2 style="margin:0; font-size:60px; font-weight:700">Administración de páginas informativas</h2>
+    </div>
+    <div style="position:absolute; left:120px; top:270px; width:620px; display:flex; flex-direction:column; gap:30px">
+      <p style="margin:0; font-size:30px; line-height:1.45; color:#2B2B33; text-wrap:pretty">Páginas que no dependen de un micrositio, como ¿Quiénes somos? o Portafolio de servicios.</p>
+      <div style="display:flex; flex-direction:column; gap:16px; font-size:26px; color:#4A4652; line-height:1.35">
+        <div style="display:flex; gap:14px"><span style="color:#7D3693; font-weight:700">—</span><span>Se crean solo con el nombre de la página</span></div>
+        <div style="display:flex; gap:14px"><span style="color:#7D3693; font-weight:700">—</span><span>El sistema genera su URL pública</span></div>
+        <div style="display:flex; gap:14px"><span style="color:#7D3693; font-weight:700">—</span><span>Se editan o eliminan desde su tarjeta</span></div>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:8px; font-size:24px; color:#4A4652; border-top:2px solid #E6E1EA; padding-top:24px">
+        <span>HU-PW-120 Administrar · HU-PW-121 Crear</span>
+        <span>HU-PW-122 Editar información · HU-PW-123 Eliminar</span>
+      </div>
+    </div>
+    <div style="position:absolute; right:120px; top:240px; width:960px; background:#F6F3F8; border-radius:20px; padding:28px; box-sizing:border-box; display:grid; grid-template-columns:minmax(0,1.5fr) minmax(0,1fr); gap:24px; align-items:center">
+      <img src="assets/deck/paginas-lista.png" alt="Listado de páginas informativas" style="width:100%; display:block; border-radius:10px; box-shadow:0 10px 30px rgba(43,43,51,.14)" />
+      <img src="assets/deck/pagina-crear.png" alt="Crear página informativa" style="width:100%; display:block; border-radius:10px; box-shadow:0 10px 30px rgba(43,43,51,.14)" />
+    </div>
+    <div style="position:absolute; left:0; bottom:0; width:100%; height:12px; background:linear-gradient(90deg, #F7981D, #B53E6B 54%, #7D3693)"></div>
+  </section>
+
+  <section data-label="Páginas · Contenidos y menús" data-screen-label="09 Páginas contenidos" data-speaker-notes="HU-PW-124, 125 y 150: contenidos de la página con estados y orden, publicación en el portal y uso como elemento de menú." style="background:#FFFFFF; font-family:Play, sans-serif; color:#2B2B33; position:relative; overflow:hidden">
+    <div style="position:absolute; left:120px; top:80px; display:flex; flex-direction:column; gap:10px">
+      <div style="font-size:26px; font-weight:700; color:#7D3693; letter-spacing:.12em">FUNCIONALIDAD 4 · 7 HISTORIAS</div>
+      <h2 style="margin:0; font-size:60px; font-weight:700">Contenidos de la página y publicación en menús</h2>
+    </div>
+    <div style="position:absolute; left:120px; right:120px; top:250px; display:grid; grid-template-columns:minmax(0,1.25fr) minmax(0,1fr); gap:48px">
+      <div style="display:flex; flex-direction:column; gap:20px">
+        <div style="font-size:26px; font-weight:700; color:#7D3693">Contenidos de ¿Quiénes somos?</div>
+        <div style="background:#F6F3F8; border-radius:20px; padding:24px">
+          <img src="assets/deck/pagina-contenidos.png" alt="Listado de contenidos de una página" style="width:100%; display:block; border-radius:10px; box-shadow:0 10px 30px rgba(43,43,51,.14)" />
+        </div>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:28px">
+        <div style="display:flex; flex-direction:column; gap:16px; font-size:26px; color:#4A4652; line-height:1.35">
+          <div style="display:flex; gap:14px"><span style="color:#7D3693; font-weight:700">—</span><span>Contenidos de texto, imágenes, video y documentos</span></div>
+          <div style="display:flex; gap:14px"><span style="color:#7D3693; font-weight:700">—</span><span>Estados Borrador, Publicado e Inactivo</span></div>
+          <div style="display:flex; gap:14px"><span style="color:#7D3693; font-weight:700">—</span><span>El orden del listado define el orden en el portal</span></div>
+          <div style="display:flex; gap:14px"><span style="color:#7D3693; font-weight:700">—</span><span>La página se agrega a un menú como elemento</span></div>
+        </div>
+        <div style="background:#F6F3F8; border-radius:20px; padding:24px">
+          <img src="assets/deck/portal-header.png" alt="¿Quiénes somos? en el menú de cabecera" style="width:100%; display:block; border-radius:10px; box-shadow:0 10px 30px rgba(43,43,51,.14)" />
+        </div>
+        <div style="display:flex; flex-direction:column; gap:8px; font-size:24px; color:#4A4652; border-top:2px solid #E6E1EA; padding-top:24px">
+          <span>HU-PW-124 Gestionar contenidos</span>
+          <span>HU-PW-125 Visualizar en el Portal WEB</span>
+          <span>HU-PW-150 Agregar páginas al menú</span>
+        </div>
+      </div>
+    </div>
+    <div style="position:absolute; left:0; bottom:0; width:100%; height:12px; background:linear-gradient(90deg, #F7981D, #B53E6B 54%, #7D3693)"></div>
+  </section>
+
+</x-import>
+</x-dc>
+</body>
+</html>

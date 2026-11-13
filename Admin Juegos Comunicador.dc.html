@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet" />
+<style>
+  body { margin:0; background:#FFFFFF; font-family:Figtree, system-ui, sans-serif; }
+  a { color:#14555C; }
+  a:hover { color:#0B3A3F; }
+  * { box-sizing:border-box; }
+</style>
+</helmet>
+<div style="display:flex; min-height:100vh; color:#0F1A1C; font-family:Figtree,system-ui,sans-serif; background:#FFFFFF">
+
+  <aside style="width:82px; flex:0 0 82px; border-right:1px solid #EAEFEF; display:flex; flex-direction:column; align-items:center; padding-bottom:20px; gap:8px">
+    <div style="width:60px; height:60px; border-radius:12px; background:#0E3B3B; color:#FFFFFF; display:flex; align-items:center; justify-content:center; font-size:28px; font-weight:800; margin:14px 0 20px">K</div>
+    <sc-for list="{{ rail }}" as="r" hint-placeholder-count="8">
+      <button onClick="{{ r.go }}" title="{{ r.label }}" style="{{ r.style }}">{{ r.glyph }}</button>
+    </sc-for>
+  </aside>
+
+  <main style="flex:1; min-width:0; display:flex; flex-direction:column; padding:22px 28px 60px">
+    <div style="display:flex; align-items:center; gap:8px; font-size:15px; color:#8A9A9C; margin-bottom:16px; flex-wrap:wrap">{{ crumbs }}</div>
+
+    <div style="background:#CDE7EA; border-radius:12px; padding:22px 26px; display:flex; align-items:center; gap:16px; margin-bottom:26px; flex-wrap:wrap">
+      <button onClick="{{ goBack }}" style="background:none; border:none; font-size:22px; color:#0F1A1C; cursor:pointer; padding:0 4px; line-height:1; font-family:inherit">‹</button>
+      <h1 style="font-size:27px; font-weight:700; margin:0; letter-spacing:-0.01em; flex:1; min-width:200px">{{ pageTitle }}</h1>
+      <sc-if value="{{ isEditor }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex; align-items:center; gap:18px">
+          <button onClick="{{ openPvDraft }}" title="Vista previa" style="background:none; border:none; color:#14555C; cursor:pointer; width:36px; height:36px; display:flex; align-items:center; justify-content:center; padding:0; border-radius:8px" style-hover="background:#BFE0E3"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"></path><circle cx="12" cy="12" r="3"></circle></svg></button>
+          <button onClick="{{ cancelEditor }}" style="background:none; border:none; color:#14555C; font-size:14px; font-weight:700; letter-spacing:.06em; cursor:pointer; font-family:inherit">CANCELAR</button>
+          <button onClick="{{ saveEditor }}" style="background:transparent; border:1.5px solid #14555C; color:#14555C; border-radius:999px; padding:11px 26px; font-size:14px; font-weight:700; letter-spacing:.06em; cursor:pointer; font-family:inherit">GUARDAR</button>
+        </div>
+      </sc-if>
+      <sc-if value="{{ isTipoJuego }}" hint-placeholder-val="{{ false }}">
+        <button onClick="{{ goLista }}" style="background:transparent; border:1.5px solid #14555C; color:#14555C; border-radius:999px; padding:11px 26px; font-size:14px; font-weight:700; letter-spacing:.06em; cursor:pointer; font-family:inherit">CANCELAR</button>
+      </sc-if>
+      <sc-if value="{{ isContJuego }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex; align-items:center; gap:18px">
+          <button onClick="{{ goTipoCont }}" style="background:none; border:none; color:#14555C; font-size:14px; font-weight:700; letter-spacing:.06em; cursor:pointer; font-family:inherit">CANCELAR</button>
+          <button onClick="{{ saveCont }}" style="background:transparent; border:1.5px solid #14555C; color:#14555C; border-radius:999px; padding:11px 26px; font-size:14px; font-weight:700; letter-spacing:.06em; cursor:pointer; font-family:inherit">GUARDAR</button>
+        </div>
+      </sc-if>
+    </div>
+
+    <sc-if value="{{ isLista }}" hint-placeholder-val="{{ true }}">
+      <div>
+        <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:20px; flex-wrap:wrap; margin-bottom:22px">
+          <p style="margin:0; font-size:15px; color:#5B6E71; max-width:66ch; line-height:1.5">Crea y parametriza los juegos del portal. Cuando un juego está completo, queda disponible para agregarlo como contenido en cualquier sección de un micrositio.</p>
+          <button onClick="{{ goTipoJuego }}" style="display:flex; align-items:center; gap:8px; background:#14555C; color:#FFFFFF; border:none; border-radius:999px; padding:13px 24px; font-size:14px; font-weight:700; letter-spacing:.06em; cursor:pointer; font-family:inherit; white-space:nowrap"><span style="font-size:20px; line-height:1; font-weight:400">+</span> CREAR JUEGO</button>
+        </div>
+        <sc-if value="{{ hayJuegos }}" hint-placeholder-val="{{ true }}">
+          <div style="display:flex; gap:14px; flex-wrap:wrap; align-items:center">
+            <div style="flex:1 1 300px; min-width:220px; display:flex; align-items:center; gap:10px; background:#E8F5F6; border:1px solid #CBE2E4; border-radius:8px; padding:12px 16px">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0F1A1C" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.5" y2="16.5"></line></svg>
+              <input value="{{ q }}" onChange="{{ onQ }}" placeholder="Buscar por nombre" style="flex:1; min-width:0; background:transparent; border:none; outline:none; font-family:inherit; font-size:15px" />
+            </div>
+            <div style="display:flex; align-items:center; gap:10px">
+              <span style="font-size:15px">Tipo:</span>
+              <select value="{{ fTipo }}" onChange="{{ onFTipo }}" style="min-width:190px; background:#E8F5F6; border:1px solid #CBE2E4; border-radius:8px; padding:12px 14px; font-family:inherit; font-size:15px; color:#3C4A4C; cursor:pointer">
+                <option>Todos los tipos</option>
+                <option>Crucigrama</option>
+                <option>Cuenta cuentos</option>
+                <option>Memoria</option>
+              </select>
+            </div>
+            <div style="display:flex; align-items:center; gap:10px">
+              <span style="font-size:15px">Estado:</span>
+              <select value="{{ fEstado }}" onChange="{{ onFEstado }}" style="min-width:190px; background:#E8F5F6; border:1px solid #CBE2E4; border-radius:8px; padding:12px 14px; font-family:inherit; font-size:15px; color:#3C4A4C; cursor:pointer">
+                <option>Todos los estados</option>
+                <option>Borrador</option>
+                <option>Completado</option>
+                <option>Publicado</option>
+              </select>
+            </div>
+          </div>
+        </sc-if>
+        <sc-if value="{{ hasRows }}" hint-placeholder-val="{{ true }}">
+          <div style="margin-top:18px; border:1px solid #E3EEEF; border-radius:12px; overflow-x:auto">
+            <div style="display:grid; grid-template-columns:minmax(260px,2.4fr) minmax(170px,1.2fr) minmax(130px,1fr) minmax(120px,1fr) minmax(150px,1fr) 132px; gap:16px; min-width:1000px; padding:18px 20px; background:#F4FAFA; border-bottom:1px solid #E3EEEF; font-size:15px; font-weight:600">
+              <div>Nombre del juego</div><div>Tipo</div><div>Estado</div><div>Usado en</div><div>Fecha de modificación</div><div></div>
+            </div>
+            <sc-for list="{{ rows }}" as="g" hint-placeholder-count="5">
+              <div style="display:grid; grid-template-columns:minmax(260px,2.4fr) minmax(170px,1.2fr) minmax(130px,1fr) minmax(120px,1fr) minmax(150px,1fr) 132px; gap:16px; min-width:1000px; padding:16px 20px; border-bottom:1px solid #EEF4F4; align-items:center; font-size:15px">
+                <div style="min-width:0">
+                  <div style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-weight:600">{{ g.nombre }}</div>
+                  <div style="font-size:13px; color:#5B6E71; margin-top:3px">{{ g.sub }}</div>
+                </div>
+                <div style="display:flex; align-items:center; gap:10px"><span style="{{ g.icoStyle }}">{{ g.ico }}</span><span>{{ g.tipo }}</span></div>
+                <div><span style="{{ g.chip }}">{{ g.estado }}</span></div>
+                <div style="color:#25383B">{{ g.uso }}</div>
+                <div style="color:#25383B">{{ g.fecha }}</div>
+                <div style="display:flex; justify-content:flex-end; gap:4px">
+                  <button onClick="{{ g.ver }}" title="Vista previa" style="background:none; border:none; width:36px; height:36px; border-radius:8px; cursor:pointer; color:#14555C; display:flex; align-items:center; justify-content:center; padding:0" style-hover="background:#E3EEEF"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"></path><circle cx="12" cy="12" r="3"></circle></svg></button>
+                  <button onClick="{{ g.editar }}" title="Editar" style="background:none; border:none; width:36px; height:36px; border-radius:8px; cursor:pointer; color:#14555C; display:flex; align-items:center; justify-content:center; padding:0" style-hover="background:#E3EEEF"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg></button>
+                  <button onClick="{{ g.eliminar }}" title="{{ g.delTitle }}" style="{{ g.delStyle }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M9 6V3.5h6V6"></path><rect x="5.5" y="6" width="13" height="15" rx="1.5"></rect></svg></button>
+                </div>
+              </div>
+            </sc-for>
+            <div style="padding:14px 20px; font-size:14px; color:#5B6E71">{{ conteo }}</div>
+          </div>
+        </sc-if>
+        <sc-if value="{{ noRows }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top:18px; border:1px solid #E3EEEF; border-radius:12px; padding:56px 22px; text-align:center; color:#5B6E71; font-size:16px">No se encontraron juegos con los criterios de búsqueda seleccionados.</div>
+        </sc-if>
+        <sc-if value="{{ listaVacia }}" hint-placeholder-val="{{ false }}">
+          <div style="border:1.5px dashed #B9DEE0; border-radius:16px; padding:56px 24px; text-align:center">
+            <div style="font-size:17px; font-weight:700">Aún no has creado juegos.</div>
+            <div style="font-size:15px; color:#5B6E71; margin-top:6px">Usa el botón "Crear juego" para agregar el primero.</div>
+          </div>
+        </sc-if>
+        <div style="display:flex; gap:22px; flex-wrap:wrap; margin-top:22px; font-size:13px; color:#3C4A4C">
+          <div style="display:flex; align-items:center; gap:8px"><span style="border:1px solid #B08A3E; color:#8A6100; border-radius:999px; padding:3px 10px; font-weight:600">Borrador</span><span>Configuración incompleta</span></div>
+          <div style="display:flex; align-items:center; gap:8px"><span style="border:1px solid #2F6FB0; color:#1F5A94; border-radius:999px; padding:3px 10px; font-weight:600">Completado</span><span>Listo para agregarse a una sección</span></div>
+          <div style="display:flex; align-items:center; gap:8px"><span style="border:1px solid #3E8E63; color:#26734A; border-radius:999px; padding:3px 10px; font-weight:600">Publicado</span><span>Está en al menos un contenido publicado</span></div>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isTipoJuego }}" hint-placeholder-val="{{ false }}">
+      <div>
+        <h2 style="font-size:17px; font-weight:700; margin:6px 0 14px; text-align:center">¿Qué tipo de juego quieres crear?</h2>
+        <p style="margin:0 0 24px; text-align:center; font-size:13px; color:#3C4A4C">Elige el tipo de juego. En el siguiente paso configuras su contenido y sus reglas.</p>
+        <div style="display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px">
+          <sc-for list="{{ tiposJuego }}" as="t" hint-placeholder-count="4">
+            <button onClick="{{ t.pick }}" style="{{ t.cardStyle }}" style-hover="box-shadow:0 8px 22px rgba(20,85,92,.16)">
+              <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px">
+                <div style="{{ t.iconStyle }}">{{ t.glyph }}</div>
+                <sc-if value="{{ t.soon }}" hint-placeholder-val="{{ false }}"><span style="font-size:12px; font-weight:700; color:#5B6E71; border:1px solid #B9C4C5; border-radius:999px; padding:3px 10px">Próximamente</span></sc-if>
+              </div>
+              <div>
+                <div style="font-size:17px; font-weight:700; color:#0F1A1C">{{ t.nombre }}</div>
+                <div style="font-size:13px; color:#3C4A4C; line-height:1.5; margin-top:8px">{{ t.desc }}</div>
+              </div>
+            </button>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isEditor }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex; flex-direction:column; gap:18px; margin-bottom:30px">
+        <sc-if value="{{ pubBanner }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex; gap:12px; align-items:flex-start; background:#FFF6E5; border:1px solid #EBCB8B; border-radius:10px; padding:14px 18px; font-size:14px; color:#6B4E10; line-height:1.5">
+            <span style="font-weight:800">!</span><span>{{ pubTxt }}</span>
+          </div>
+        </sc-if>
+        <div style="display:grid; grid-template-columns:minmax(0,1fr) 320px; gap:28px; align-items:start">
+          <div style="display:flex; flex-direction:column; gap:18px; min-width:0">
+            <h2 style="font-size:21px; font-weight:700; margin:0">Información general</h2>
+            <div>
+              <label style="display:block; font-size:16px; font-weight:600; margin-bottom:8px">Nombre del juego <span style="color:#D0382B">*</span></label>
+              <input value="{{ dNombre }}" onChange="{{ onNombre }}" maxLength="80" placeholder="Ej. El café colombiano" style="{{ nombreStyle }}" />
+              <div style="display:flex; justify-content:space-between; gap:12px; margin-top:6px; font-size:13px">
+                <span style="color:#D0382B">{{ nombreErr }}</span><span style="color:#5B6E71">{{ nombreCount }}</span>
+              </div>
+            </div>
+            <div>
+              <label style="display:block; font-size:16px; font-weight:600; margin-bottom:8px">Instrucciones para el jugador <span style="color:#8A9A9C; font-weight:400">(opcional)</span></label>
+              <textarea value="{{ dDesc }}" onChange="{{ onDesc }}" maxLength="300" rows="2" placeholder="Ej. Lee cada pista y escribe la palabra en el tablero." style="width:100%; background:#E8F5F6; border:1px solid #CBE2E4; border-radius:8px; padding:12px 14px; font-family:inherit; font-size:15px; resize:vertical; outline:none"></textarea>
+              <div style="text-align:right; font-size:13px; color:#5B6E71; margin-top:6px">{{ descCount }}</div>
+            </div>
+            <div>
+              <label style="display:block; font-size:16px; font-weight:600; margin-bottom:8px">Mensaje de cierre <span style="color:#8A9A9C; font-weight:400">(opcional)</span></label>
+              <input value="{{ dCierre }}" onChange="{{ onCierre }}" maxLength="150" placeholder="¿Quieres conocer más sobre lo que hacemos en KANOA LAB? Escríbenos." style="width:100%; background:#E8F5F6; border:1px solid #CBE2E4; border-radius:8px; padding:12px 14px; font-family:inherit; font-size:15px; outline:none" />
+              <div style="font-size:13px; color:#5B6E71; margin-top:6px">Se muestra al terminar el juego, junto al botón CONTÁCTANOS. Si lo dejas vacío, se usa el mensaje por defecto.</div>
+            </div>
+          </div>
+          <div style="background:#F4FAFA; border:1px solid #E3EEEF; border-radius:12px; padding:20px; display:flex; flex-direction:column; gap:14px">
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:10px">
+              <span style="font-size:15px; font-weight:700">Estado del juego</span>
+              <span style="{{ estChip }}">{{ estTxt }}</span>
+            </div>
+            <div style="font-size:13px; color:#3C4A4C">Para quedar <b>Completado</b>:</div>
+            <div style="display:flex; flex-direction:column; gap:9px">
+              <sc-for list="{{ reqs }}" as="rq" hint-placeholder-count="2">
+                <div style="display:flex; gap:10px; align-items:flex-start; font-size:14px; line-height:1.4"><span style="{{ rq.icoStyle }}">{{ rq.ico }}</span><span>{{ rq.t }}</span></div>
+              </sc-for>
+            </div>
+            <div style="font-size:12px; color:#5B6E71; line-height:1.5; border-top:1px solid #E3EEEF; padding-top:12px">El estado se calcula solo. Solo los juegos Completados o Publicados se pueden agregar a una sección.</div>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isCruci }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex; flex-direction:column; gap:18px">
+        <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:16px; flex-wrap:wrap">
+          <div>
+            <h2 style="font-size:21px; font-weight:700; margin:0 0 6px">Tablero</h2>
+            <div style="font-size:14px; color:#5B6E71">Haz clic en una casilla para iniciar una palabra. El número de la pregunta se asigna solo.</div>
+          </div>
+          <div style="display:flex; align-items:center; gap:10px">
+            <span style="font-size:15px; font-weight:600">Tamaño del tablero:</span>
+            <select value="{{ cSize }}" onChange="{{ onSize }}" style="min-width:130px; background:#E8F5F6; border:1px solid #CBE2E4; border-radius:8px; padding:11px 14px; font-family:inherit; font-size:15px; cursor:pointer">
+              <option value="8">8 × 8</option>
+              <option value="10">10 × 10</option>
+              <option value="12">12 × 12</option>
+              <option value="15">15 × 15</option>
+            </select>
+          </div>
+        </div>
+        <div style="display:flex; gap:28px; flex-wrap:wrap; align-items:flex-start">
+          <div style="display:flex; flex-direction:column; gap:12px">
+            <div style="{{ boardStyle }}">
+              <sc-for list="{{ cells }}" as="c" hint-placeholder-count="100">
+                <button onClick="{{ c.click }}" title="{{ c.title }}" style="{{ c.style }}"><sc-if value="{{ c.hasNum }}" hint-placeholder-val="{{ false }}"><span style="position:absolute; top:1px; left:3px; font-size:9px; font-weight:800; color:#14555C">{{ c.num }}</span></sc-if>{{ c.letter }}</button>
+              </sc-for>
+            </div>
+            <div style="display:flex; gap:16px; flex-wrap:wrap; font-size:12px; color:#3C4A4C">
+              <span style="display:flex; align-items:center; gap:6px"><span style="width:14px; height:14px; border-radius:3px; background:#FFFFFF; box-shadow:inset 0 0 0 2px #14555C"></span>Casilla de inicio</span>
+              <span style="display:flex; align-items:center; gap:6px"><span style="width:14px; height:14px; border-radius:3px; background:#FFE7C2; border:1px solid #E39A3B"></span>Palabra en creación</span>
+              <span style="display:flex; align-items:center; gap:6px"><span style="width:14px; height:14px; border-radius:3px; background:#F9D4D0; border:1px solid #D0382B"></span>Letra en conflicto</span>
+            </div>
+            <div style="font-size:13px; color:#5B6E71">{{ blackInfo }}</div>
+          </div>
+
+          <div style="flex:1 1 340px; min-width:300px; max-width:520px; border:1px solid #E3EEEF; border-radius:12px; padding:20px; display:flex; flex-direction:column; gap:16px">
+            <sc-if value="{{ noSel }}" hint-placeholder-val="{{ true }}">
+              <div style="display:flex; flex-direction:column; gap:8px; align-items:flex-start; padding:12px 0">
+                <div style="font-size:16px; font-weight:700">Agrega una palabra</div>
+                <div style="font-size:14px; color:#5B6E71; line-height:1.5">1. Haz clic en la casilla donde empieza la palabra.<br>2. Elige si va hacia la derecha o hacia abajo.<br>3. Escribe la respuesta y su pista.</div>
+              </div>
+            </sc-if>
+            <sc-if value="{{ hasSel }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex; flex-direction:column; gap:16px">
+                <div style="display:flex; justify-content:space-between; align-items:baseline; gap:10px">
+                  <div style="font-size:16px; font-weight:700">{{ cxTitle }}</div>
+                  <div style="font-size:13px; color:#5B6E71">{{ selTxt }}</div>
+                </div>
+                <div>
+                  <div style="font-size:15px; font-weight:600; margin-bottom:8px">Dirección <span style="color:#D0382B">*</span></div>
+                  <div style="display:flex; gap:8px">
+                    <button onClick="{{ setH }}" style="{{ dirHStyle }}">→ Horizontal</button>
+                    <button onClick="{{ setV }}" style="{{ dirVStyle }}">↓ Vertical</button>
+                  </div>
+                </div>
+                <div>
+                  <label style="display:block; font-size:15px; font-weight:600; margin-bottom:8px">Respuesta <span style="color:#D0382B">*</span></label>
+                  <input value="{{ cxAns }}" onChange="{{ onAns }}" placeholder="Ej. SOL" style="width:100%; background:#E8F5F6; border:1px solid #CBE2E4; border-radius:8px; padding:12px 14px; font-family:inherit; font-size:17px; font-weight:700; letter-spacing:.18em; outline:none" />
+                  <div style="font-size:13px; color:#5B6E71; margin-top:6px">{{ ansHelp }}</div>
+                </div>
+                <div>
+                  <label style="display:block; font-size:15px; font-weight:600; margin-bottom:8px">Pista o pregunta <span style="color:#D0382B">*</span></label>
+                  <textarea value="{{ cxClue }}" onChange="{{ onClue }}" maxLength="150" rows="2" placeholder="Ej. Estrella que ilumina la Tierra durante el día." style="width:100%; background:#E8F5F6; border:1px solid #CBE2E4; border-radius:8px; padding:12px 14px; font-family:inherit; font-size:15px; resize:vertical; outline:none"></textarea>
+                  <div style="text-align:right; font-size:13px; color:#5B6E71; margin-top:4px">{{ clueCount }}</div>
+                </div>
+                <div style="background:#F4FAFA; border-radius:10px; padding:14px; display:flex; flex-direction:column; gap:10px">
+                  <div style="font-size:13px; font-weight:700; color:#3C4A4C; letter-spacing:.04em">VALIDACIONES</div>
+                  <sc-for list="{{ rules }}" as="ru" hint-placeholder-count="4">
+                    <div style="display:flex; gap:10px; align-items:flex-start">
+                      <span style="{{ ru.icoStyle }}">{{ ru.ico }}</span>
+                      <div style="min-width:0">
+                        <div style="font-size:14px; font-weight:600">{{ ru.t }}</div>
+                        <div style="font-size:13px; color:#3C4A4C; line-height:1.45; margin-top:2px">{{ ru.msg }}</div>
+                      </div>
+                    </div>
+                  </sc-for>
+                </div>
+                <div style="display:flex; justify-content:flex-end; gap:16px; align-items:center">
+                  <button onClick="{{ cancelCx }}" style="background:none; border:none; color:#14555C; font-size:14px; font-weight:700; letter-spacing:.06em; cursor:pointer; font-family:inherit">CANCELAR</button>
+                  <button onClick="{{ addCx }}" disabled="{{ addDisabled }}" style="{{ addStyle }}">{{ addLabel }}</button>
+                </div>
+              </div>
+            </sc-if>
+          </div>
+        </div>
+
+        <h2 style="font-size:21px; font-weight:700; margin:12px 0 0">Palabras y pistas</h2>
+        <sc-if value="{{ noWords }}" hint-placeholder-val="{{ false }}">
+          <div style="border:1.5px dashed #B9DEE0; border-radius:12px; padding:28px; text-align:center; color:#5B6E71; font-size:15px">Aún no has agregado palabras. Necesitas mínimo 3 para que el crucigrama quede completo.</div>
+        </sc-if>
+        <sc-if value="{{ hasWords }}" hint-placeholder-val="{{ true }}">
+          <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(360px,1fr)); gap:20px">
+            <div style="border:1px solid #E3EEEF; border-radius:12px; overflow:hidden">
+              <div style="padding:14px 18px; background:#F4FAFA; font-weight:700; font-size:15px">→ Horizontales</div>
+              <sc-for list="{{ hWords }}" as="w" hint-placeholder-count="2">
+                <div style="display:flex; gap:12px; align-items:flex-start; padding:12px 18px; border-top:1px solid #EEF4F4">
+                  <span style="flex-shrink:0; width:26px; height:26px; border-radius:6px; background:#14555C; color:#FFFFFF; font-size:13px; font-weight:700; display:flex; align-items:center; justify-content:center">{{ w.num }}</span>
+                  <div style="flex:1; min-width:0">
+                    <div style="font-size:14px; line-height:1.4">{{ w.clue }}</div>
+                    <div style="font-size:13px; font-weight:700; letter-spacing:.14em; color:#14555C; margin-top:4px">{{ w.ans }}</div>
+                  </div>
+                  <button onClick="{{ w.edit }}" title="Editar palabra" style="background:none; border:none; width:32px; height:32px; border-radius:8px; cursor:pointer; color:#14555C; padding:0" style-hover="background:#E3EEEF">✎</button>
+                  <button onClick="{{ w.del }}" title="Eliminar palabra" style="background:none; border:none; width:32px; height:32px; border-radius:8px; cursor:pointer; color:#C0392B; padding:0; font-size:16px" style-hover="background:#F6DADA">✕</button>
+                </div>
+              </sc-for>
+            </div>
+            <div style="border:1px solid #E3EEEF; border-radius:12px; overflow:hidden">
+              <div style="padding:14px 18px; background:#F4FAFA; font-weight:700; font-size:15px">↓ Verticales</div>
+              <sc-for list="{{ vWords }}" as="w" hint-placeholder-count="2">
+                <div style="display:flex; gap:12px; align-items:flex-start; padding:12px 18px; border-top:1px solid #EEF4F4">
+                  <span style="flex-shrink:0; width:26px; height:26px; border-radius:6px; background:#14555C; color:#FFFFFF; font-size:13px; font-weight:700; display:flex; align-items:center; justify-content:center">{{ w.num }}</span>
+                  <div style="flex:1; min-width:0">
+                    <div style="font-size:14px; line-height:1.4">{{ w.clue }}</div>
+                    <div style="font-size:13px; font-weight:700; letter-spacing:.14em; color:#14555C; margin-top:4px">{{ w.ans }}</div>
+                  </div>
+                  <button onClick="{{ w.edit }}" title="Editar palabra" style="background:none; border:none; width:32px; height:32px; border-radius:8px; cursor:pointer; color:#14555C; padding:0" style-hover="background:#E3EEEF">✎</button>
+                  <button onClick="{{ w.del }}" title="Eliminar palabra" style="background:none; border:none; width:32px; height:32px; border-radius:8px; cursor:pointer; color:#C0392B; padding:0; font-size:16px" style-hover="background:#F6DADA">✕</button>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isCuento }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex; flex-direction:column; gap:14px">
+        <h2 style="font-size:21px; font-weight:700; margin:0">Páginas de la historia</h2>
+        <div style="font-size:14px; color:#5B6E71">Cada página tiene una ilustración, un texto, una pregunta y sus opciones de respuesta. Mínimo 2 y máximo 15 páginas.</div>
+        <div style="display:grid; grid-template-columns:240px minmax(0,1fr); gap:24px; align-items:start; margin-top:6px">
+          <div style="display:flex; flex-direction:column; gap:8px">
+            <sc-for list="{{ pages }}" as="p" hint-placeholder-count="3">
+              <button onClick="{{ p.go }}" style="{{ p.style }}"><span style="{{ p.dot }}"></span><span style="flex:1">{{ p.label }}</span><span style="font-size:12px; color:#5B6E71">{{ p.st }}</span></button>
+            </sc-for>
+            <button onClick="{{ addPage }}" disabled="{{ addPageDisabled }}" style="display:flex; align-items:center; justify-content:center; gap:8px; background:transparent; border:1.5px dashed #7FB8BD; color:#14555C; border-radius:10px; padding:12px; font-size:14px; font-weight:700; letter-spacing:.04em; cursor:pointer; font-family:inherit">+ AGREGAR PÁGINA</button>
+          </div>
+          <div style="border:1px solid #E3EEEF; border-radius:12px; padding:22px; display:flex; flex-direction:column; gap:18px; min-width:0">
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:12px">
+              <div style="font-size:18px; font-weight:700">{{ pgTitle }}</div>
+              <div style="display:flex; gap:6px">
+                <button onClick="{{ pgUp }}" title="Mover antes" style="background:none; border:1px solid #CBE2E4; width:34px; height:34px; border-radius:8px; cursor:pointer; color:#14555C">↑</button>
+                <button onClick="{{ pgDown }}" title="Mover después" style="background:none; border:1px solid #CBE2E4; width:34px; height:34px; border-radius:8px; cursor:pointer; color:#14555C">↓</button>
+                <button onClick="{{ pgDel }}" title="Eliminar página" style="background:none; border:1px solid #F0C6C1; width:34px; height:34px; border-radius:8px; cursor:pointer; color:#C0392B">✕</button>
+              </div>
+            </div>
+            <div>
+              <div style="font-size:15px; font-weight:600; margin-bottom:8px">Ilustración <span style="color:#D0382B">*</span></div>
+              <sc-if value="{{ noPgImg }}" hint-placeholder-val="{{ true }}">
+                <button onClick="{{ addImg }}" style="width:100%; border:1px dashed #7FB8BD; border-radius:8px; background:#FFFFFF; padding:26px; cursor:pointer; font-family:inherit; display:flex; flex-direction:column; align-items:center; gap:6px">
+                  <span style="color:#14555C; font-size:14px; font-weight:700; letter-spacing:.06em">+ AÑADIR IMAGEN</span>
+                  <span style="font-size:13px; color:#5B6E71">.jpg, .jpeg o .png · hasta 10 MB · también puedes arrastrarla aquí</span>
+                </button>
+              </sc-if>
+              <sc-if value="{{ hasPgImg }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex; align-items:center; gap:12px; background:#E8F5F6; border:1px solid #CBE2E4; border-radius:8px; padding:10px 14px">
+                  <div style="width:64px; height:44px; border-radius:6px; background:#B9DEE0; display:flex; align-items:center; justify-content:center; font-size:11px; color:#14555C; font-weight:700">IMG</div>
+                  <span style="flex:1; font-size:14px; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap">{{ pgImg }}</span>
+                  <button onClick="{{ rmImg }}" title="Quitar imagen" style="background:none; border:none; color:#C0392B; cursor:pointer; font-size:16px">✕</button>
+                </div>
+              </sc-if>
+            </div>
+            <div>
+              <label style="display:block; font-size:15px; font-weight:600; margin-bottom:8px">Texto de la página <span style="color:#D0382B">*</span></label>
+              <textarea value="{{ pgTexto }}" onChange="{{ onPgTexto }}" maxLength="500" rows="3" placeholder="Ej. Había una vez un cóndor llamado Simón…" style="width:100%; background:#E8F5F6; border:1px solid #CBE2E4; border-radius:8px; padding:12px 14px; font-family:inherit; font-size:15px; resize:vertical; outline:none"></textarea>
+              <div style="text-align:right; font-size:13px; color:#5B6E71; margin-top:4px">{{ pgTextoCount }}</div>
+            </div>
+            <div>
+              <label style="display:block; font-size:15px; font-weight:600; margin-bottom:8px">Pregunta <span style="color:#D0382B">*</span></label>
+              <input value="{{ pgPregunta }}" onChange="{{ onPgPregunta }}" maxLength="150" placeholder="Ej. ¿Cómo se siente Simón en esta parte?" style="width:100%; background:#E8F5F6; border:1px solid #CBE2E4; border-radius:8px; padding:12px 14px; font-family:inherit; font-size:15px; outline:none" />
+            </div>
+            <div>
+              <div style="font-size:15px; font-weight:600; margin-bottom:4px">Opciones de respuesta <span style="color:#D0382B">*</span></div>
+              <div style="font-size:13px; color:#5B6E71; margin-bottom:10px">Entre 2 y 4 opciones. Marca la respuesta correcta.</div>
+              <div style="display:flex; flex-direction:column; gap:8px">
+                <sc-for list="{{ opciones }}" as="o" hint-placeholder-count="3">
+                  <div style="display:flex; gap:10px; align-items:center">
+                    <button onClick="{{ o.mark }}" title="Marcar como correcta" style="{{ o.markStyle }}">{{ o.markIco }}</button>
+                    <input value="{{ o.t }}" onChange="{{ o.onT }}" maxLength="80" placeholder="{{ o.ph }}" style="flex:1; min-width:0; background:#E8F5F6; border:1px solid #CBE2E4; border-radius:8px; padding:11px 14px; font-family:inherit; font-size:15px; outline:none" />
+                    <button onClick="{{ o.del }}" title="Quitar opción" style="background:none; border:none; color:#C0392B; cursor:pointer; font-size:15px; width:30px">✕</button>
+                  </div>
+                </sc-for>
+              </div>
+              <sc-if value="{{ canAddOpc }}" hint-placeholder-val="{{ true }}">
+                <button onClick="{{ addOpc }}" style="margin-top:10px; background:none; border:none; color:#14555C; font-size:14px; font-weight:700; letter-spacing:.04em; cursor:pointer; font-family:inherit; padding:4px 0">+ AGREGAR OPCIÓN</button>
+              </sc-if>
+            </div>
+            <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:16px">
+              <div>
+                <label style="display:block; font-size:15px; font-weight:600; margin-bottom:8px">Mensaje si acierta <span style="color:#D0382B">*</span></label>
+                <input value="{{ pgFbOk }}" onChange="{{ onFbOk }}" maxLength="150" placeholder="Ej. ¡Correcto! Simón se siente feliz." style="width:100%; background:#E8F5F6; border:1px solid #CBE2E4; border-radius:8px; padding:12px 14px; font-family:inherit; font-size:15px; outline:none" />
+              </div>
+              <div>
+                <label style="display:block; font-size:15px; font-weight:600; margin-bottom:8px">Mensaje si no acierta <span style="color:#D0382B">*</span></label>
+                <input value="{{ pgFbNo }}" onChange="{{ onFbNo }}" maxLength="150" placeholder="Ej. Mira de nuevo la imagen." style="width:100%; background:#E8F5F6; border:1px solid #CBE2E4; border-radius:8px; padding:12px 14px; font-family:inherit; font-size:15px; outline:none" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isMemo }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex; flex-direction:column; gap:22px">
+        <h2 style="font-size:21px; font-weight:700; margin:0">Configuración del tablero</h2>
+        <div>
+          <div style="font-size:15px; font-weight:600; margin-bottom:10px">Tipo de emparejamiento <span style="color:#D0382B">*</span></div>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px">
+            <sc-for list="{{ modos }}" as="m" hint-placeholder-count="4">
+              <button onClick="{{ m.pick }}" style="{{ m.style }}">
+                <span style="font-size:15px; font-weight:700">{{ m.t }}</span>
+                <span style="font-size:13px; color:#3C4A4C; line-height:1.45">{{ m.d }}</span>
+              </button>
+            </sc-for>
+          </div>
+        </div>
+        <div style="display:flex; gap:36px; flex-wrap:wrap">
+          <div>
+            <div style="font-size:15px; font-weight:600; margin-bottom:10px">Número de parejas <span style="color:#D0382B">*</span></div>
+            <div style="display:flex; gap:8px">
+              <sc-for list="{{ parejasOpts }}" as="po" hint-placeholder-count="4">
+                <button onClick="{{ po.pick }}" style="{{ po.style }}">{{ po.n }}</button>
+              </sc-for>
+            </div>
+            <div style="font-size:13px; color:#5B6E71; margin-top:8px">{{ gridSug }}</div>
+          </div>
+          <div>
+            <div style="font-size:15px; font-weight:600; margin-bottom:10px">Dorso de las cartas <span style="color:#8A9A9C; font-weight:400">(opcional)</span></div>
+            <div style="display:flex; align-items:center; gap:12px">
+              <div style="width:44px; height:56px; border-radius:8px; background:#14555C; color:#FFFFFF; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:13px">KL</div>
+              <div style="display:flex; flex-direction:column; gap:4px">
+                <span style="font-size:14px">{{ dorsoTxt }}</span>
+                <button onClick="{{ toggleDorso }}" style="background:none; border:none; color:#14555C; font-size:13px; font-weight:700; letter-spacing:.04em; cursor:pointer; font-family:inherit; padding:0; text-align:left">{{ dorsoBtn }}</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:16px">
+          <div style="border:1px solid #E3EEEF; border-radius:12px; padding:16px 18px; display:flex; flex-direction:column; gap:12px">
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:10px">
+              <span style="font-size:15px; font-weight:600">Tiempo límite</span>
+              <button onClick="{{ toggleTiempo }}" style="{{ tiempoTrack }}"><span style="{{ tiempoKnob }}"></span></button>
+            </div>
+            <sc-if value="{{ tiempoOn }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex; align-items:center; gap:10px; font-size:14px">
+                <select value="{{ tiempoMin }}" onChange="{{ onTiempoMin }}" style="background:#E8F5F6; border:1px solid #CBE2E4; border-radius:8px; padding:9px 12px; font-family:inherit; font-size:14px">
+                  <option value="1">1 minuto</option>
+                  <option value="2">2 minutos</option>
+                  <option value="3">3 minutos</option>
+                  <option value="5">5 minutos</option>
+                </select>
+                <span style="color:#5B6E71">Cuenta regresiva visible para el jugador.</span>
+              </div>
+            </sc-if>
+          </div>
+          <div style="border:1px solid #E3EEEF; border-radius:12px; padding:16px 18px; display:flex; flex-direction:column; gap:12px">
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:10px">
+              <span style="font-size:15px; font-weight:600">Límite de errores</span>
+              <button onClick="{{ toggleIntentos }}" style="{{ intentosTrack }}"><span style="{{ intentosKnob }}"></span></button>
+            </div>
+            <sc-if value="{{ intentosOn }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex; align-items:center; gap:10px; font-size:14px">
+                <input type="number" min="1" max="50" value="{{ intentosN }}" onChange="{{ onIntentosN }}" style="width:80px; background:#E8F5F6; border:1px solid #CBE2E4; border-radius:8px; padding:9px 12px; font-family:inherit; font-size:14px" />
+                <span style="color:#5B6E71">errores permitidos antes de perder.</span>
+              </div>
+            </sc-if>
+          </div>
+        </div>
+
+        <h2 style="font-size:21px; font-weight:700; margin:8px 0 0">Parejas</h2>
+        <div style="font-size:14px; color:#5B6E71; margin-top:-12px">{{ paresHelp }}</div>
+        <div style="border:1px solid #E3EEEF; border-radius:12px; overflow-x:auto">
+          <div style="display:grid; grid-template-columns:90px minmax(220px,1fr) minmax(220px,1fr) minmax(220px,1fr); gap:16px; min-width:860px; padding:14px 18px; background:#F4FAFA; font-size:14px; font-weight:700">
+            <div>Pareja</div><div>Carta A</div><div>Carta B</div><div>Mensaje al encontrarla (opcional)</div>
+          </div>
+          <sc-for list="{{ pares }}" as="pr" hint-placeholder-count="6">
+            <div style="display:grid; grid-template-columns:90px minmax(220px,1fr) minmax(220px,1fr) minmax(220px,1fr); gap:16px; min-width:860px; padding:12px 18px; border-top:1px solid #EEF4F4; align-items:center">
+              <div style="display:flex; align-items:center; gap:8px; font-size:14px; font-weight:600"><span style="{{ pr.dot }}"></span>{{ pr.n }}</div>
+              <div style="display:flex; gap:8px; align-items:center; min-width:0">
+                <sc-if value="{{ pr.aSelTipo }}" hint-placeholder-val="{{ false }}">
+                  <select value="{{ pr.aTipo }}" onChange="{{ pr.onATipo }}" style="background:#E8F5F6; border:1px solid #CBE2E4; border-radius:8px; padding:9px 8px; font-family:inherit; font-size:13px">
+                    <option>Imagen</option>
+                    <option>Texto</option>
+                    <option>Audio</option>
+                  </select>
+                </sc-if>
+                <sc-if value="{{ pr.aIsTexto }}" hint-placeholder-val="{{ false }}">
+                  <input value="{{ pr.aVal }}" onChange="{{ pr.onAVal }}" maxLength="60" placeholder="{{ pr.aPh }}" style="flex:1; min-width:0; background:#E8F5F6; border:1px solid #CBE2E4; border-radius:8px; padding:9px 12px; font-family:inherit; font-size:14px; outline:none" />
+                </sc-if>
+                <sc-if value="{{ pr.aIsFile }}" hint-placeholder-val="{{ true }}">
+                  <button onClick="{{ pr.aFile }}" style="{{ pr.aFileStyle }}">{{ pr.aFileTxt }}</button>
+                </sc-if>
+                <sc-if value="{{ pr.aIsEmo }}" hint-placeholder-val="{{ false }}">
+                  <select value="{{ pr.aVal }}" onChange="{{ pr.onAVal }}" style="flex:1; min-width:0; background:#E8F5F6; border:1px solid #CBE2E4; border-radius:8px; padding:9px 10px; font-family:inherit; font-size:14px">
+                    <option value="">Selecciona una emoción</option>
+                    <option>Alegría</option>
+                    <option>Tristeza</option>
+                    <option>Miedo</option>
+                    <option>Ira</option>
+                    <option>Sorpresa</option>
+                    <option>Calma</option>
+                    <option>Asco</option>
+                    <option>Amor</option>
+                  </select>
+                </sc-if>
+              </div>
+              <div style="min-width:0">
+                <sc-if value="{{ pr.bIgual }}" hint-placeholder-val="{{ true }}">
+                  <span style="font-size:13px; color:#5B6E71">Igual a la carta A (se duplica automáticamente)</span>
+                </sc-if>
+                <sc-if value="{{ pr.bIsTexto }}" hint-placeholder-val="{{ false }}">
+                  <input value="{{ pr.bVal }}" onChange="{{ pr.onBVal }}" maxLength="80" placeholder="{{ pr.bPh }}" style="width:100%; background:#E8F5F6; border:1px solid #CBE2E4; border-radius:8px; padding:9px 12px; font-family:inherit; font-size:14px; outline:none" />
+                </sc-if>
+              </div>
+              <input value="{{ pr.msg }}" onChange="{{ pr.onMsg }}" maxLength="120" placeholder="Ej. ¡Bien! Encontraste la alegría." style="width:100%; background:#E8F5F6; border:1px solid #CBE2E4; border-radius:8px; padding:9px 12px; font-family:inherit; font-size:14px; outline:none" />
+            </div>
+          </sc-for>
+        </div>
+        <div style="font-size:13px; color:#5B6E71">Al iniciar el juego, el sistema duplica y mezcla las cartas en el tablero de forma aleatoria.</div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isTipoCont }}" hint-placeholder-val="{{ false }}">
+      <div>
+        <h2 style="font-size:17px; font-weight:700; margin:6px 0 14px; text-align:center">¿Que tipo de contenido quieres crear?</h2>
+        <p style="margin:0 0 24px; text-align:center; font-size:13px; color:#3C4A4C">Elige un formato para empezar. podrás completar el título, la descripción y los archivos en el siguiente paso.</p>
+        <div style="display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px">
+          <sc-for list="{{ tiposCont }}" as="t" hint-placeholder-count="6">
+            <button onClick="{{ t.pick }}" style="{{ t.cardStyle }}" style-hover="box-shadow:0 8px 22px rgba(20,85,92,.16)">
+              <div style="display:flex; justify-content:space-between; align-items:flex-start">
+                <div style="{{ t.iconStyle }}">{{ t.glyph }}</div>
+                <sc-if value="{{ t.nuevo }}" hint-placeholder-val="{{ false }}"><span style="font-size:12px; font-weight:700; color:#FFFFFF; background:#14555C; border-radius:999px; padding:4px 10px">Nuevo</span></sc-if>
+              </div>
+              <div>
+                <div style="font-size:17px; font-weight:700; color:#0F1A1C">{{ t.nombre }}</div>
+                <div style="font-size:13px; color:#3C4A4C; line-height:1.5; margin-top:8px">{{ t.limite }}</div>
+              </div>
+            </button>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isContJuego }}" hint-placeholder-val="{{ false }}">
+      <div style="display:grid; grid-template-columns:minmax(0,1fr) 320px; gap:28px; align-items:start">
+        <div style="display:flex; flex-direction:column; gap:22px; min-width:0">
+          <div>
+            <label style="display:block; font-size:16px; font-weight:600; margin-bottom:8px">Título <span style="color:#8A9A9C; font-weight:400">(opcional)</span></label>
+            <input value="{{ cTitulo }}" onChange="{{ onCTitulo }}" maxLength="150" placeholder="Ej. Juega y aprende sobre el café" style="width:100%; background:#E8F5F6; border:1px solid #CBE2E4; border-radius:8px; padding:12px 14px; font-family:inherit; font-size:15px; outline:none" />
+            <div style="font-size:13px; color:#5B6E71; margin-top:6px">Se muestra sobre el juego en la sección.</div>
+          </div>
+          <div>
+            <div style="font-size:16px; font-weight:600; margin-bottom:10px">Tipo de juego <span style="color:#D0382B">*</span></div>
+            <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:12px">
+              <sc-for list="{{ cTipos }}" as="ct" hint-placeholder-count="4">
+                <button onClick="{{ ct.pick }}" style="{{ ct.style }}"><span style="{{ ct.icoStyle }}">{{ ct.glyph }}</span><span style="display:flex; flex-direction:column; gap:2px; text-align:left"><span style="font-size:15px; font-weight:700">{{ ct.t }}</span><span style="font-size:12px; color:#5B6E71">{{ ct.sub }}</span></span></button>
+              </sc-for>
+            </div>
+          </div>
+          <div>
+            <div style="font-size:16px; font-weight:600; margin-bottom:4px">Juegos <span style="color:#D0382B">*</span></div>
+            <div style="font-size:13px; color:#5B6E71; margin-bottom:12px">Selecciona uno o varios. Solo se muestran juegos Completados o Publicados de este tipo.</div>
+            <sc-if value="{{ hasDisp }}" hint-placeholder-val="{{ true }}">
+              <div style="border:1px solid #E3EEEF; border-radius:12px; overflow:hidden">
+                <sc-for list="{{ disp }}" as="dj" hint-placeholder-count="2">
+                  <button onClick="{{ dj.toggle }}" style="{{ dj.rowStyle }}">
+                    <span style="{{ dj.boxStyle }}">{{ dj.ico }}</span>
+                    <span style="flex:1; min-width:0; display:flex; flex-direction:column; gap:3px; text-align:left">
+                      <span style="font-size:15px; font-weight:600">{{ dj.nombre }}</span>
+                      <span style="font-size:13px; color:#5B6E71">{{ dj.sub }}</span>
+                    </span>
+                    <span style="{{ dj.chip }}">{{ dj.estado }}</span>
+                    <span onClick="{{ dj.ver }}" title="Vista previa" style="width:34px; height:34px; border-radius:8px; display:flex; align-items:center; justify-content:center; color:#14555C"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"></path><circle cx="12" cy="12" r="3"></circle></svg></span>
+                  </button>
+                </sc-for>
+              </div>
+            </sc-if>
+            <sc-if value="{{ noDisp }}" hint-placeholder-val="{{ false }}">
+              <div style="border:1.5px dashed #B9DEE0; border-radius:12px; padding:28px; text-align:center; font-size:15px; color:#5B6E71">No hay juegos Completados de este tipo. Créalos o complétalos en el módulo Juegos.</div>
+            </sc-if>
+            <sc-if value="{{ cErrOn }}" hint-placeholder-val="{{ false }}">
+              <div style="font-size:13px; color:#D0382B; margin-top:8px">Debes seleccionar al menos un juego.</div>
+            </sc-if>
+            <sc-if value="{{ rotaOn }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex; gap:10px; align-items:flex-start; margin-top:12px; background:#E8F5F6; border-radius:10px; padding:12px 16px; font-size:14px; line-height:1.5"><span style="font-weight:800; color:#14555C">↻</span><span>{{ rotaTxt }}</span></div>
+            </sc-if>
+          </div>
+        </div>
+        <div style="background:#F4FAFA; border:1px solid #E3EEEF; border-radius:12px; padding:20px; display:flex; flex-direction:column; gap:12px; font-size:14px; line-height:1.5; color:#25383B">
+          <div style="font-size:15px; font-weight:700">Así funciona</div>
+          <div>• El contenido se crea en <b>Borrador</b>. Al publicarlo, los juegos seleccionados pasan a <b>Publicado</b>.</div>
+          <div>• Un mismo juego se puede usar en varias secciones y micrositios.</div>
+          <div>• Con varios juegos, cada visitante ve uno de ellos de forma rotativa.</div>
+          <div>• Al terminar el juego, el visitante ve el mensaje de cierre y el botón CONTÁCTANOS.</div>
+        </div>
+      </div>
+    </sc-if>
+  </main>
+
+  <sc-if value="{{ pvOpen }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closePv }}" style="position:fixed; inset:0; background:rgba(15,26,28,.55); z-index:50; display:flex; align-items:flex-start; justify-content:center; padding:40px 20px; overflow:auto">
+      <div onClick="{{ stop }}" style="background:#FFFFFF; border-radius:16px; width:100%; max-width:980px; box-shadow:0 24px 60px rgba(0,0,0,.25); overflow:hidden">
+        <div style="display:flex; align-items:center; gap:14px; padding:16px 22px; border-bottom:1px solid #E3EEEF; background:#F4FAFA">
+          <span style="font-size:13px; font-weight:700; color:#5B6E71; letter-spacing:.06em">VISTA PREVIA · ASÍ LO VERÁ EL VISITANTE</span>
+          <span style="flex:1"></span>
+          <button onClick="{{ closePv }}" title="Cerrar" style="background:none; border:none; font-size:20px; cursor:pointer; color:#0F1A1C; width:36px; height:36px; border-radius:8px">✕</button>
+        </div>
+        <div style="padding:28px 32px 34px; display:flex; flex-direction:column; gap:18px">
+          <div>
+            <div style="font-size:13px; font-weight:700; color:#B5651D; letter-spacing:.08em">{{ pvTipo }}</div>
+            <div style="font-size:26px; font-weight:800; margin-top:4px">{{ pvNombre }}</div>
+            <sc-if value="{{ pvHasDesc }}" hint-placeholder-val="{{ false }}"><div style="font-size:15px; color:#3C4A4C; margin-top:6px">{{ pvDesc }}</div></sc-if>
+          </div>
+
+          <sc-if value="{{ pvDone }}" hint-placeholder-val="{{ false }}">
+            <div style="background:#E8F5F6; border-radius:16px; padding:46px 28px; display:flex; flex-direction:column; align-items:center; gap:14px; text-align:center">
+              <div style="font-size:26px; font-weight:800">{{ pvDoneTitle }}</div>
+              <div style="font-size:16px; color:#25383B; max-width:52ch; line-height:1.5">{{ pvCierre }}</div>
+              <div style="display:flex; gap:12px; margin-top:8px; flex-wrap:wrap; justify-content:center">
+                <button onClick="{{ pvReplay }}" style="background:transparent; border:1.5px solid #14555C; color:#14555C; border-radius:999px; padding:12px 24px; font-size:14px; font-weight:700; letter-spacing:.06em; cursor:pointer; font-family:inherit">VOLVER A JUGAR</button>
+                <button onClick="{{ pvContact }}" style="background:#14555C; border:none; color:#FFFFFF; border-radius:999px; padding:12px 26px; font-size:14px; font-weight:700; letter-spacing:.06em; cursor:pointer; font-family:inherit">CONTÁCTANOS</button>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ pvCruci }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex; gap:28px; flex-wrap:wrap; align-items:flex-start">
+              <div style="display:flex; flex-direction:column; gap:12px">
+                <div style="{{ pvBoardStyle }}">
+                  <sc-for list="{{ pvCells }}" as="pc" hint-placeholder-count="100">
+                    <div style="{{ pc.style }}"><sc-if value="{{ pc.hasNum }}" hint-placeholder-val="{{ false }}"><span style="position:absolute; top:1px; left:3px; font-size:9px; font-weight:800; color:#14555C">{{ pc.num }}</span></sc-if><sc-if value="{{ pc.white }}" hint-placeholder-val="{{ false }}"><input value="{{ pc.val }}" onChange="{{ pc.onChange }}" style="{{ pc.inStyle }}" /></sc-if></div>
+                  </sc-for>
+                </div>
+                <div style="display:flex; gap:12px; align-items:center">
+                  <button onClick="{{ pvCheck }}" style="background:#14555C; border:none; color:#FFFFFF; border-radius:999px; padding:11px 22px; font-size:14px; font-weight:700; letter-spacing:.06em; cursor:pointer; font-family:inherit">COMPROBAR</button>
+                  <span style="font-size:14px; color:#3C4A4C">{{ pvMsg }}</span>
+                </div>
+              </div>
+              <div style="flex:1 1 280px; display:flex; flex-direction:column; gap:16px; min-width:260px">
+                <div>
+                  <div style="font-size:15px; font-weight:700; margin-bottom:8px">Horizontales</div>
+                  <sc-for list="{{ pvH }}" as="ph" hint-placeholder-count="3"><div style="font-size:14px; line-height:1.45; margin-bottom:6px"><b>{{ ph.num }}.</b> {{ ph.clue }} <span style="color:#5B6E71">({{ ph.len }})</span></div></sc-for>
+                </div>
+                <div>
+                  <div style="font-size:15px; font-weight:700; margin-bottom:8px">Verticales</div>
+                  <sc-for list="{{ pvV }}" as="pvv" hint-placeholder-count="2"><div style="font-size:14px; line-height:1.45; margin-bottom:6px"><b>{{ pvv.num }}.</b> {{ pvv.clue }} <span style="color:#5B6E71">({{ pvv.len }})</span></div></sc-for>
+                </div>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ pvCuento }}" hint-placeholder-val="{{ false }}">
+            <div style="display:grid; grid-template-columns:minmax(0,1.1fr) minmax(0,1fr); gap:26px; align-items:stretch">
+              <div style="background:#DCEFF0; border-radius:14px; min-height:300px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; color:#14555C; text-align:center; padding:20px">
+                <div style="font-size:13px; font-weight:700; letter-spacing:.08em">ILUSTRACIÓN</div>
+                <div style="font-size:14px">{{ pvImg }}</div>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:14px">
+                <div style="font-size:13px; color:#5B6E71; font-weight:700">{{ pvPage }}</div>
+                <div style="font-size:16px; line-height:1.55">{{ pvTexto }}</div>
+                <div style="font-size:17px; font-weight:700">{{ pvPregunta }}</div>
+                <div style="display:flex; flex-direction:column; gap:8px">
+                  <sc-for list="{{ pvOpcs }}" as="po" hint-placeholder-count="3">
+                    <button onClick="{{ po.pick }}" style="{{ po.style }}">{{ po.t }}</button>
+                  </sc-for>
+                </div>
+                <sc-if value="{{ pvHasFb }}" hint-placeholder-val="{{ false }}">
+                  <div style="{{ pvFbStyle }}">{{ pvFb }}</div>
+                </sc-if>
+                <div style="display:flex; gap:10px; justify-content:flex-end">
+                  <sc-if value="{{ pvShowRetry }}" hint-placeholder-val="{{ false }}"><button onClick="{{ pvRetry }}" style="background:transparent; border:1.5px solid #14555C; color:#14555C; border-radius:999px; padding:10px 20px; font-size:14px; font-weight:700; letter-spacing:.06em; cursor:pointer; font-family:inherit">REINTENTAR</button></sc-if>
+                  <sc-if value="{{ pvShowNext }}" hint-placeholder-val="{{ false }}"><button onClick="{{ pvNext }}" style="background:#14555C; border:none; color:#FFFFFF; border-radius:999px; padding:10px 22px; font-size:14px; font-weight:700; letter-spacing:.06em; cursor:pointer; font-family:inherit">{{ pvNextTxt }}</button></sc-if>
+                </div>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ pvMemo }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex; flex-direction:column; gap:14px">
+              <div style="display:flex; gap:20px; flex-wrap:wrap; font-size:14px; color:#25383B"><span>{{ pvStats }}</span><span>{{ pvTiempo }}</span></div>
+              <div style="{{ pvMemoGrid }}">
+                <sc-for list="{{ pvCards }}" as="cd" hint-placeholder-count="12">
+                  <button onClick="{{ cd.click }}" style="{{ cd.style }}">{{ cd.face }}</button>
+                </sc-for>
+              </div>
+              <sc-if value="{{ pvHasPairMsg }}" hint-placeholder-val="{{ false }}"><div style="background:#E1F3E8; color:#1E6A42; border-radius:10px; padding:10px 14px; font-size:14px; font-weight:600">{{ pvPairMsg }}</div></sc-if>
+            </div>
+          </sc-if>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ cfOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed; inset:0; background:rgba(15,26,28,.45); z-index:60; display:flex; align-items:center; justify-content:center; padding:20px">
+      <div style="background:#FFFFFF; border-radius:14px; width:100%; max-width:460px; padding:26px 26px 22px; display:flex; flex-direction:column; gap:14px; box-shadow:0 20px 50px rgba(0,0,0,.25)">
+        <div style="font-size:19px; font-weight:700">Confirmar acción</div>
+        <div style="font-size:15px; color:#25383B; line-height:1.5">{{ cfMsg }}</div>
+        <div style="display:flex; justify-content:flex-end; gap:16px; margin-top:6px">
+          <button onClick="{{ cfNo }}" style="background:none; border:none; color:#14555C; font-size:14px; font-weight:700; letter-spacing:.06em; cursor:pointer; font-family:inherit">CANCELAR</button>
+          <button onClick="{{ cfYes }}" style="background:#14555C; border:none; color:#FFFFFF; border-radius:999px; padding:11px 24px; font-size:14px; font-weight:700; letter-spacing:.06em; cursor:pointer; font-family:inherit">CONFIRMAR</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ toastOn }}" hint-placeholder-val="{{ false }}">
+    <div style="{{ toastStyle }}">{{ toastTxt }}</div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;datos&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Con juegos de ejemplo&quot;,&quot;Sin juegos creados&quot;],&quot;default&quot;:&quot;Con juegos de ejemplo&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;mostrarMatica&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;}}">
+const CB = "border-radius:999px; padding:4px 12px; font-size:13px; font-weight:600; display:inline-block; white-space:nowrap; ";
+const CHIP = {
+  Publicado: CB + "border:1px solid #3E8E63; color:#26734A",
+  Completado: CB + "border:1px solid #2F6FB0; color:#1F5A94",
+  Borrador: CB + "border:1px solid #B08A3E; color:#8A6100"
+};
+const TJ = [
+  ["Crucigrama", "Palabras que se cruzan en una cuadrícula, con una pista para cada palabra.", "▦", "#C3DAFA"],
+  ["Cuenta cuentos", "Historia por páginas: cada página tiene ilustración, texto y una pregunta con opciones de respuesta.", "❡", "#FAD2A5"],
+  ["Memoria", "Cartas boca abajo para encontrar parejas idénticas, relacionadas o de emociones.", "◫", "#C7C2F2"],
+  ["Matica", "Cuida un ser vivo con recursos y etapas de crecimiento. Las reglas están en definición.", "❀", "#CFE8B8"]
+];
+const TC = [
+  ["Solo texto", "Titulo y texto enriquecido como base del contenido", "Tт", "#8FEAC8"],
+  ["Imágenes", "Hasta 5 imágenes con descripción. con mas de una se muestran en carrusel", "▣", "#AFC4F5"],
+  ["Video", "Un video subido o embebido desde YouTube con descripción", "▷", "#FAD2A5"],
+  ["Documentos descargables", "Hasta 3 archivos adjuntos (PDF,DOC,DOCX, XLS, XLSX,PPTX) con descripción", "▤", "#C7C2F2"],
+  ["Tablero BI", "Un tablero de Power BI publicado en la web, con título, descripción, fuente y fecha de actualización", "▥", "#FCE7A8"],
+  ["Juego", "Uno o varios juegos creados en el módulo Juegos: crucigrama, cuenta cuentos o memoria", "◈", "#F5C2D6"]
+];
+const EMO = { "Alegría": "#FCE7A8", "Tristeza": "#C3DAFA", "Miedo": "#C7C2F2", "Ira": "#F6B8B0", "Sorpresa": "#FAD2A5", "Calma": "#A5F3E0", "Asco": "#CFE8B8", "Amor": "#F5C2D6" };
+const MODOS = [
+  ["Idénticos", "Dos cartas iguales: imagen, texto o audio."],
+  ["Concepto – definición", "Un concepto y su definición, en texto."],
+  ["Imagen – texto", "Una imagen y la palabra que la nombra."],
+  ["Emociones", "Parejas con las emociones del kit de KANOA LAB."]
+];
+const GRID = { 4: [2, 4], 6: [3, 4], 8: [4, 4], 12: [4, 6] };
+const RAIL = [["Portada", "⌂", null], ["Cifras destacadas", "▥", null], ["Bloques de contenido", "▤", null], ["Noticias", "▦", null], ["Micrositios", "◉", "tipoCont"], ["Páginas informativas", "▤", null], ["Menús", "☰", null], ["Juegos", "◈", "lista"]];
+const CX0 = { sel: null, dir: "H", ans: "", clue: "", editId: null };
+const HOY = "9 nov 2026";
+const SCREEN = { "Crucigrama": "cruci", "Cuenta cuentos": "cuento", "Memoria": "memo" };
+
+const key = (r, c) => r + "," + c;
+const norm = (s) => (s || "").toUpperCase().replace(/Ñ/g, "\u0001").normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\u0001/g, "Ñ").replace(/[^A-ZÑ]/g, "");
+const cellsOf = (w) => { const a = []; for (let i = 0; i < w.ans.length; i++) a.push([w.r + (w.dir === "V" ? i : 0), w.c + (w.dir === "H" ? i : 0)]); return a; };
+const buildMap = (ws) => { const m = {}; ws.forEach(w => cellsOf(w).forEach(([r, c], i) => { const k = key(r, c); (m[k] = m[k] || { L: w.ans[i], ws: [] }).ws.push(w); })); return m; };
+const numerar = (ws) => { const byStart = {}, byId = {}; let n = 0; ws.forEach(w => { const k = key(w.r, w.c); if (!byStart[k]) byStart[k] = ++n; byId[w.id] = byStart[k]; }); return { byStart, byId }; };
+const clone = (o) => JSON.parse(JSON.stringify(o));
+
+const pagOk = (p) => !!p.img && p.texto.trim().length >= 3 && p.pregunta.trim().length >= 3 && p.opciones.length >= 2 && p.opciones.every(o => o.t.trim()) && p.opciones.filter(o => o.ok).length === 1 && !!p.fbOk.trim() && !!p.fbNo.trim();
+const parOk = (it) => !!(it.a.v || "").trim() && (it.b.tipo === "Igual" || !!(it.b.v || "").trim());
+function reqs(g) {
+  const r = [{ t: "Nombre del juego (3 a 80 caracteres)", ok: g.nombre.trim().length >= 3 }];
+  if (g.tipo === "Crucigrama") { const n = g.cruci.words.length; r.push({ t: "Mínimo 3 palabras con su pista (" + n + " agregadas)", ok: n >= 3 }); }
+  if (g.tipo === "Cuenta cuentos") { const ps = g.cuento.paginas, k = ps.filter(pagOk).length; r.push({ t: "Mínimo 2 páginas (" + ps.length + " creadas)", ok: ps.length >= 2 }); r.push({ t: "Todas las páginas completas (" + k + " de " + ps.length + ")", ok: ps.length > 0 && k === ps.length }); }
+  if (g.tipo === "Memoria") { const k = g.memo.items.filter(parOk).length; r.push({ t: "Parejas completas (" + k + " de " + g.memo.parejas + ")", ok: k === g.memo.parejas }); }
+  return r;
+}
+const completo = (g) => reqs(g).every(x => x.ok);
+const estadoDe = (g) => g.usos > 0 ? "Publicado" : completo(g) ? "Completado" : "Borrador";
+
+const defA = (m) => ({ "Idénticos": "Imagen", "Concepto – definición": "Texto", "Imagen – texto": "Imagen", "Emociones": "Emoción" })[m];
+const defB = (m) => (m === "Idénticos" || m === "Emociones") ? "Igual" : "Texto";
+const blankItem = (m) => ({ a: { tipo: defA(m), v: "" }, b: { tipo: defB(m), v: "" }, msg: "" });
+const blankPage = (n) => ({ id: Date.now() + n, img: "", texto: "", pregunta: "", opciones: [{ t: "", ok: true }, { t: "", ok: false }], fbOk: "", fbNo: "" });
+const W = (id, r, c, dir, ans, clue) => ({ id, r, c, dir, ans, clue });
+const P = (id, img, texto, pregunta, ops, ok, fbOk, fbNo) => ({ id, img, texto, pregunta, opciones: ops.map((t, i) => ({ t, ok: i === ok })), fbOk, fbNo });
+const E = (v, msg) => ({ a: { tipo: "Emoción", v }, b: { tipo: "Igual", v: "" }, msg: msg || "" });
+const base = (o) => Object.assign({ desc: "", cierre: "", autor: "María Castaño", usos: 0, cruci: { size: 10, words: [] }, cuento: { paginas: [] }, memo: { modo: "Idénticos", parejas: 6, dorso: "", tiempo: { on: false, min: 2 }, intentos: { on: false, n: 10 }, items: [] } }, o);
+
+function seed() {
+  return [
+    base({ id: 1, tipo: "Crucigrama", nombre: "El café colombiano", desc: "Completa el crucigrama con palabras relacionadas con el cultivo del café.", fecha: "28 oct 2026", editada: "4 nov 2026", usos: 1,
+      cruci: { size: 10, words: [W(11, 0, 0, "H", "CAFE", "Bebida típica de Colombia preparada con granos tostados."), W(12, 0, 1, "V", "AGUA", "Recurso que la planta de café necesita todos los días."), W(13, 3, 1, "H", "AROMA", "Olor agradable que se siente al preparar café."), W(14, 3, 4, "V", "MATA", "Así se le dice en Colombia a una planta pequeña."), W(15, 6, 2, "H", "GRANO", "Semilla del café que se tuesta y se muele.")] } }),
+    base({ id: 2, tipo: "Cuenta cuentos", nombre: "Simón, el cóndor de los Andes", desc: "Lee la historia de Simón y responde cómo se siente en cada momento.", fecha: "30 oct 2026", editada: "5 nov 2026",
+      cuento: { paginas: [
+        P(21, "condor-montana.png", "Había una vez un cóndor llamado Simón que vivía en lo alto de los Andes colombianos. Cada mañana volaba solo sobre las montañas.", "¿Cómo crees que se siente Simón al volar solo?", ["Feliz", "Solo y un poco triste", "Enojado"], 1, "Así es. Volar sin compañía a veces nos hace sentir solos.", "Piensa de nuevo: Simón vuela sin compañía todos los días."),
+        P(22, "condor-colibri.png", "Un día, Simón conoció a Paco, un pequeño colibrí que le enseñó las flores del páramo.", "¿Cómo se siente Simón ahora?", ["Feliz", "Asustado", "Aburrido"], 0, "¡Correcto! Tener un amigo le dio alegría.", "Mira la imagen: Simón encontró un amigo."),
+        P(23, "condor-tormenta.png", "Una tarde llegó una tormenta y Paco no aparecía. Simón lo buscó por todo el valle.", "¿Qué emoción siente Simón?", ["Calma", "Preocupación", "Alegría"], 1, "Sí. Cuando no sabemos dónde está un amigo, nos preocupamos.", "Piensa en cómo te sentirías si no encuentras a un amigo.")
+      ] } }),
+    base({ id: 3, tipo: "Memoria", nombre: "Memorama de emociones", desc: "Encuentra las parejas de emociones.", fecha: "31 oct 2026", editada: "5 nov 2026",
+      memo: { modo: "Emociones", parejas: 6, dorso: "", tiempo: { on: false, min: 2 }, intentos: { on: true, n: 10 }, items: [E("Alegría", "¡Bien! La alegría se siente cuando algo nos gusta."), E("Tristeza"), E("Miedo"), E("Ira"), E("Sorpresa"), E("Calma", "La calma nos ayuda a pensar mejor.")] } }),
+    base({ id: 6, tipo: "Crucigrama", nombre: "Partes de la planta", fecha: "3 nov 2026", editada: "6 nov 2026",
+      cruci: { size: 10, words: [W(61, 0, 0, "H", "TALLO", "Parte de la planta que sostiene las hojas."), W(62, 0, 0, "V", "TIERRA", "Lugar donde crecen las raíces."), W(63, 0, 4, "V", "OXIGENO", "Gas que liberan las plantas y que respiramos.")] } }),
+    base({ id: 4, tipo: "Crucigrama", nombre: "Ciencia en el aula", fecha: "6 nov 2026", editada: "6 nov 2026",
+      cruci: { size: 12, words: [W(41, 2, 2, "H", "ATOMO", "Unidad más pequeña de la materia.")] } }),
+    base({ id: 5, tipo: "Memoria", nombre: "Capitales de Colombia", fecha: "7 nov 2026", editada: "7 nov 2026",
+      memo: { modo: "Concepto – definición", parejas: 4, dorso: "", tiempo: { on: true, min: 2 }, intentos: { on: false, n: 10 }, items: [{ a: { tipo: "Texto", v: "Bogotá" }, b: { tipo: "Texto", v: "Capital de Colombia" }, msg: "" }, { a: { tipo: "Texto", v: "Medellín" }, b: { tipo: "Texto", v: "Capital de Antioquia" }, msg: "" }, blankItem("Concepto – definición"), blankItem("Concepto – definición")] } })
+  ];
+}
+
+function validar(N, words, cx) {
+  const others = words.filter(w => w.id !== cx.editId);
+  const map = buildMap(others);
+  const nums = numerar(words).byId;
+  const { r, c } = cx.sel, dir = cx.dir, a = cx.ans, len = a.length;
+  const dr = dir === "V" ? 1 : 0, dc = dir === "H" ? 1 : 0;
+  const maxLen = dir === "H" ? N - c : N - r;
+  const path = [], conflicts = {};
+  for (let i = 0; i < Math.min(len, maxLen); i++) path.push(key(r + dr * i, c + dc * i));
+  const at = (rr, cc) => (rr < 0 || cc < 0 || rr >= N || cc >= N) ? null : map[key(rr, cc)];
+  let r1, r2, r3;
+  if (!len) r1 = { st: "pend", msg: "Desde esta casilla caben hasta " + maxLen + " letras " + (dir === "H" ? "hacia la derecha." : "hacia abajo.") };
+  else if (len > maxLen) r1 = { st: "err", msg: "La palabra no cabe: desde esta casilla solo caben " + maxLen + " letras " + (dir === "H" ? "hacia la derecha." : "hacia abajo.") };
+  else if (len < 2) r1 = { st: "err", msg: "La palabra debe tener mínimo 2 letras." };
+  else r1 = { st: "ok", msg: "La palabra cabe en el tablero (" + len + " de " + maxLen + " letras posibles)." };
+  let cross = 0; const bad = [];
+  path.forEach((k, i) => { const m = map[k]; if (!m) return; if (m.L === a[i]) cross++; else { conflicts[k] = 1; const [rr, cc] = k.split(",").map(Number); bad.push("en la fila " + (rr + 1) + ", columna " + (cc + 1) + " debe ir «" + m.L + "»"); } });
+  if (!len) r2 = { st: "pend", msg: "Si la palabra cruza otra, la letra del cruce debe ser la misma." };
+  else if (bad.length) r2 = { st: "err", msg: "La letra del cruce no coincide: " + bad.join("; ") + "." };
+  else r2 = { st: "ok", msg: cross ? "Se cruza correctamente con " + cross + (cross > 1 ? " palabras." : " palabra.") : "No se cruza con otras palabras." };
+  const probs = [];
+  if (len && len <= maxLen) {
+    if (path.some(k => map[k] && map[k].ws.some(w => w.dir === dir))) probs.push("se superpone con otra palabra en la misma dirección");
+    if (at(r - dr, c - dc) || at(r + dr * len, c + dc * len)) probs.push("queda pegada a otra palabra al inicio o al final");
+    let par = false;
+    for (let i = 0; i < len; i++) { const rr = r + dr * i, cc = c + dc * i; [[dc, dr], [-dc, -dr]].forEach(([o1, o2]) => { const n = at(rr + o1, cc + o2); if (n && n.ws.some(w => w.dir === dir)) par = true; }); }
+    if (par) probs.push("queda pegada en paralelo a otra palabra sin una casilla vacía de por medio");
+    const ext = [];
+    others.forEach(w => { const wr = w.dir === "V" ? 1 : 0, wc = w.dir === "H" ? 1 : 0; if (path.includes(key(w.r - wr, w.c - wc)) || path.includes(key(w.r + wr * w.ans.length, w.c + wc * w.ans.length))) ext.push(nums[w.id]); });
+    if (ext.length) probs.push("alarga la palabra " + ext.join(", "));
+  }
+  if (!len) r3 = { st: "pend", msg: "Dos palabras en la misma dirección no pueden quedar pegadas; debe haber una casilla vacía entre ellas." };
+  else if (probs.length) r3 = { st: "err", msg: "La palabra " + probs.join(" y ") + "." };
+  else r3 = { st: "ok", msg: "No queda pegada a otras palabras." };
+  const used = Object.keys(buildMap(words)).length + path.filter(k => !map[k]).length;
+  const r4 = { st: "info", msg: "Las " + (N * N - used) + " casillas que no uses se convertirán en negras al guardar." };
+  const clueOk = cx.clue.trim().length >= 3;
+  return { maxLen, path, conflicts, rules: [["Ajuste al límite", r1], ["Intersección perfecta", r2], ["Sin palabras pegadas", r3], ["Casillas negras automáticas", r4]], can: r1.st === "ok" && r2.st === "ok" && r3.st === "ok" && clueOk, clueOk, map };
+}
+const ICO = { ok: ["✓", "#26734A", "#E1F3E8"], err: ["✕", "#B3261E", "#F9D4D0"], pend: ["•", "#5B6E71", "#E3EEEF"], info: ["i", "#1F5A94", "#DCE9F7"] };
+const icoStyle = (st) => "flex-shrink:0; width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:800; color:" + ICO[st][1] + "; background:" + ICO[st][2];
+const sw = (on) => ["width:44px; height:24px; border-radius:999px; border:none; padding:2px; cursor:pointer; display:flex; align-items:center; background:" + (on ? "#14555C" : "#C9D6D7") + "; justify-content:" + (on ? "flex-end" : "flex-start"), "width:20px; height:20px; border-radius:50%; background:#FFFFFF; display:block; box-shadow:0 1px 3px rgba(0,0,0,.25)"];
+
+class Component extends DCLogic {
+  state = { screen: "lista", games: seed(), q: "", fTipo: "Todos los tipos", fEstado: "Todos los estados", draft: null, orig: "", nombreErr: false, cx: CX0, pgIdx: 0, pv: null, cf: null, toast: null, cont: { titulo: "", tipo: "Crucigrama", sel: [], err: false } };
+
+  componentDidMount() { this.applyDatos(); }
+  componentDidUpdate(pp) { if (pp.datos !== this.props.datos) this.applyDatos(); }
+  applyDatos() { this.setState({ games: this.props.datos === "Sin juegos creados" ? [] : seed() }); }
+
+  toast(t, kind) { clearTimeout(this._tt); this.setState({ toast: { t, kind } }); this._tt = setTimeout(() => this.setState({ toast: null }), 4200); }
+  upd(fn) { this.setState(s => { const d = clone(s.draft); fn(d, s); return { draft: d }; }); }
+  open(g) { const d = clone(g); this.setState({ draft: d, orig: JSON.stringify(d), screen: SCREEN[g.tipo], cx: CX0, pgIdx: 0, nombreErr: false }); }
+  nuevo(tipo) {
+    const d = base({ id: null, tipo, nombre: "" });
+    if (tipo === "Cuenta cuentos") d.cuento.paginas = [blankPage(1), blankPage(2)];
+    if (tipo === "Memoria") d.memo.items = Array.from({ length: 6 }, () => blankItem("Idénticos"));
+    this.open(d);
+  }
+  confirm(msg, yes) { this.setState({ cf: { msg, yes } }); }
+  cancelEditor() { const s = this.state; const go = () => this.setState({ screen: "lista", draft: null, cx: CX0 }); if (JSON.stringify(s.draft) !== s.orig) this.confirm("Hay cambios sin guardar. ¿Deseas descartarlos?", go); else go(); }
+  save() {
+    const d = this.state.draft, n = d.nombre.trim();
+    if (n.length < 3) { this.setState({ nombreErr: true }); this.toast("Revisa los campos obligatorios antes de guardar.", "err"); return; }
+    if (d.usos > 0 && !completo(d)) { this.toast("No puedes guardar: el juego está publicado y su configuración debe quedar completa.", "err"); return; }
+    const games = [...this.state.games], g = Object.assign({}, d, { nombre: n, editada: HOY });
+    if (!g.id) { g.id = Date.now(); g.fecha = HOY; games.unshift(g); } else games[games.findIndex(x => x.id === g.id)] = g;
+    const est = estadoDe(g);
+    this.setState({ games, screen: "lista", draft: null, cx: CX0, nombreErr: false });
+    this.toast(est === "Borrador" ? "El juego se guardó en Borrador. Completa la configuración para poder agregarlo a una sección." : est === "Completado" ? "El juego se guardó y quedó Completado. Ya puedes agregarlo a una sección." : "El juego ha sido actualizado. Los cambios ya se ven en el portal.", "ok");
+  }
+  askDel(g) {
+    if (g.usos > 0) { this.toast("No es posible eliminar este juego porque está publicado en una sección. Retíralo de las secciones antes de continuar.", "err"); return; }
+    this.confirm("¿Estás seguro de que deseas eliminar el juego «" + g.nombre + "»? Esta acción no se puede deshacer.", () => { this.setState(s => ({ games: s.games.filter(x => x.id !== g.id) })); this.toast("El juego ha sido eliminado correctamente.", "ok"); });
+  }
+  deck(g) {
+    const it = g.memo.items.map((x, i) => [x, i]).filter(([x]) => parOk(x));
+    const d = []; it.forEach(([x, i]) => { d.push({ pid: i, side: "a" }); d.push({ pid: i, side: "b" }); });
+    for (let i = d.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [d[i], d[j]] = [d[j], d[i]]; }
+    return d;
+  }
+  openPv(g) {
+    if (g.tipo === "Crucigrama" && !g.cruci.words.length) { this.toast("Agrega al menos una palabra para ver la vista previa.", "err"); return; }
+    if (g.tipo === "Cuenta cuentos" && !g.cuento.paginas.some(p => p.opciones.some(o => o.t.trim()))) { this.toast("Completa al menos una página para ver la vista previa.", "err"); return; }
+    if (g.tipo === "Memoria" && !g.memo.items.some(parOk)) { this.toast("Completa al menos una pareja para ver la vista previa.", "err"); return; }
+    this.setState({ pv: { g: clone(g), done: false, lost: false, letters: {}, checked: false, msg: "", idx: 0, pick: null, deck: g.tipo === "Memoria" ? this.deck(g) : [], openC: [], matched: [], errors: 0, lock: false, pairMsg: "" } });
+  }
+  setPv(o) { this.setState(s => ({ pv: Object.assign({}, s.pv, o) })); }
+  flip(i) {
+    const p = this.state.pv; if (p.lock || p.openC.includes(i) || p.matched.includes(p.deck[i].pid)) return;
+    const o = [...p.openC, i];
+    if (o.length < 2) { this.setPv({ openC: o, pairMsg: "" }); return; }
+    const [a, b] = o, g = p.g;
+    if (p.deck[a].pid === p.deck[b].pid) {
+      const m = [...p.matched, p.deck[a].pid], it = g.memo.items[p.deck[a].pid];
+      const total = new Set(p.deck.map(x => x.pid)).size;
+      this.setPv({ openC: [], matched: m, pairMsg: it.msg || "", done: m.length === total });
+    } else {
+      const e = p.errors + 1; this.setPv({ openC: o, errors: e, lock: true });
+      setTimeout(() => { const lost = g.memo.intentos.on && e >= g.memo.intentos.n; this.setPv({ openC: [], lock: false, lost, done: lost }); }, 1000);
+    }
+  }
+
+  renderVals() {
+    const s = this.state, d = s.draft, isEd = ["cruci", "cuento", "memo"].includes(s.screen);
+    const v = {};
+    const onlyMatica = (this.props.mostrarMatica ?? true);
+    v.rail = RAIL.map(r => {
+      const act = (r[2] === "lista" && ["lista", "tipoJuego", "cruci", "cuento", "memo"].includes(s.screen)) || (r[2] === "tipoCont" && ["tipoCont", "contJuego"].includes(s.screen));
+      return { label: r[0], glyph: r[1], style: "width:48px; height:48px; border-radius:12px; font-size:19px; cursor:pointer; font-family:inherit; " + (act ? "border:1px solid #CBE2E4; background:#EEF7F7; color:#0E3B3B" : "border:1px solid transparent; background:transparent; color:" + (r[2] ? "#43575A" : "#A9B6B7")),
+        go: () => r[2] ? this.setState({ screen: r[2], draft: null, cx: CX0, cont: { titulo: "", tipo: "Crucigrama", sel: [], err: false } }) : this.toast("Esta opción está en el diseño principal de la administración.", "info") };
+    });
+    const tName = d ? d.tipo.toLowerCase() : "";
+    const T = { lista: ["Panel › Juegos", "Juegos"], tipoJuego: ["Panel › Juegos › Crear juego", "Crear juego"], tipoCont: ["Panel › Micrositios › Bienestar emocional › Sentir › Crear contenido", "Crear contenido"], contJuego: ["Panel › Micrositios › Bienestar emocional › Sentir › Crear contenido", "Crear contenido · Juego"] };
+    const tt = isEd ? ["Panel › Juegos › " + (d.id ? "Editar " : "Crear ") + tName, (d.id ? "Editar " : "Crear ") + tName] : T[s.screen];
+    v.crumbs = tt[0]; v.pageTitle = tt[1];
+    v.goBack = () => { if (isEd) this.cancelEditor(); else if (s.screen === "tipoJuego") this.setState({ screen: "lista" }); else if (s.screen === "contJuego") this.setState({ screen: "tipoCont" }); };
+    Object.assign(v, { isLista: s.screen === "lista", isTipoJuego: s.screen === "tipoJuego", isEditor: isEd, isCruci: s.screen === "cruci", isCuento: s.screen === "cuento", isMemo: s.screen === "memo", isTipoCont: s.screen === "tipoCont", isContJuego: s.screen === "contJuego" });
+    v.goLista = () => this.setState({ screen: "lista" });
+    v.goTipoJuego = () => this.setState({ screen: "tipoJuego" });
+    v.goTipoCont = () => this.setState({ screen: "tipoCont", cont: { titulo: "", tipo: "Crucigrama", sel: [], err: false } });
+    v.openPvDraft = () => this.openPv(d);
+    v.cancelEditor = () => this.cancelEditor();
+    v.saveEditor = () => this.save();
+
+    // Lista
+    const q = s.q.trim().toLowerCase();
+    const filt = s.games.filter(g => (!q || g.nombre.toLowerCase().includes(q)) && (s.fTipo === "Todos los tipos" || g.tipo === s.fTipo) && (s.fEstado === "Todos los estados" || estadoDe(g) === s.fEstado));
+    Object.assign(v, { q: s.q, onQ: e => this.setState({ q: e.target.value }), fTipo: s.fTipo, onFTipo: e => this.setState({ fTipo: e.target.value }), fEstado: s.fEstado, onFEstado: e => this.setState({ fEstado: e.target.value }) });
+    v.hayJuegos = s.games.length > 0; v.hasRows = filt.length > 0; v.noRows = s.games.length > 0 && !filt.length; v.listaVacia = !s.games.length;
+    v.conteo = "Mostrando " + filt.length + " de " + s.games.length + " juegos";
+    v.rows = filt.map(g => { const est = estadoDe(g), t = TJ.find(x => x[0] === g.tipo), pub = g.usos > 0;
+      return { nombre: g.nombre, sub: "Creado por " + g.autor + " · " + g.fecha, tipo: g.tipo, ico: t[2], icoStyle: "width:30px; height:30px; border-radius:8px; background:" + t[3] + "; display:flex; align-items:center; justify-content:center; font-size:15px; flex-shrink:0", estado: est, chip: CHIP[est],
+        uso: pub ? g.usos + (g.usos > 1 ? " secciones" : " sección") : "Sin usar", fecha: g.editada, ver: () => this.openPv(g), editar: () => this.open(g), eliminar: () => this.askDel(g),
+        delTitle: pub ? "No se puede eliminar: está publicado" : "Eliminar", delStyle: "background:none; border:none; width:36px; height:36px; border-radius:8px; cursor:pointer; display:flex; align-items:center; justify-content:center; padding:0; color:" + (pub ? "#B9C4C5" : "#C0392B") }; });
+
+    v.tiposJuego = TJ.filter(t => onlyMatica || t[0] !== "Matica").map(t => ({ nombre: t[0], desc: t[1], glyph: t[2], soon: t[0] === "Matica",
+      iconStyle: "width:50px; height:50px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:22px; color:#0F1A1C; background:" + t[3],
+      cardStyle: "text-align:left; background:#DCEFF0; border:none; border-radius:12px; padding:16px 16px 22px; cursor:pointer; font-family:inherit; display:flex; flex-direction:column; gap:14px; box-shadow:0 2px 6px rgba(15,43,40,.06)" + (t[0] === "Matica" ? "; opacity:.55" : ""),
+      pick: () => t[0] === "Matica" ? this.toast("Las reglas de Matica están en definición. Este tipo de juego estará disponible más adelante.", "info") : this.nuevo(t[0]) }));
+
+    // Editor común
+    if (d) {
+      const est = estadoDe(d);
+      Object.assign(v, { dNombre: d.nombre, onNombre: e => { const x = e.target.value; this.upd(dd => { dd.nombre = x; }); if (s.nombreErr) this.setState({ nombreErr: false }); },
+        nombreErr: s.nombreErr ? (d.nombre.trim() ? "La información ingresada en este campo debe contener al menos 3 caracteres." : "La información de este campo es obligatoria.") : "",
+        nombreStyle: "width:100%; background:#E8F5F6; border:1px solid " + (s.nombreErr ? "#D0382B" : "#CBE2E4") + "; border-radius:8px; padding:12px 14px; font-family:inherit; font-size:15px; outline:none",
+        nombreCount: d.nombre.length + "/80", dDesc: d.desc, onDesc: e => { const x = e.target.value; this.upd(dd => { dd.desc = x; }); }, descCount: d.desc.length + "/300",
+        dCierre: d.cierre, onCierre: e => { const x = e.target.value; this.upd(dd => { dd.cierre = x; }); },
+        estTxt: est, estChip: CHIP[est], pubBanner: d.usos > 0, pubTxt: "Este juego está publicado en " + d.usos + (d.usos > 1 ? " secciones" : " sección") + ". Los cambios se verán de inmediato en el portal al guardar, y la configuración debe quedar completa.",
+        reqs: reqs(d).map(r => ({ t: r.t, ico: r.ok ? "✓" : "•", icoStyle: icoStyle(r.ok ? "ok" : "pend") })) });
+    }
+
+    // Crucigrama
+    if (d && s.screen === "cruci") {
+      const N = d.cruci.size, words = d.cruci.words, cx = s.cx;
+      const val = cx.sel ? validar(N, words, cx) : null;
+      const map = val ? val.map : buildMap(words);
+      const all = numerar(words), starts = {};
+      words.filter(w => w.id !== cx.editId).forEach(w => { starts[key(w.r, w.c)] = all.byId[w.id]; });
+      const cs = N <= 10 ? 36 : N <= 12 ? 31 : 26, fs = N <= 10 ? 16 : N <= 12 ? 14 : 12;
+      v.cSize = String(N);
+      v.onSize = e => { const n = Number(e.target.value); if (words.some(w => cellsOf(w).some(([r, c]) => r >= n || c >= n))) { this.toast("No puedes reducir el tablero: hay palabras que quedarían por fuera.", "err"); return; } this.upd(dd => { dd.cruci.size = n; }); this.setState({ cx: CX0 }); };
+      v.boardStyle = "display:grid; grid-template-columns:repeat(" + N + ", " + cs + "px); gap:3px; padding:12px; background:#E8F5F6; border-radius:12px; width:max-content; max-width:100%; overflow:auto";
+      const cells = [];
+      for (let r = 0; r < N; r++) for (let c = 0; c < N; c++) {
+        const k = key(r, c), m = map[k], pi = val ? val.path.indexOf(k) : -1, conf = val && val.conflicts[k], isSel = cx.sel && cx.sel.r === r && cx.sel.c === c;
+        const letter = m ? m.L : (pi >= 0 ? cx.ans[pi] : "");
+        let bg = m ? "#FFFFFF" : "#F7FBFB", bd = "#CBE2E4", col = "#0F1A1C";
+        if (pi >= 0) { bg = "#FFE7C2"; bd = "#E39A3B"; if (!m) col = "#8A5A12"; }
+        if (conf) { bg = "#F9D4D0"; bd = "#D0382B"; col = "#A12A1F"; }
+        cells.push({ letter, num: starts[k] || (isSel && !starts[k] ? "·" : ""), hasNum: !!starts[k], title: "Fila " + (r + 1) + ", columna " + (c + 1),
+          style: "position:relative; width:" + cs + "px; height:" + cs + "px; border-radius:4px; border:1px solid " + bd + "; background:" + bg + "; color:" + col + "; font-family:inherit; font-weight:700; font-size:" + fs + "px; cursor:pointer; padding:0; display:flex; align-items:center; justify-content:center" + (isSel ? "; box-shadow:inset 0 0 0 2px #14555C" : ""),
+          click: () => this.setState(st => ({ cx: Object.assign({}, st.cx, { sel: { r, c } }) })) });
+      }
+      v.cells = cells;
+      const usedNow = Object.keys(buildMap(words)).length;
+      v.blackInfo = usedNow + " casillas con letras · " + (N * N - usedNow) + " se convertirán en casillas negras al guardar.";
+      v.noSel = !cx.sel; v.hasSel = !!cx.sel;
+      if (cx.sel) {
+        const nextNum = starts[key(cx.sel.r, cx.sel.c)] || (cx.editId ? all.byId[cx.editId] : Object.keys(all.byStart).length + 1);
+        v.cxTitle = cx.editId ? "Editar palabra " + all.byId[cx.editId] : "Nueva palabra · pregunta " + nextNum;
+        v.selTxt = "Inicia en fila " + (cx.sel.r + 1) + ", columna " + (cx.sel.c + 1);
+        const segOn = "flex:1; border:1.5px solid #14555C; background:#14555C; color:#FFFFFF; border-radius:999px; padding:10px 14px; font-size:14px; font-weight:700; cursor:pointer; font-family:inherit";
+        const segOff = "flex:1; border:1.5px solid #CBE2E4; background:#FFFFFF; color:#14555C; border-radius:999px; padding:10px 14px; font-size:14px; font-weight:700; cursor:pointer; font-family:inherit";
+        v.dirHStyle = cx.dir === "H" ? segOn : segOff; v.dirVStyle = cx.dir === "V" ? segOn : segOff;
+        v.setH = () => this.setState(st => ({ cx: Object.assign({}, st.cx, { dir: "H" }) }));
+        v.setV = () => this.setState(st => ({ cx: Object.assign({}, st.cx, { dir: "V" }) }));
+        v.cxAns = cx.ans; v.onAns = e => { const x = norm(e.target.value); this.setState(st => ({ cx: Object.assign({}, st.cx, { ans: x }) })); };
+        v.ansHelp = "Solo letras, sin tildes ni espacios. Máximo " + val.maxLen + " letras desde esta casilla.";
+        v.cxClue = cx.clue; v.onClue = e => { const x = e.target.value; this.setState(st => ({ cx: Object.assign({}, st.cx, { clue: x }) })); };
+        v.clueCount = cx.clue.length + "/150";
+        v.rules = val.rules.map(([t, r]) => ({ t, msg: r.msg, ico: ICO[r.st][0], icoStyle: icoStyle(r.st) }));
+        v.addLabel = cx.editId ? "ACTUALIZAR PALABRA" : "AGREGAR PALABRA";
+        v.addDisabled = !val.can;
+        v.addStyle = "border:none; border-radius:999px; padding:11px 22px; font-size:14px; font-weight:700; letter-spacing:.06em; font-family:inherit; " + (val.can ? "background:#14555C; color:#FFFFFF; cursor:pointer" : "background:#DCE5E6; color:#8A9A9C; cursor:not-allowed");
+        v.addCx = () => { if (!val.can) return; const w = { id: cx.editId || Date.now(), r: cx.sel.r, c: cx.sel.c, dir: cx.dir, ans: cx.ans, clue: cx.clue.trim() };
+          this.upd(dd => { const i = dd.cruci.words.findIndex(x => x.id === w.id); if (i >= 0) dd.cruci.words[i] = w; else dd.cruci.words.push(w); });
+          this.setState({ cx: CX0 }); this.toast(cx.editId ? "La palabra ha sido actualizada." : "La palabra ha sido agregada al crucigrama.", "ok"); };
+        v.cancelCx = () => this.setState({ cx: CX0 });
+      }
+      const wl = (dir) => words.filter(w => w.dir === dir).sort((a, b) => all.byId[a.id] - all.byId[b.id]).map(w => ({ num: all.byId[w.id], clue: w.clue, ans: w.ans,
+        edit: () => this.setState({ cx: { sel: { r: w.r, c: w.c }, dir: w.dir, ans: w.ans, clue: w.clue, editId: w.id } }),
+        del: () => this.confirm("¿Estás seguro de que deseas eliminar la palabra «" + w.ans + "»?", () => { this.upd(dd => { dd.cruci.words = dd.cruci.words.filter(x => x.id !== w.id); }); this.setState({ cx: CX0 }); }) }));
+      v.hWords = wl("H"); v.vWords = wl("V"); v.hasWords = words.length > 0; v.noWords = !words.length;
+    }
+
+    // Cuenta cuentos
+    if (d && s.screen === "cuento") {
+      const ps = d.cuento.paginas, i = Math.min(s.pgIdx, ps.length - 1), p = ps[i];
+      v.pages = ps.map((pg, k) => { const ok = pagOk(pg), sel = k === i;
+        return { label: "Página " + (k + 1), st: ok ? "Completa" : "Incompleta", go: () => this.setState({ pgIdx: k }),
+          dot: "width:9px; height:9px; border-radius:50%; flex-shrink:0; background:" + (ok ? "#3E8E63" : "#D9A54A"),
+          style: "display:flex; align-items:center; gap:10px; text-align:left; border-radius:10px; padding:12px 14px; font-size:15px; font-weight:600; cursor:pointer; font-family:inherit; " + (sel ? "background:#DCEFF0; border:1.5px solid #14555C; color:#0F1A1C" : "background:#FFFFFF; border:1px solid #E3EEEF; color:#25383B") }; });
+      v.addPageDisabled = ps.length >= 15;
+      v.addPage = () => { if (ps.length >= 15) { this.toast("La historia puede tener máximo 15 páginas.", "err"); return; } this.upd(dd => { dd.cuento.paginas.push(blankPage(dd.cuento.paginas.length + 1)); }); this.setState({ pgIdx: ps.length }); };
+      const P2 = (fn) => this.upd(dd => fn(dd.cuento.paginas[i]));
+      v.pgTitle = "Página " + (i + 1) + " de " + ps.length;
+      v.pgUp = () => { if (i === 0) return; this.upd(dd => { const a = dd.cuento.paginas; [a[i - 1], a[i]] = [a[i], a[i - 1]]; }); this.setState({ pgIdx: i - 1 }); };
+      v.pgDown = () => { if (i >= ps.length - 1) return; this.upd(dd => { const a = dd.cuento.paginas; [a[i + 1], a[i]] = [a[i], a[i + 1]]; }); this.setState({ pgIdx: i + 1 }); };
+      v.pgDel = () => { if (ps.length <= 1) { this.toast("La historia debe tener al menos una página.", "err"); return; } this.confirm("¿Estás seguro de que deseas eliminar la página " + (i + 1) + "?", () => { this.upd(dd => { dd.cuento.paginas.splice(i, 1); }); this.setState({ pgIdx: Math.max(0, i - 1) }); }); };
+      v.pgImg = p.img; v.hasPgImg = !!p.img; v.noPgImg = !p.img;
+      v.addImg = () => P2(pg => { pg.img = "ilustracion-pagina-" + (i + 1) + ".png"; }); v.rmImg = () => P2(pg => { pg.img = ""; });
+      v.pgTexto = p.texto; v.onPgTexto = e => { const x = e.target.value; P2(pg => { pg.texto = x; }); }; v.pgTextoCount = p.texto.length + "/500";
+      v.pgPregunta = p.pregunta; v.onPgPregunta = e => { const x = e.target.value; P2(pg => { pg.pregunta = x; }); };
+      v.opciones = p.opciones.map((o, k) => ({ t: o.t, ph: "Opción " + (k + 1), markIco: o.ok ? "✓" : "",
+        markStyle: "flex-shrink:0; width:26px; height:26px; border-radius:50%; cursor:pointer; font-size:13px; font-weight:800; padding:0; " + (o.ok ? "background:#26734A; color:#FFFFFF; border:2px solid #26734A" : "background:#FFFFFF; color:#FFFFFF; border:2px solid #9FB5B7"),
+        mark: () => P2(pg => { pg.opciones.forEach((x, j) => { x.ok = j === k; }); }),
+        onT: e => { const x = e.target.value; P2(pg => { pg.opciones[k].t = x; }); },
+        del: () => { if (p.opciones.length <= 2) { this.toast("Cada pregunta debe tener mínimo 2 opciones.", "err"); return; } P2(pg => { const wasOk = pg.opciones[k].ok; pg.opciones.splice(k, 1); if (wasOk) pg.opciones[0].ok = true; }); } }));
+      v.canAddOpc = p.opciones.length < 4; v.addOpc = () => P2(pg => { pg.opciones.push({ t: "", ok: false }); });
+      v.pgFbOk = p.fbOk; v.onFbOk = e => { const x = e.target.value; P2(pg => { pg.fbOk = x; }); };
+      v.pgFbNo = p.fbNo; v.onFbNo = e => { const x = e.target.value; P2(pg => { pg.fbNo = x; }); };
+    }
+
+    // Memoria
+    if (d && s.screen === "memo") {
+      const m = d.memo;
+      v.modos = MODOS.map(([t, de]) => ({ t, d: de, pick: () => { if (t === m.modo) return; this.upd(dd => { dd.memo.modo = t; dd.memo.items = dd.memo.items.map(it => ({ a: { tipo: defA(t), v: it.a.tipo === defA(t) ? it.a.v : "" }, b: { tipo: defB(t), v: it.b.tipo === defB(t) ? it.b.v : "" }, msg: it.msg })); }); },
+        style: "text-align:left; display:flex; flex-direction:column; gap:6px; border-radius:12px; padding:14px 16px; cursor:pointer; font-family:inherit; color:#0F1A1C; " + (t === m.modo ? "background:#DCEFF0; border:1.5px solid #14555C" : "background:#FFFFFF; border:1px solid #E3EEEF") }));
+      v.parejasOpts = [4, 6, 8, 12].map(n => ({ n, pick: () => this.upd(dd => { const it = dd.memo.items; while (it.length < n) it.push(blankItem(dd.memo.modo)); it.length = n; dd.memo.parejas = n; }),
+        style: "min-width:52px; border-radius:999px; padding:10px 16px; font-size:15px; font-weight:700; cursor:pointer; font-family:inherit; " + (n === m.parejas ? "background:#14555C; color:#FFFFFF; border:1.5px solid #14555C" : "background:#FFFFFF; color:#14555C; border:1.5px solid #CBE2E4") }));
+      const gs = GRID[m.parejas];
+      v.gridSug = m.parejas * 2 + " cartas · tablero sugerido de " + gs[0] + " filas × " + gs[1] + " columnas";
+      v.dorsoTxt = m.dorso || "Logo de KANOA LAB (por defecto)"; v.dorsoBtn = m.dorso ? "QUITAR IMAGEN" : "+ CAMBIAR IMAGEN";
+      v.toggleDorso = () => this.upd(dd => { dd.memo.dorso = dd.memo.dorso ? "" : "dorso-personalizado.png"; });
+      const t1 = sw(m.tiempo.on), t2 = sw(m.intentos.on);
+      Object.assign(v, { tiempoOn: m.tiempo.on, tiempoTrack: t1[0], tiempoKnob: t1[1], toggleTiempo: () => this.upd(dd => { dd.memo.tiempo.on = !dd.memo.tiempo.on; }), tiempoMin: String(m.tiempo.min), onTiempoMin: e => { const x = Number(e.target.value); this.upd(dd => { dd.memo.tiempo.min = x; }); },
+        intentosOn: m.intentos.on, intentosTrack: t2[0], intentosKnob: t2[1], toggleIntentos: () => this.upd(dd => { dd.memo.intentos.on = !dd.memo.intentos.on; }), intentosN: String(m.intentos.n), onIntentosN: e => { const x = Math.max(1, Math.min(50, Number(e.target.value) || 1)); this.upd(dd => { dd.memo.intentos.n = x; }); } });
+      v.paresHelp = ({ "Idénticos": "Configura la carta A; el sistema la duplica para formar la pareja.", "Concepto – definición": "Escribe el concepto en la carta A y su definición en la carta B.", "Imagen – texto": "Sube la imagen en la carta A y escribe la palabra que la nombra en la carta B.", "Emociones": "Elige una emoción del kit para cada pareja; el sistema la duplica." })[m.modo];
+      v.pares = m.items.map((it, k) => { const IP = (fn) => this.upd(dd => fn(dd.memo.items[k])); const isFile = it.a.tipo === "Imagen" || it.a.tipo === "Audio";
+        return { n: k + 1, dot: "width:9px; height:9px; border-radius:50%; background:" + (parOk(it) ? "#3E8E63" : "#D9A54A"),
+          aSelTipo: m.modo === "Idénticos", aTipo: it.a.tipo, onATipo: e => { const x = e.target.value; IP(o => { o.a = { tipo: x, v: "" }; }); },
+          aIsTexto: it.a.tipo === "Texto", aIsFile: isFile, aIsEmo: it.a.tipo === "Emoción", aVal: it.a.v, onAVal: e => { const x = e.target.value; IP(o => { o.a.v = x; }); },
+          aPh: m.modo === "Concepto – definición" ? "Ej. Bogotá" : "Texto de la carta",
+          aFileTxt: it.a.v ? it.a.v : (it.a.tipo === "Audio" ? "+ AÑADIR AUDIO" : "+ AÑADIR IMAGEN"),
+          aFileStyle: "flex:1; min-width:0; text-align:left; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; border-radius:8px; padding:9px 12px; font-family:inherit; font-size:13px; cursor:pointer; " + (it.a.v ? "background:#E8F5F6; border:1px solid #CBE2E4; color:#0F1A1C" : "background:#FFFFFF; border:1px dashed #7FB8BD; color:#14555C; font-weight:700"),
+          aFile: () => IP(o => { o.a.v = o.a.v ? "" : (o.a.tipo === "Audio" ? "audio-pareja-" + (k + 1) + ".mp3" : "imagen-pareja-" + (k + 1) + ".png"); }),
+          bIgual: it.b.tipo === "Igual", bIsTexto: it.b.tipo === "Texto", bVal: it.b.v, onBVal: e => { const x = e.target.value; IP(o => { o.b.v = x; }); },
+          bPh: m.modo === "Concepto – definición" ? "Ej. Capital de Colombia" : "Ej. Café",
+          msg: it.msg, onMsg: e => { const x = e.target.value; IP(o => { o.msg = x; }); } }; });
+    }
+
+    // Tipo de contenido y contenido Juego
+    v.tiposCont = TC.map(t => ({ nombre: t[0], limite: t[1], glyph: t[2], nuevo: t[0] === "Juego",
+      iconStyle: "width:50px; height:50px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:20px; font-weight:700; color:#0F1A1C; background:" + t[3],
+      cardStyle: "text-align:left; background:#DCEFF0; border:" + (t[0] === "Juego" ? "1.5px solid #14555C" : "none") + "; border-radius:12px; padding:16px 16px 22px; cursor:pointer; font-family:inherit; display:flex; flex-direction:column; gap:14px; box-shadow:0 2px 6px rgba(15,43,40,.06)",
+      pick: () => t[0] === "Juego" ? this.setState({ screen: "contJuego" }) : this.toast("Este tipo de contenido ya existe en el diseño principal de la administración.", "info") }));
+    const ct = s.cont;
+    const disp = s.games.filter(g => g.tipo === ct.tipo && estadoDe(g) !== "Borrador");
+    v.cTitulo = ct.titulo; v.onCTitulo = e => { const x = e.target.value; this.setState(st => ({ cont: Object.assign({}, st.cont, { titulo: x }) })); };
+    v.cTipos = TJ.filter(t => onlyMatica || t[0] !== "Matica").map(t => { const on = t[0] === ct.tipo, soon = t[0] === "Matica";
+      return { t: t[0], glyph: t[2], sub: soon ? "Próximamente" : s.games.filter(g => g.tipo === t[0] && estadoDe(g) !== "Borrador").length + " disponibles",
+        icoStyle: "width:38px; height:38px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; background:" + t[3],
+        style: "display:flex; align-items:center; gap:12px; border-radius:12px; padding:12px 14px; font-family:inherit; color:#0F1A1C; " + (soon ? "opacity:.5; cursor:not-allowed; background:#FFFFFF; border:1px solid #E3EEEF" : on ? "cursor:pointer; background:#DCEFF0; border:1.5px solid #14555C" : "cursor:pointer; background:#FFFFFF; border:1px solid #E3EEEF"),
+        pick: () => soon ? this.toast("Las reglas de Matica están en definición.", "info") : this.setState({ cont: Object.assign({}, ct, { tipo: t[0], sel: [], err: false }) }) }; });
+    v.disp = disp.map(g => { const on = ct.sel.includes(g.id), est = estadoDe(g);
+      return { nombre: g.nombre, sub: "Modificado el " + g.editada + (g.usos ? " · usado en " + g.usos + (g.usos > 1 ? " secciones" : " sección") : ""), estado: est, chip: CHIP[est], ico: on ? "✓" : "",
+        boxStyle: "flex-shrink:0; width:22px; height:22px; border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:800; color:#FFFFFF; " + (on ? "background:#14555C; border:2px solid #14555C" : "background:#FFFFFF; border:2px solid #9FB5B7"),
+        rowStyle: "width:100%; display:flex; align-items:center; gap:14px; padding:14px 18px; border:none; border-bottom:1px solid #EEF4F4; cursor:pointer; font-family:inherit; color:#0F1A1C; background:" + (on ? "#F1F9F9" : "#FFFFFF"),
+        toggle: () => this.setState(st => ({ cont: Object.assign({}, st.cont, { err: false, sel: on ? st.cont.sel.filter(x => x !== g.id) : [...st.cont.sel, g.id] }) })),
+        ver: (e) => { e.stopPropagation(); this.openPv(g); } }; });
+    v.hasDisp = disp.length > 0; v.noDisp = !disp.length; v.cErrOn = ct.err;
+    v.rotaOn = ct.sel.length > 1; v.rotaTxt = "Seleccionaste " + ct.sel.length + " juegos. En el portal se mostrarán de forma rotativa: cada visitante verá uno de ellos al ingresar a la sección.";
+    v.saveCont = () => { if (!ct.sel.length) { this.setState({ cont: Object.assign({}, ct, { err: true }) }); return; } this.setState({ screen: "tipoCont", cont: { titulo: "", tipo: "Crucigrama", sel: [], err: false } }); this.toast("El contenido ha sido creado correctamente en Borrador. Al publicarlo, los juegos seleccionados pasarán a Publicado.", "ok"); };
+
+    // Vista previa
+    const pv = s.pv;
+    v.pvOpen = !!pv; v.closePv = () => this.setState({ pv: null }); v.stop = e => e.stopPropagation();
+    if (pv) {
+      const g = pv.g;
+      Object.assign(v, { pvTipo: g.tipo.toUpperCase(), pvNombre: g.nombre || "Juego sin nombre", pvDesc: g.desc, pvHasDesc: !!g.desc.trim(), pvDone: pv.done,
+        pvDoneTitle: pv.lost ? "Se acabaron los intentos" : "¡Terminaste el juego!",
+        pvCierre: pv.lost ? "Puedes volver a intentarlo cuando quieras." : (g.cierre.trim() || "¿Quieres conocer más sobre lo que hacemos en KANOA LAB? Escríbenos."),
+        pvReplay: () => this.openPv(g), pvContact: () => this.toast("Lleva al visitante al formulario Contáctanos del portal.", "info"),
+        pvCruci: !pv.done && g.tipo === "Crucigrama", pvCuento: !pv.done && g.tipo === "Cuenta cuentos", pvMemo: !pv.done && g.tipo === "Memoria" });
+      if (g.tipo === "Crucigrama") {
+        const N = g.cruci.size, map = buildMap(g.cruci.words), nm = numerar(g.cruci.words), cs = N <= 10 ? 36 : N <= 12 ? 31 : 26, fs = N <= 10 ? 16 : 13;
+        v.pvBoardStyle = "display:grid; grid-template-columns:repeat(" + N + ", " + cs + "px); gap:2px; padding:10px; background:#0E3B3B; border-radius:10px; width:max-content; max-width:100%; overflow:auto";
+        const pc = [];
+        for (let r = 0; r < N; r++) for (let c = 0; c < N; c++) { const k = key(r, c), m = map[k], val = pv.letters[k] || "", wrong = pv.checked && m && val !== m.L, right = pv.checked && m && val === m.L;
+          pc.push({ white: !!m, hasNum: !!nm.byStart[k], num: nm.byStart[k] || "", val,
+            style: "position:relative; width:" + cs + "px; height:" + cs + "px; border-radius:3px; background:" + (m ? (wrong ? "#F9D4D0" : right ? "#E1F3E8" : "#FFFFFF") : "#0E3B3B"),
+            inStyle: "width:100%; height:100%; border:none; background:transparent; text-align:center; font-family:inherit; font-weight:700; font-size:" + fs + "px; color:#0F1A1C; outline:none; padding:0; text-transform:uppercase",
+            onChange: e => { const x = norm(e.target.value).slice(-1); this.setState(st => ({ pv: Object.assign({}, st.pv, { letters: Object.assign({}, st.pv.letters, { [k]: x }), checked: false, msg: "" }) })); } }); }
+        v.pvCells = pc;
+        const cl = (dir) => g.cruci.words.filter(w => w.dir === dir).sort((a, b) => nm.byId[a.id] - nm.byId[b.id]).map(w => ({ num: nm.byId[w.id], clue: w.clue, len: w.ans.length }));
+        v.pvH = cl("H"); v.pvV = cl("V"); v.pvMsg = pv.msg;
+        v.pvCheck = () => { const ks = Object.keys(map), bad = ks.filter(k => (pv.letters[k] || "") !== map[k].L).length; if (!bad) this.setPv({ done: true }); else this.setPv({ checked: true, msg: bad + (bad > 1 ? " casillas por corregir." : " casilla por corregir.") }); };
+      }
+      if (g.tipo === "Cuenta cuentos") {
+        const ps = g.cuento.paginas.filter(p => p.opciones.some(o => o.t.trim())), p = ps[Math.min(pv.idx, ps.length - 1)], last = pv.idx >= ps.length - 1;
+        const ops = p.opciones.filter(o => o.t.trim()), picked = pv.pick != null ? ops[pv.pick] : null;
+        Object.assign(v, { pvPage: "Página " + (pv.idx + 1) + " de " + ps.length, pvImg: p.img || "Sin ilustración", pvTexto: p.texto, pvPregunta: p.pregunta,
+          pvOpcs: ops.map((o, k) => { const me = pv.pick === k;
+            return { t: o.t, pick: () => { if (pv.pick == null) this.setPv({ pick: k }); },
+              style: "text-align:left; border-radius:10px; padding:12px 16px; font-size:15px; font-weight:600; font-family:inherit; cursor:" + (pv.pick == null ? "pointer" : "default") + "; " + (me ? (o.ok ? "background:#E1F3E8; border:1.5px solid #3E8E63; color:#1E6A42" : "background:#F9D4D0; border:1.5px solid #D0382B; color:#A12A1F") : "background:#FFFFFF; border:1px solid #CBE2E4; color:#0F1A1C") }; }),
+          pvHasFb: !!picked, pvFb: picked ? (picked.ok ? p.fbOk : p.fbNo) : "",
+          pvFbStyle: "border-radius:10px; padding:12px 16px; font-size:14px; font-weight:600; " + (picked && picked.ok ? "background:#E1F3E8; color:#1E6A42" : "background:#FDECEA; color:#A12A1F"),
+          pvShowRetry: !!picked && !picked.ok, pvRetry: () => this.setPv({ pick: null }), pvShowNext: !!picked, pvNextTxt: last ? "TERMINAR" : "SIGUIENTE",
+          pvNext: () => last ? this.setPv({ done: true }) : this.setPv({ idx: pv.idx + 1, pick: null }) });
+      }
+      if (g.tipo === "Memoria") {
+        const m = g.memo, cols = GRID[m.parejas] ? GRID[m.parejas][1] : 4;
+        v.pvMemoGrid = "display:grid; grid-template-columns:repeat(" + cols + ", minmax(0,1fr)); gap:12px; max-width:" + (cols * 130) + "px";
+        v.pvCards = pv.deck.map((cd, i) => { const it = m.items[cd.pid], face = cd.side === "a" || it.b.tipo === "Igual" ? it.a : it.b, up = pv.openC.includes(i) || pv.matched.includes(cd.pid), mt = pv.matched.includes(cd.pid);
+          const txt = face.tipo === "Imagen" ? "Imagen · " + face.v : face.tipo === "Audio" ? "♪ Audio" : face.v;
+          const bg = !up ? "#14555C" : face.tipo === "Emoción" ? EMO[face.v] : face.tipo === "Imagen" ? "#DCEFF0" : "#FFFFFF";
+          return { face: up ? txt : (m.dorso ? "" : "KL"), click: () => this.flip(i),
+            style: "aspect-ratio:3/4; border-radius:12px; font-family:inherit; font-weight:700; padding:8px; display:flex; align-items:center; justify-content:center; text-align:center; cursor:pointer; line-height:1.3; font-size:" + (up ? "14px" : "18px") + "; color:" + (up ? "#0F1A1C" : "#FFFFFF") + "; background:" + bg + "; border:" + (mt ? "2px solid #3E8E63" : up ? "1.5px solid #9FC9CD" : "1.5px solid #0E3B3B") }; });
+        const total = new Set(pv.deck.map(x => x.pid)).size;
+        v.pvStats = "Parejas: " + pv.matched.length + " de " + total + " · Errores: " + pv.errors + (m.intentos.on ? " de " + m.intentos.n : "");
+        v.pvTiempo = m.tiempo.on ? "Tiempo límite: " + m.tiempo.min + (m.tiempo.min > 1 ? " minutos" : " minuto") : "";
+        v.pvHasPairMsg = !!pv.pairMsg; v.pvPairMsg = pv.pairMsg;
+      }
+    }
+
+    v.cfOpen = !!s.cf; v.cfMsg = s.cf ? s.cf.msg : "";
+    v.cfNo = () => this.setState({ cf: null }); v.cfYes = () => { const y = s.cf.yes; this.setState({ cf: null }); y(); };
+    const tk = s.toast;
+    v.toastOn = !!tk; v.toastTxt = tk ? tk.t : "";
+    v.toastStyle = "position:fixed; right:24px; bottom:24px; z-index:70; max-width:420px; border-radius:10px; padding:14px 18px; font-size:14px; line-height:1.45; font-weight:600; box-shadow:0 10px 30px rgba(0,0,0,.18); " + (tk && tk.kind === "err" ? "background:#FDECEA; color:#A12A1F; border:1px solid #F0C6C1" : tk && tk.kind === "info" ? "background:#EEF5FC; color:#1F5A94; border:1px solid #C7DAF0" : "background:#E1F3E8; color:#1E6A42; border:1px solid #B9DFC9");
+    return v;
+  }
+}
+</script>
+</body>
+</html>

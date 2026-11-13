@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet" />
+<style>
+  body { margin:0; background:#EEF4F4; font-family:Figtree, system-ui, sans-serif; }
+  a { color:#14555C; } a:hover { color:#0B3A3F; }
+  * { box-sizing:border-box; }
+</style>
+</helmet>
+<div style="width:1960px; background:#FFFFFF; color:#0F1A1C; font-family:Figtree,system-ui,sans-serif; padding:48px 56px 56px; display:flex; flex-direction:column; gap:34px">
+  <div style="display:flex; justify-content:space-between; align-items:flex-end; gap:30px">
+    <div style="display:flex; flex-direction:column; gap:8px">
+      <div style="font-size:15px; font-weight:700; letter-spacing:.14em; color:#14555C">PORTAL WEB KANOA LAB · ADMINISTRACIÓN DE CONTENIDO · V2</div>
+      <h1 style="margin:0; font-size:46px; font-weight:800; letter-spacing:-0.01em">Diagrama to-be · Creación, administración y publicación de juegos</h1>
+      <div style="font-size:19px; color:#3C4A4C; max-width:120ch">El Comunicador crea y parametriza juegos en la opción Juegos de la administración, los agrega como contenido de tipo Juego en las secciones y los publica al cambiar el estado del contenido.</div>
+    </div>
+    <div style="display:flex; gap:16px; font-size:14px; color:#3C4A4C; flex-wrap:wrap; justify-content:flex-end; max-width:520px">
+      <span style="display:flex; align-items:center; gap:8px"><span style="width:18px; height:14px; border-radius:4px; background:#DCEFF0; border:1.5px solid #14555C"></span>Tarea del usuario</span>
+      <span style="display:flex; align-items:center; gap:8px"><span style="width:18px; height:14px; border-radius:4px; background:#EEF5FC; border:1.5px solid #2F6FB0"></span>Tarea del sistema</span>
+      <span style="display:flex; align-items:center; gap:8px"><span style="width:14px; height:14px; background:#FFF6E5; border:1.5px solid #B08A3E; transform:rotate(45deg)"></span>Compuerta de decisión</span>
+      <span style="display:flex; align-items:center; gap:8px"><span style="width:18px; height:14px; border-radius:999px; background:#FFFFFF; border:1.5px solid #3E8E63"></span>Estado del juego</span>
+    </div>
+  </div>
+
+  <div style="border:1.5px solid #CBE2E4; border-radius:16px; overflow:hidden">
+    <sc-for list="{{ lanes }}" as="ln" hint-placeholder-count="5">
+      <div style="{{ ln.rowStyle }}">
+        <div style="{{ ln.labelStyle }}">
+          <span style="font-size:12px; font-weight:800; letter-spacing:.12em; opacity:.85">{{ ln.kicker }}</span>
+          <span style="font-size:19px; font-weight:800; line-height:1.2">{{ ln.name }}</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:10px; padding:22px 24px; flex-wrap:nowrap; min-width:0">
+          <sc-for list="{{ ln.steps }}" as="st" hint-placeholder-count="5">
+            <div style="display:flex; align-items:center; gap:10px">
+              <sc-if value="{{ st.arrow }}" hint-placeholder-val="{{ false }}"><span style="font-size:22px; color:#7FA3A6; font-weight:700">→</span></sc-if>
+              <div style="{{ st.style }}">
+                <div style="display:flex; align-items:center; gap:8px"><span style="{{ st.numStyle }}">{{ st.n }}</span><span style="font-size:15px; font-weight:800; line-height:1.25">{{ st.t }}</span></div>
+                <div style="font-size:13px; color:#25383B; line-height:1.45">{{ st.d }}</div>
+                <sc-if value="{{ st.hasTags }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:2px">
+                    <sc-for list="{{ st.tags }}" as="tg" hint-placeholder-count="2"><span style="{{ tg.style }}">{{ tg.t }}</span></sc-for>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ st.hasGo }}" hint-placeholder-val="{{ false }}"><div style="font-size:12px; font-weight:700; color:#14555C">{{ st.go }}</div></sc-if>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-for>
+  </div>
+
+  <div style="display:grid; grid-template-columns:1.35fr 1fr; gap:26px">
+    <div style="border:1.5px solid #CBE2E4; border-radius:16px; padding:26px 28px; display:flex; flex-direction:column; gap:18px">
+      <div style="display:flex; align-items:baseline; justify-content:space-between; gap:12px"><div style="font-size:21px; font-weight:800">Diagrama de estados del juego (UML)</div><div style="font-size:13px; color:#5B6E71">El sistema calcula el estado; el Comunicador no lo cambia manualmente.</div></div>
+      <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap">
+        <span style="width:18px; height:18px; border-radius:50%; background:#0F1A1C"></span>
+        <span style="font-size:20px; color:#7FA3A6">→</span>
+        <span style="border:1.5px solid #B08A3E; color:#8A6100; border-radius:14px; padding:12px 22px; font-size:17px; font-weight:800; background:#FFFBF2">Borrador</span>
+        <span style="font-size:20px; color:#7FA3A6">⇄</span>
+        <span style="border:1.5px solid #2F6FB0; color:#1F5A94; border-radius:14px; padding:12px 22px; font-size:17px; font-weight:800; background:#F4F8FD">Completado</span>
+        <span style="font-size:20px; color:#7FA3A6">⇄</span>
+        <span style="border:1.5px solid #3E8E63; color:#26734A; border-radius:14px; padding:12px 22px; font-size:17px; font-weight:800; background:#F3FAF6">Publicado</span>
+        <span style="font-size:13px; color:#5B6E71; margin-left:8px">Borrador y Completado → <b>Eliminado</b> (con confirmación)</span>
+      </div>
+      <div style="border:1px solid #E3EEEF; border-radius:12px; overflow:hidden">
+        <div style="display:grid; grid-template-columns:150px 150px minmax(0,1fr); gap:14px; padding:12px 16px; background:#F4FAFA; font-size:13px; font-weight:800; letter-spacing:.04em">
+          <div>DE</div><div>A</div><div>DISPARADOR / CONDICIÓN</div>
+        </div>
+        <sc-for list="{{ trans }}" as="tr" hint-placeholder-count="8">
+          <div style="display:grid; grid-template-columns:150px 150px minmax(0,1fr); gap:14px; padding:11px 16px; border-top:1px solid #EEF4F4; font-size:14px; line-height:1.45; align-items:center">
+            <div style="{{ tr.deStyle }}">{{ tr.de }}</div><div style="{{ tr.aStyle }}">{{ tr.a }}</div><div style="color:#25383B">{{ tr.d }}</div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:26px">
+      <div style="border:1.5px solid #CBE2E4; border-radius:16px; padding:24px 28px; display:flex; flex-direction:column; gap:14px">
+        <div style="font-size:21px; font-weight:800">Requisitos para quedar Completado</div>
+        <sc-for list="{{ completos }}" as="cp" hint-placeholder-count="3">
+          <div style="display:flex; gap:12px; align-items:flex-start">
+            <span style="{{ cp.icoStyle }}">{{ cp.g }}</span>
+            <div><div style="font-size:15px; font-weight:800">{{ cp.t }}</div><div style="font-size:13px; color:#25383B; line-height:1.5; margin-top:2px">{{ cp.d }}</div></div>
+          </div>
+        </sc-for>
+        <div style="font-size:13px; color:#5B6E71; border-top:1px solid #E3EEEF; padding-top:12px">Matica se muestra como «Próximamente» hasta definir sus reglas.</div>
+      </div>
+      <div style="border:1.5px solid #CBE2E4; border-radius:16px; padding:24px 28px; display:flex; flex-direction:column; gap:10px">
+        <div style="font-size:21px; font-weight:800">Reglas clave del flujo</div>
+        <sc-for list="{{ reglas }}" as="rg" hint-placeholder-count="6"><div style="display:flex; gap:10px; font-size:14px; line-height:1.5; color:#25383B"><span style="color:#14555C; font-weight:800">•</span><span>{{ rg }}</span></div></sc-for>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1960,&quot;height&quot;:1700}}">
+const U = "user", S = "sys", D = "dec", ST = "state";
+const BOX = { user: "background:#DCEFF0; border:1.5px solid #14555C", sys: "background:#EEF5FC; border:1.5px solid #2F6FB0", dec: "background:#FFF6E5; border:1.5px dashed #B08A3E", state: "background:#FFFFFF; border:1.5px solid #3E8E63" };
+const TAG = { b: "border:1px solid #B08A3E; color:#8A6100", c: "border:1px solid #2F6FB0; color:#1F5A94", p: "border:1px solid #3E8E63; color:#26734A", n: "border:1px solid #9FB5B7; color:#3C4A4C", e: "border:1px solid #C0392B; color:#A12A1F" };
+const LANES = [
+  ["COMUNICADOR", "Administración › Juegos", "#14555C", [
+    [U, "1", "Ingresa a Juegos", "Menú lateral de la administración. Listado con nombre, tipo, estado, usado en (micrositio › sección), fecha y menú ⋮.", [], ""],
+    [U, "2", "Crea un juego", "+ CREAR JUEGO, también desde el estado vacío.", [], ""],
+    [U, "3", "Elige el tipo", "Crucigrama, Cuenta cuentos o Memoria.", [["Matica: próximamente", "n"]], ""],
+    [U, "4", "Parametriza", "Información general y configuración propia del tipo de juego.", [], "→ Validación (5)"],
+    [U, "6", "Vista previa", "Opcional. Juega como lo verá el visitante.", [], ""],
+    [U, "7", "GUARDAR", "Guarda aunque esté incompleto, si el nombre es válido.", [], "→ Estado (8)"]
+  ]],
+  ["SISTEMA", "Validación y estado", "#2F6FB0", [
+    [S, "5", "Valida en tiempo real", "Crucigrama: ajuste al límite, intersección perfecta y sin palabras pegadas. Demás tipos: campos obligatorios y límites.", [], ""],
+    [D, "8", "¿Configuración completa?", "Revisa los requisitos mínimos del tipo.", [["No → Borrador", "b"], ["Sí → Completado", "c"]], ""],
+    [D, "9", "¿Está en un contenido publicado?", "Solo al editar un juego existente.", [["Sí → debe quedar completo", "p"], ["No → puede pasar a Borrador", "b"]], ""],
+    [S, "10", "Avisa impacto", "Si queda en Borrador y está en un contenido en Borrador, avisa que ese contenido no se podrá publicar.", [], ""],
+    [ST, "11", "Juego disponible", "Los juegos Completados y Publicados aparecen al crear contenido de tipo Juego.", [["Completado", "c"]], "→ Micrositios (12)"]
+  ]],
+  ["COMUNICADOR", "Micrositio › Sección", "#14555C", [
+    [U, "12", "Crea contenido", "+ CREAR CONTENIDO › Juego (6.º tipo de contenido).", [], ""],
+    [U, "13", "Elige tipo de juego", "Uno por contenido.", [], ""],
+    [U, "14", "Selecciona juegos", "Uno o varios Completados o Publicados. Los Publicados indican dónde se usan.", [["Varios = aleatorio", "n"]], ""],
+    [U, "15", "GUARDAR", "El contenido queda en Borrador; los juegos no cambian de estado.", [["Contenido: Borrador", "b"]], ""],
+    [U, "16", "Publica el contenido", "⋮ › Cambiar estado › Publicado.", [], "→ Publicación (17)"]
+  ]],
+  ["SISTEMA", "Publicación", "#2F6FB0", [
+    [D, "17", "¿Todos los juegos están completos?", "Revisa cada juego seleccionado.", [["No → bloquea y nombra el juego", "e"], ["Sí → confirma", "c"]], ""],
+    [S, "18", "Confirmar acción", "«Se publicará el contenido y pasarán a Publicado los juegos: …».", [], ""],
+    [ST, "19", "Juegos publicados", "Contenido Publicado y sus juegos en Publicado. Se ven en el portal.", [["Publicado", "p"]], ""],
+    [S, "20", "Recalcula al retirar", "Al inactivar o eliminar el contenido, o quitar un juego, los juegos vuelven a Completado salvo si siguen en otro contenido publicado.", [["→ Completado", "c"]], ""]
+  ]],
+  ["VISITANTE", "Portal WEB", "#B5651D", [
+    [U, "21", "Ingresa a la sección", "Ve el título del contenido y un juego.", [], ""],
+    [S, "22", "Muestra un juego", "Con varios juegos, muestra uno elegido al azar en cada visita.", [], ""],
+    [U, "23", "Juega", "Crucigrama: escribe y COMPROBAR. Cuento: responde y avanza. Memoria: voltea cartas.", [], ""],
+    [S, "24", "Pantalla de cierre", "Mensaje de cierre, VOLVER A JUGAR e IR AL INICIO. No se guarda puntaje.", [], ""]
+  ]]
+];
+const TR = [
+  ["● Inicio", "Borrador", "Se guarda un juego nuevo con la configuración incompleta."],
+  ["● Inicio", "Completado", "Se guarda un juego nuevo con todos los requisitos cumplidos."],
+  ["Borrador", "Completado", "Se completan los requisitos y se selecciona GUARDAR."],
+  ["Completado", "Borrador", "Se edita, se quita información obligatoria y se guarda. Solo si no está en ningún contenido publicado."],
+  ["Completado", "Publicado", "Se publica un contenido de tipo Juego que lo tiene seleccionado."],
+  ["Publicado", "Completado", "Deja de estar en todo contenido publicado: el contenido se inactiva o se elimina, o se quita el juego del contenido."],
+  ["Publicado", "Borrador", "No permitido: un juego publicado no se puede guardar incompleto."],
+  ["Borrador / Completado", "Eliminado", "Se elimina con confirmación. Un juego Publicado no se puede eliminar."]
+];
+const STC = { "Borrador": "#8A6100", "Completado": "#1F5A94", "Publicado": "#26734A", "Eliminado": "#A12A1F" };
+const COMP = [
+  ["▦", "#C3DAFA", "Crucigrama", "Nombre válido y mínimo 3 palabras con pista, sin errores de validación."],
+  ["❡", "#FAD2A5", "Cuenta cuentos", "Mínimo 2 páginas, todas con ilustración, texto, pregunta, 2 a 4 opciones con una correcta y sus dos mensajes."],
+  ["◫", "#C7C2F2", "Memoria", "Tipo de emparejamiento y todas las parejas completas (4, 6, 8 o 12). En emociones con Imagen propia, cada pareja con su imagen."]
+];
+const REGLAS = [
+  "Juegos es una opción de la administración del Comunicador; allí se crean, editan, eliminan y prueban.",
+  "Al crear contenido solo se listan juegos Completados o Publicados; los Borradores no se pueden seleccionar.",
+  "Un juego se puede usar en varias secciones y micrositios; cada contenido usa un solo tipo de juego.",
+  "El estado de los juegos cambia solo al cambiar el estado del contenido; si el contenido ya está publicado, el cambio se aplica al guardar.",
+  "Un juego Publicado no se puede eliminar ni quedar incompleto.",
+  "El portal no guarda ni muestra puntajes."
+];
+class Component extends DCLogic {
+  renderVals() {
+    const tc = (x) => "font-weight:800; color:" + (STC[x] || "#0F1A1C");
+    return {
+      lanes: LANES.map(([k, n, col, steps], li) => ({
+        kicker: k, name: n,
+        rowStyle: "display:grid; grid-template-columns:220px minmax(0,1fr); " + (li ? "border-top:1.5px solid #CBE2E4; " : "") + "background:" + (li % 2 ? "#FAFCFC" : "#FFFFFF"),
+        labelStyle: "display:flex; flex-direction:column; justify-content:center; gap:6px; padding:20px 22px; color:#FFFFFF; background:" + col,
+        steps: steps.map(([t, num, title, desc, tags, go], i) => ({
+          arrow: i > 0, n: num, t: title, d: desc, go, hasGo: !!go, hasTags: tags.length > 0,
+          tags: tags.map(([tt, c]) => ({ t: tt, style: "border-radius:999px; padding:3px 10px; font-size:12px; font-weight:700; background:#FFFFFF; " + TAG[c] })),
+          style: "width:" + (t === D ? 236 : 218) + "px; border-radius:" + (t === ST ? 22 : 12) + "px; padding:14px 16px; display:flex; flex-direction:column; gap:8px; " + BOX[t],
+          numStyle: "flex-shrink:0; min-width:26px; height:26px; padding:0 6px; border-radius:999px; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:800; color:#FFFFFF; background:" + (t === D ? "#B08A3E" : t === ST ? "#3E8E63" : t === S ? "#2F6FB0" : "#14555C")
+        }))
+      })),
+      trans: TR.map(([de, a, d]) => ({ de, a, d, deStyle: tc(de), aStyle: tc(a) })),
+      completos: COMP.map(([g, c, t, d]) => ({ g, t, d, icoStyle: "flex-shrink:0; width:36px; height:36px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:17px; background:" + c })),
+      reglas: REGLAS
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div style="font-family:Roboto, system-ui, sans-serif; color:#1A1A1A">
+  <sc-if value="{{ enviado }}" hint-placeholder-val="{{ false }}">
+    <div style="background:#FFFFFF; border-radius:14px; padding:40px 26px; text-align:center; display:flex; flex-direction:column; align-items:center; gap:12px">
+      <div style="width:56px; height:56px; border-radius:50%; background:#22C55E; color:#FFFFFF; display:flex; align-items:center; justify-content:center; box-shadow:0 6px 16px rgba(34,197,94,.4)"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg></div>
+      <div style="font-size:19px; font-weight:700; color:#1B5E6B">¡Solicitud enviada!</div>
+      <div style="font-size:13px; line-height:1.6; color:#3A3A3A; max-width:42ch">{{ okMsg }}</div>
+      <button onClick="{{ nueva }}" style="margin-top:8px; background:#1B5E6B; color:#FFFFFF; border:1px solid #1B5E6B; border-radius:999px; padding:13px 18px; font-size:11px; font-weight:700; cursor:pointer; font-family:inherit">ENVIAR OTRA SOLICITUD</button>
+    </div>
+  </sc-if>
+  <sc-if value="{{ editando }}" hint-placeholder-val="{{ true }}">
+    <div>
+      <sc-if value="{{ conEncabezado }}" hint-placeholder-val="{{ true }}">
+        <h2 style="font-size:20px; font-weight:700; color:#1B5E6B; margin:0 0 6px">{{ titulo }}</h2>
+        <sc-if value="{{ hayDesc }}" hint-placeholder-val="{{ true }}"><p style="font-size:12.5px; line-height:1.55; color:#3A3A3A; margin:0 0 8px">{{ desc }}</p></sc-if>
+      </sc-if>
+      <p style="font-size:11.5px; color:#3A3A3A; margin:0 0 18px">Los campos marcados con <span style="color:#B42318">*</span> son obligatorios.</p>
+      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:16px">
+        <sc-for list="{{ campos }}" as="c" hint-placeholder-count="4">
+          <div style="{{ c.wrapStyle }}">
+            <label style="display:block; font-size:12px; font-weight:600; margin-bottom:6px">{{ c.label }} <sc-if value="{{ c.req }}" hint-placeholder-val="{{ false }}"><span style="color:#B42318">*</span></sc-if></label>
+            <sc-if value="{{ c.esInput }}" hint-placeholder-val="{{ true }}">
+              <input type="{{ c.type }}" value="{{ c.v }}" onChange="{{ c.on }}" maxLength="{{ c.max }}" placeholder="{{ c.ph }}" style="{{ c.style }}" />
+            </sc-if>
+            <sc-if value="{{ c.esTexto }}" hint-placeholder-val="{{ false }}">
+              <textarea value="{{ c.v }}" onChange="{{ c.on }}" maxLength="{{ c.max }}" rows="4" placeholder="{{ c.ph }}" style="{{ c.taStyle }}"></textarea>
+              <div style="text-align:right; font-size:11px; color:#6B7280; margin-top:4px">{{ c.count }}</div>
+            </sc-if>
+            <sc-if value="{{ c.esSelect }}" hint-placeholder-val="{{ false }}">
+              <select value="{{ c.v }}" onChange="{{ c.on }}" style="{{ c.style }}">
+                <option value="">Selecciona una opción</option>
+                <sc-for list="{{ c.opciones }}" as="o" hint-placeholder-count="4"><option value="{{ o }}">{{ o }}</option></sc-for>
+              </select>
+            </sc-if>
+            <sc-if value="{{ c.esMulti }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex; flex-wrap:wrap; gap:8px">
+                <sc-for list="{{ c.chips }}" as="ch" hint-placeholder-count="4"><button onClick="{{ ch.go }}" style="{{ ch.style }}">{{ ch.nombre }}</button></sc-for>
+              </div>
+            </sc-if>
+            <div style="{{ c.errStyle }}">{{ c.err }}</div>
+          </div>
+        </sc-for>
+        <div style="grid-column:1 / -1; display:flex; flex-direction:column; gap:4px">
+          <button onClick="{{ toggleAuth }}" style="display:flex; align-items:flex-start; gap:10px; background:none; border:none; padding:0; text-align:left; cursor:pointer; font-family:inherit; font-size:12px; line-height:1.5; color:#1A1A1A">
+            <span style="{{ authBox }}"><sc-if value="{{ auth }}" hint-placeholder-val="{{ false }}"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg></sc-if></span>
+            <span>Autorizo el tratamiento de mis datos personales conforme a la <a href="#" style="font-weight:600; color:#1B5E6B">Política de privacidad</a> de KANOA LAB (Ley 1581 de 2012). <span style="color:#B42318">*</span></span>
+          </button>
+          <div style="{{ authErrStyle }}">Debes autorizar el tratamiento de datos personales para enviar la solicitud.</div>
+        </div>
+        <div style="grid-column:1 / -1; display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-top:4px">
+          <span style="font-size:11px; color:#3A3A3A">Protegido por reCAPTCHA.</span>
+          <button onClick="{{ enviar }}" style="background:#1B5E6B; color:#FFFFFF; border:1px solid #1B5E6B; border-radius:999px; padding:14px 26px; font-size:11px; font-weight:700; text-transform:uppercase; cursor:pointer; font-family:inherit" style-hover="background:#124650">{{ boton }}</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:560,&quot;height&quot;:720},&quot;def&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;object&quot;},&quot;sinEncabezado&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  state = { v: {}, multi: {}, auth: false, touched: false, enviado: false, defId: null };
+
+  componentDidUpdate() {
+    const id = this.props.def && this.props.def.id;
+    if (id && id !== this.state.defId) this.setState({ defId: id, touched: false, enviado: false });
+  }
+
+  renderVals() {
+    const def = this.props.def || { titulo: "Formulario", campos: [], boton: "Enviar" };
+    const s = this.state;
+    const OBL = "La información de este campo es obligatoria.";
+    const IN = "width:100%; box-sizing:border-box; background:#FFFFFF; border-radius:10px; padding:12px 14px; font-family:inherit; font-size:13px; color:#1A1A1A; outline:none; border:1px solid ";
+    const val = (c) => {
+      if (c.tipo === "multi") return (s.multi[c.k] || []).length ? null : (c.req ? "Selecciona al menos una opción." : null);
+      const x = (s.v[c.k] || "").trim();
+      if (!x) return c.req ? OBL : null;
+      if (c.k === "nombre" && (x.length < 3 || !/^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ' .-]+$/.test(x))) return "Ingresa un nombre válido (mínimo 3 letras).";
+      if (c.tipo === "email" && !/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(x)) return "Ingresa un correo electrónico válido.";
+      if (c.tipo === "tel" && !/^\d{7,10}$/.test(x)) return "Ingresa un teléfono válido de 7 a 10 dígitos.";
+      if (c.tipo === "number" && !/^\d+$/.test(x)) return "Ingresa solo números.";
+      if (c.k === "nit" && !/^[0-9-]{5,15}$/.test(x)) return "Ingresa un NIT válido (solo números y guion).";
+      if ((c.tipo === "text" || c.tipo === "textarea") && c.k !== "nit" && x.length < 3) return "La información ingresada en este campo debe contener al menos 3 caracteres.";
+      return null;
+    };
+    const errs = def.campos.map(val);
+    const hayErr = errs.some(Boolean) || !s.auth;
+    const nombre = (s.v.nombre || "").trim().split(" ")[0];
+    return {
+      enviado: s.enviado, editando: !s.enviado,
+      conEncabezado: this.props.sinEncabezado !== true,
+      titulo: def.titulo, desc: def.desc || "", hayDesc: !!def.desc, boton: def.boton,
+      okMsg: (def.okMsg || "").includes("{nombre}") ? def.okMsg.replace("{nombre}", nombre || "").replace(", .", ".").replace("{correo}", (s.v.correo || "").trim()) : (def.okMsg || "Hemos recibido tu solicitud.") + (nombre ? " Gracias, " + nombre + "." : ""),
+      campos: def.campos.map((c, i) => {
+        const e = s.touched ? errs[i] : null;
+        const full = c.tipo === "textarea" || c.tipo === "multi";
+        const sel = s.multi[c.k] || [];
+        return {
+          label: c.label, req: !!c.req, v: s.v[c.k] || "", max: c.max || 100, ph: c.ph || "",
+          type: c.tipo === "number" ? "text" : c.tipo,
+          esInput: ["text", "email", "tel", "number"].includes(c.tipo), esTexto: c.tipo === "textarea", esSelect: c.tipo === "select", esMulti: c.tipo === "multi",
+          opciones: c.opciones || [],
+          chips: (c.opciones || []).map(o => { const on = sel.includes(o); return { nombre: o,
+            go: () => this.setState({ multi: Object.assign({}, s.multi, { [c.k]: on ? sel.filter(x => x !== o) : sel.concat([o]) }) }),
+            style: "border-radius:999px; padding:8px 14px; font-size:12px; cursor:pointer; font-family:inherit; " + (on ? "background:#1B5E6B; color:#FFFFFF; border:1px solid #1B5E6B; font-weight:700" : "background:#FFFFFF; color:#1B5E6B; border:1px solid #B7DCE3") }; }),
+          on: (ev) => this.setState({ v: Object.assign({}, s.v, { [c.k]: ev.target.value }) }),
+          count: (s.v[c.k] || "").length + "/" + (c.max || 500),
+          wrapStyle: full ? "grid-column:1 / -1" : "",
+          style: IN + (e ? "#B42318" : "#B7DCE3"),
+          taStyle: IN + (e ? "#B42318" : "#B7DCE3") + "; resize:vertical; line-height:1.5",
+          err: e || "", errStyle: e ? "font-size:11.5px; color:#B42318; margin-top:4px" : "display:none"
+        };
+      }),
+      auth: s.auth, toggleAuth: () => this.setState({ auth: !s.auth }),
+      authBox: "flex-shrink:0; margin-top:1px; width:18px; height:18px; border-radius:5px; display:flex; align-items:center; justify-content:center; " + (s.auth ? "background:#1B5E6B; border:1.5px solid #1B5E6B" : "background:#FFFFFF; border:1.5px solid " + (s.touched && !s.auth ? "#B42318" : "#9AAFB4")),
+      authErrStyle: s.touched && !s.auth ? "font-size:11.5px; color:#B42318; margin-left:28px" : "display:none",
+      enviar: () => { if (hayErr) { this.setState({ touched: true }); return; } this.setState({ enviado: true, touched: false }); },
+      nueva: () => this.setState({ v: {}, multi: {}, auth: false, touched: false, enviado: false })
+    };
+  }
+}
+</script>
+</body>
+</html>

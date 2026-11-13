@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  body { margin: 0; background: #FAF8F5; font-family: "Source Sans 3", system-ui, sans-serif; }
+  a { color: #0F5C57; }
+  a:hover { color: #0A403C; }
+  * { box-sizing: border-box; }
+</style>
+</helmet>
+<div style="min-height:100vh; color:#14201D; background:#FAF8F5">
+
+  <header style="position:sticky; top:0; z-index:20; background:rgba(250,248,245,.94); backdrop-filter:blur(8px); border-bottom:1px solid #E6E1D9">
+    <div style="max-width:1180px; margin:0 auto; padding:16px 28px; display:flex; align-items:center; gap:28px">
+      <button onClick="{{ goHome }}" style="display:flex; align-items:center; gap:10px; background:none; border:none; cursor:pointer; padding:0; font-family:inherit">
+        <div style="width:30px; height:30px; border-radius:9px; background:#C75A3B"></div>
+        <span style="font-family:Outfit,sans-serif; font-weight:700; font-size:17px; letter-spacing:.05em; color:#14201D">KANOA LAB</span>
+      </button>
+      <nav style="display:flex; gap:4px; flex-wrap:wrap; margin-left:auto">
+        <sc-for list="{{ navItems }}" as="n" hint-placeholder-count="5">
+          <button onClick="{{ n.go }}" style="{{ n.style }}">{{ n.nombre }}</button>
+        </sc-for>
+      </nav>
+      <button style="background:#0F5C57; color:#FFFFFF; border:none; border-radius:999px; padding:10px 20px; font-size:14px; font-weight:600; cursor:pointer; font-family:inherit; white-space:nowrap">Ingresar</button>
+    </div>
+  </header>
+
+  <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+    <div>
+      <section style="max-width:1180px; margin:0 auto; padding:64px 28px 40px; display:grid; grid-template-columns:minmax(0,1.05fr) minmax(0,1fr); gap:56px; align-items:center">
+        <div>
+          <div style="display:inline-block; background:#EFE9DF; color:#6B5B44; border-radius:999px; padding:6px 14px; font-size:13px; font-weight:600; letter-spacing:.02em; margin-bottom:22px">Portal WEB KANOA LAB</div>
+          <h1 style="font-family:Outfit,sans-serif; font-size:56px; line-height:1.06; font-weight:600; margin:0 0 20px; letter-spacing:-0.02em; text-wrap:pretty">Aprender también es cuidar de ti</h1>
+          <p style="font-size:19px; line-height:1.6; color:#4A544F; margin:0 0 32px; max-width:52ch; text-wrap:pretty">Recursos, cursos y experiencias para el bienestar emocional y el aprendizaje de comunidades educativas.</p>
+          <div style="display:flex; gap:12px; flex-wrap:wrap">
+            <button onClick="{{ goMicrositios }}" style="background:#0F5C57; color:#FFFFFF; border:none; border-radius:999px; padding:15px 28px; font-size:16px; font-weight:600; cursor:pointer; font-family:inherit">Explorar micrositios</button>
+          </div>
+        </div>
+        <div style="border-radius:20px; overflow:hidden; background:#EFE9DF; aspect-ratio:4/3; display:flex; align-items:center; justify-content:center; position:relative">
+          <div style="position:absolute; inset:0; background:repeating-linear-gradient(135deg,#E6DFD3 0 14px,#EFE9DF 14px 28px)"></div>
+          <div style="position:relative; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:13px; color:#7A6A55; background:rgba(250,248,245,.9); padding:10px 16px; border-radius:8px">imagen principal del Hero · 1600×900</div>
+        </div>
+      </section>
+
+      <section style="max-width:1180px; margin:0 auto; padding:0 28px 72px">
+        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:18px">
+          <sc-for list="{{ destacados }}" as="d" hint-placeholder-count="3">
+            <button onClick="{{ d.go }}" style="text-align:left; background:#FFFFFF; border:1px solid #E6E1D9; border-radius:16px; padding:26px; cursor:pointer; font-family:inherit; display:flex; flex-direction:column; gap:10px" style-hover="border-color:#0F5C57; transform:translateY(-2px)">
+              <div style="font-size:12px; letter-spacing:.1em; text-transform:uppercase; color:#9A8F7E">{{ d.tipo }}</div>
+              <div style="font-family:Outfit,sans-serif; font-size:21px; font-weight:600; color:#14201D">{{ d.nombre }}</div>
+              <div style="font-size:15px; line-height:1.55; color:#4A544F">{{ d.descripcion }}</div>
+              <div style="font-size:14px; font-weight:600; color:#0F5C57; margin-top:6px">{{ d.cta }} →</div>
+            </button>
+          </sc-for>
+        </div>
+      </section>
+
+      <section style="background:#FFFFFF; border-top:1px solid #E6E1D9; border-bottom:1px solid #E6E1D9">
+        <div style="max-width:1180px; margin:0 auto; padding:72px 28px">
+          <div style="max-width:58ch; margin-bottom:36px">
+            <h2 style="font-family:Outfit,sans-serif; font-size:36px; font-weight:600; margin:0 0 12px; letter-spacing:-0.015em">Micrositios</h2>
+            <p style="font-size:17px; line-height:1.6; color:#4A544F; margin:0">Cada micrositio reúne secciones y contenidos sobre una temática. Explora el que te interesa.</p>
+          </div>
+          <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:20px">
+            <sc-for list="{{ micrositiosActivos }}" as="m" hint-placeholder-count="5">
+              <button onClick="{{ m.go }}" style="text-align:left; background:#FAF8F5; border:1px solid #E6E1D9; border-radius:18px; overflow:hidden; cursor:pointer; font-family:inherit; display:flex; flex-direction:column" style-hover="border-color:#0F5C57">
+                <div style="height:132px; background:repeating-linear-gradient(135deg,#E6DFD3 0 12px,#EFE9DF 12px 24px); display:flex; align-items:flex-end; padding:14px">
+                  <span style="font-family:ui-monospace,Menlo,monospace; font-size:11px; color:#7A6A55; background:rgba(250,248,245,.9); padding:5px 9px; border-radius:6px">imagen micrositio</span>
+                </div>
+                <div style="padding:22px; display:flex; flex-direction:column; gap:8px">
+                  <div style="font-family:Outfit,sans-serif; font-size:20px; font-weight:600">{{ m.nombre }}</div>
+                  <div style="font-size:15px; line-height:1.55; color:#4A544F">{{ m.descripcion }}</div>
+                  <div style="font-size:14px; font-weight:600; color:#0F5C57; margin-top:6px">Ver micrositio →</div>
+                </div>
+              </button>
+            </sc-for>
+          </div>
+        </div>
+      </section>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isMicrositio }}" hint-placeholder-val="{{ false }}">
+    <div>
+      <section style="background:#0F2B28; color:#F3F7F5">
+        <div style="max-width:1180px; margin:0 auto; padding:72px 28px; display:grid; grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr); gap:56px; align-items:center">
+          <div>
+            <div style="font-size:13px; letter-spacing:.12em; text-transform:uppercase; color:#8FB3AD; margin-bottom:16px">Micrositio</div>
+            <h1 style="font-family:Outfit,sans-serif; font-size:48px; line-height:1.1; font-weight:600; margin:0 0 18px; letter-spacing:-0.02em">Bienestar emocional</h1>
+            <p style="font-size:18px; line-height:1.65; color:#C9DCD8; margin:0 0 28px; max-width:54ch">Micrositio dedicado al bienestar emocional de estudiantes y docentes: recursos prácticos para el autoconocimiento, la regulación emocional y la convivencia.</p>
+            <button onClick="{{ goSeccion }}" style="background:#C75A3B; color:#FFFFFF; border:none; border-radius:999px; padding:14px 26px; font-size:15px; font-weight:600; cursor:pointer; font-family:inherit">Ver secciones</button>
+          </div>
+          <div style="border-radius:18px; aspect-ratio:4/3; background:repeating-linear-gradient(135deg,#17403B 0 14px,#1C4A44 14px 28px); display:flex; align-items:center; justify-content:center">
+            <span style="font-family:ui-monospace,Menlo,monospace; font-size:12px; color:#8FB3AD; background:rgba(15,43,40,.75); padding:8px 14px; border-radius:7px">imagen Hero del micrositio</span>
+          </div>
+        </div>
+      </section>
+
+      <section style="max-width:1180px; margin:0 auto; padding:72px 28px">
+        <h2 style="font-family:Outfit,sans-serif; font-size:32px; font-weight:600; margin:0 0 8px; letter-spacing:-0.015em">Secciones</h2>
+        <p style="font-size:16px; color:#4A544F; margin:0 0 32px">Solo se muestran las secciones activas del micrositio.</p>
+        <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:18px">
+          <sc-for list="{{ seccionesActivas }}" as="s" hint-placeholder-count="4">
+            <button onClick="{{ s.go }}" style="text-align:left; background:#FFFFFF; border:1px solid #E6E1D9; border-radius:16px; padding:26px; cursor:pointer; font-family:inherit; display:flex; flex-direction:column; gap:10px" style-hover="border-color:#0F5C57">
+              <div style="font-family:Outfit,sans-serif; font-size:20px; font-weight:600">{{ s.nombre }}</div>
+              <div style="font-size:15px; line-height:1.55; color:#4A544F">{{ s.descripcion }}</div>
+              <div style="font-size:14px; font-weight:600; color:#0F5C57; margin-top:6px">Entrar a la sección →</div>
+            </button>
+          </sc-for>
+        </div>
+      </section>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isSeccion }}" hint-placeholder-val="{{ false }}">
+    <div>
+      <section style="max-width:1180px; margin:0 auto; padding:48px 28px 12px">
+        <div style="font-size:14px; color:#7A8480; margin-bottom:20px">
+          <button onClick="{{ goHome }}" style="background:none; border:none; padding:0; font-family:inherit; font-size:14px; color:#0F5C57; cursor:pointer">Inicio</button>
+          <span style="margin:0 8px">/</span>
+          <button onClick="{{ goMicrositio }}" style="background:none; border:none; padding:0; font-family:inherit; font-size:14px; color:#0F5C57; cursor:pointer">Bienestar emocional</button>
+          <span style="margin:0 8px">/</span>
+          <span style="color:#14201D; font-weight:600">Conócete</span>
+        </div>
+        <h1 style="font-family:Outfit,sans-serif; font-size:44px; line-height:1.1; font-weight:600; margin:0 0 16px; letter-spacing:-0.02em">Conócete</h1>
+        <p style="font-size:18px; line-height:1.65; color:#4A544F; margin:0; max-width:62ch">Recursos para el autoconocimiento: identidad, emociones propias y reconocimiento de fortalezas personales.</p>
+      </section>
+
+      <section style="max-width:1180px; margin:0 auto; padding:44px 28px 80px; display:flex; flex-direction:column; gap:28px">
+        <sc-for list="{{ publicados }}" as="c" hint-placeholder-count="3">
+          <article style="background:#FFFFFF; border:1px solid #E6E1D9; border-radius:18px; padding:32px; display:flex; flex-direction:column; gap:20px">
+            <div style="display:flex; align-items:center; gap:12px; font-size:13px; color:#9A8F7E">
+              <span style="letter-spacing:.08em; text-transform:uppercase; font-weight:600">{{ c.tipo }}</span>
+              <span>·</span>
+              <span>{{ c.fecha }}</span>
+            </div>
+            <div style="display:{{ c.wrapDisplay }}; grid-template-columns:{{ c.wrapCols }}; flex-direction:{{ c.wrapDir }}; gap:28px; align-items:start">
+              <sc-if value="{{ c.hasRecurso }}" hint-placeholder-val="{{ false }}">
+                <div style="order:{{ c.recursoOrder }}; display:flex; flex-direction:column; gap:8px; min-width:0; width:100%">
+                  <sc-if value="{{ c.media }}" hint-placeholder-val="{{ false }}">
+                    <div style="border-radius:14px; min-height:210px; background:repeating-linear-gradient(135deg,#E6DFD3 0 14px,#EFE9DF 14px 28px); display:flex; align-items:center; justify-content:center; padding:20px">
+                      <span style="font-family:ui-monospace,Menlo,monospace; font-size:12px; color:#7A6A55; background:rgba(250,248,245,.9); padding:8px 14px; border-radius:7px">{{ c.media }}</span>
+                    </div>
+                  </sc-if>
+                  <sc-if value="{{ c.credito }}" hint-placeholder-val="{{ false }}">
+                    <p style="margin:0; font-size:14px; font-style:italic; color:#7A8480; line-height:1.5">{{ c.credito }}</p>
+                  </sc-if>
+                  <sc-if value="{{ c.archivo }}" hint-placeholder-val="{{ false }}">
+                    <div style="display:flex; align-items:center; justify-content:space-between; gap:16px; border:1px solid #E6E1D9; border-radius:12px; padding:16px 20px; background:#FAF8F5">
+                      <span style="font-size:15px; font-weight:600">{{ c.archivo }}</span>
+                      <span style="font-size:14px; font-weight:600; color:#0F5C57">Descargar</span>
+                    </div>
+                  </sc-if>
+                </div>
+              </sc-if>
+              <div style="order:{{ c.bloqueOrder }}; display:flex; flex-direction:column; gap:14px; min-width:0">
+                <sc-if value="{{ c.hasTitulo }}" hint-placeholder-val="{{ true }}">
+                  <h2 style="font-family:Outfit,sans-serif; font-size:27px; font-weight:600; margin:0; letter-spacing:-0.01em; text-wrap:pretty">{{ c.titulo }}</h2>
+                </sc-if>
+                <sc-if value="{{ c.hasCuerpo }}" hint-placeholder-val="{{ true }}">
+                  <p style="font-size:17px; line-height:1.7; color:#3F4945; margin:0; max-width:70ch; text-wrap:pretty">{{ c.cuerpo }}</p>
+                </sc-if>
+              </div>
+            </div>
+          </article>
+        </sc-for>
+      </section>
+    </div>
+  </sc-if>
+
+  <footer style="background:#0F2B28; color:#B9CFCB">
+    <div style="max-width:1180px; margin:0 auto; padding:56px 28px; display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:36px">
+      <div>
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:14px">
+          <div style="width:26px; height:26px; border-radius:8px; background:#C75A3B"></div>
+          <span style="font-family:Outfit,sans-serif; font-weight:700; font-size:16px; letter-spacing:.05em; color:#F3F7F5">KANOA LAB</span>
+        </div>
+        <p style="font-size:14px; line-height:1.6; margin:0; max-width:34ch">Portal institucional de bienestar, ciencia y aprendizaje.</p>
+      </div>
+      <div>
+        <div style="font-size:13px; letter-spacing:.1em; text-transform:uppercase; color:#7E9A95; margin-bottom:12px">Micrositios</div>
+        <div style="display:flex; flex-direction:column; gap:8px; font-size:14px">
+          <sc-for list="{{ footerMicro }}" as="f" hint-placeholder-count="5">
+            <span>{{ f }}</span>
+          </sc-for>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:13px; letter-spacing:.1em; text-transform:uppercase; color:#7E9A95; margin-bottom:12px">Institucional</div>
+        <div style="display:flex; flex-direction:column; gap:8px; font-size:14px">
+          <span>Sobre KANOA LAB</span>
+          <span>Política de privacidad</span>
+          <span>Términos de uso</span>
+          <span>Contacto</span>
+        </div>
+      </div>
+    </div>
+    <div style="border-top:1px solid #1E403C">
+      <div style="max-width:1180px; margin:0 auto; padding:20px 28px; font-size:13px; color:#7E9A95">© 2026 KANOA LAB. Todos los derechos reservados.</div>
+    </div>
+  </footer>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+const MICROSITIOS = [
+  ["Bienestar emocional", "Autoconocimiento, manejo de emociones, convivencia y hábitos saludables.", true],
+  ["STEM Lab", "Experimentación, pensamiento computacional y retos de ciencia aplicada.", true],
+  ["Tecnología", "Ciudadanía digital, herramientas y alfabetización tecnológica.", true],
+  ["Aprendizaje", "Estrategias de estudio, acompañamiento docente y rutas formativas.", true],
+  ["Cursos", "Oferta formativa abierta y programas de certificación.", true],
+  ["Noticias y convocatorias", "Novedades del laboratorio, convocatorias abiertas y eventos.", false],
+  ["Micrositio configurable 7", "Nueva línea de contenidos del Portal WEB.", false]
+];
+
+const SECCIONES = [
+  ["Conócete", "Autoconocimiento, identidad y reconocimiento de fortalezas personales.", true],
+  ["Gestiona tus emociones", "Herramientas para identificar, nombrar y regular las emociones.", true],
+  ["Convivencia y entorno seguro", "Relaciones sanas, prevención del acoso y entornos protectores.", true],
+  ["Hábitos saludables", "Sueño, alimentación, actividad física y uso equilibrado de pantallas.", true],
+  ["Sección opcional 5", "Sin configurar.", false]
+];
+
+const PUBLICADOS = [
+  {
+    tipo: "Solo texto", fecha: "12 de septiembre de 2026", plantilla: null,
+    titulo: "¿Quién soy cuando nadie me mira?",
+    cuerpo: "El autoconocimiento empieza por observar lo que hacemos cuando no hay nadie evaluándonos. Esta guía propone tres ejercicios breves para registrar reacciones cotidianas, identificar patrones y nombrar aquello que se repite en situaciones de tensión.",
+    media: "", credito: "", archivo: ""
+  },
+  {
+    tipo: "Imágenes", fecha: "9 de septiembre de 2026", plantilla: "Izquierda",
+    titulo: "Mapa de fortalezas personales",
+    cuerpo: "Cuatro láminas para trabajar en aula o en casa. Cada lámina propone una pregunta distinta sobre talentos, límites y apoyos disponibles.",
+    media: "carrusel · 4 imágenes", credito: "Ilustraciones: equipo pedagógico KANOA LAB", archivo: ""
+  },
+  {
+    tipo: "Video", fecha: "5 de septiembre de 2026", plantilla: "Superior",
+    titulo: "Reconocer lo que siento",
+    cuerpo: "Pieza audiovisual de seis minutos que acompaña la primera sesión del itinerario de autoconocimiento.",
+    media: "video embebido", credito: "", archivo: ""
+  },
+  {
+    tipo: "Documentos descargables", fecha: "1 de septiembre de 2026", plantilla: "Derecha",
+    titulo: "",
+    cuerpo: "Documento de trabajo con actividades secuenciadas para seis sesiones, pensado para acompañamiento docente.",
+    media: "", credito: "", archivo: "guia-autoconocimiento.pdf · 2,4 MB"
+  }
+];
+
+const NAV_BASE = "background:none; border:none; padding:9px 13px; border-radius:999px; font-size:15px; color:#4A544F; cursor:pointer; font-family:inherit; white-space:nowrap";
+const NAV_ON = "background:#EFE9DF; border:none; padding:9px 13px; border-radius:999px; font-size:15px; color:#14201D; font-weight:600; cursor:pointer; font-family:inherit; white-space:nowrap";
+
+class Component extends DCLogic {
+  state = { page: "home" };
+
+  go = (page) => () => { this.setState({ page }); window.scrollTo(0, 0); };
+
+  renderVals() {
+    const p = this.state.page;
+    const activos = MICROSITIOS.filter(m => m[2]);
+    return {
+      isHome: p === "home",
+      isMicrositio: p === "micrositio",
+      isSeccion: p === "seccion",
+      goHome: this.go("home"),
+      goMicrositio: this.go("micrositio"),
+      goMicrositios: this.go("micrositio"),
+      goSeccion: this.go("seccion"),
+
+      navItems: activos.map(m => ({
+        nombre: m[0],
+        style: p === "micrositio" && m[0] === "Bienestar emocional" ? NAV_ON : NAV_BASE,
+        go: this.go("micrositio")
+      })),
+
+      destacados: [
+        { tipo: "Micrositio", nombre: "Bienestar emocional", descripcion: "Autoconocimiento, emociones y convivencia.", cta: "Explorar micrositio", go: this.go("micrositio") },
+        { tipo: "Sección", nombre: "Gestiona tus emociones", descripcion: "Herramientas para identificar y regular emociones.", cta: "Ver sección", go: this.go("seccion") },
+        { tipo: "Micrositio", nombre: "STEM Lab", descripcion: "Retos de ciencia aplicada y pensamiento computacional.", cta: "Explorar micrositio", go: this.go("micrositio") }
+      ],
+
+      micrositiosActivos: activos.map(m => ({ nombre: m[0], descripcion: m[1], go: this.go("micrositio") })),
+      seccionesActivas: SECCIONES.filter(s => s[2]).map(s => ({ nombre: s[0], descripcion: s[1], go: this.go("seccion") })),
+      publicados: PUBLICADOS.map(c => {
+        const horiz = c.plantilla === "Izquierda" || c.plantilla === "Derecha";
+        const invertido = c.plantilla === "Derecha" || c.plantilla === "Inferior";
+        return Object.assign({}, c, {
+          hasTitulo: !!c.titulo,
+          hasCuerpo: !!c.cuerpo,
+          hasRecurso: !!(c.media || c.archivo),
+          wrapDisplay: horiz ? "grid" : "flex",
+          wrapCols: horiz ? "minmax(0,0.9fr) minmax(0,1.1fr)" : "none",
+          wrapDir: horiz ? "row" : "column",
+          recursoOrder: invertido ? 2 : 1,
+          bloqueOrder: invertido ? 1 : 2
+        });
+      }),
+      footerMicro: activos.map(m => m[0])
+    };
+  }
+}
+
+</script>
+</body>
+</html>

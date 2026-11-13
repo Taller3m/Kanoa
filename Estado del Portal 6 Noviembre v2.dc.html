@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Play:wght@400;700&amp;display=swap" rel="stylesheet" />
+<style>body { margin:0; background:#E9E6EE; } a { color:#7D3693; } a:hover { color:#B53E6B; }</style>
+</helmet>
+<div id="estado" style="width:1920px; height:1120px; box-sizing:border-box; background:#FBFAFD; font-family:Play, sans-serif; color:#24222A; padding:48px 56px 40px; display:flex; flex-direction:column; gap:28px; position:relative; overflow:hidden">
+  <div style="display:grid; grid-template-columns:minmax(0,1fr) 500px 260px; gap:36px; align-items:center">
+    <div style="display:flex; gap:26px">
+      <div style="width:12px; border-radius:6px; background:linear-gradient(180deg, #F7981D, #B53E6B 54%, #7D3693)"></div>
+      <div style="display:flex; flex-direction:column; gap:10px">
+        <div style="font-size:22px; letter-spacing:.18em; color:#B53E6B; font-weight:700">PROYECTO PORTAL WEB · KANOA LAB</div>
+        <h1 style="margin:0; font-size:72px; line-height:1; font-weight:700">Estado del producto</h1>
+        <div style="font-size:32px; color:#3A3742">Visión general de módulos y funcionalidades</div>
+        <div style="font-size:22px; color:#4A4652; line-height:1.4; max-width:880px">Estado de los módulos del Portal Web y funcionalidades que tendremos disponibles con el end to end completo al <strong>6 de noviembre de 2026</strong>.</div>
+      </div>
+    </div>
+    <div style="background:#FBEFF5; border:2px solid #F1D3E2; border-radius:20px; padding:26px 30px; display:flex; flex-direction:column; gap:6px">
+      <div style="font-size:24px; color:#B53E6B">Corte de avance</div>
+      <div style="font-size:34px; font-weight:700; color:#2B2B33; white-space:nowrap">6 de noviembre de 2026</div>
+    </div>
+    <img src="assets/hero-ilustracion.png" alt="" style="width:260px; height:200px; object-fit:contain; display:block" />
+  </div>
+
+  <div style="display:grid; grid-template-columns:repeat(6, minmax(0,1fr)); gap:18px; flex:1">
+    <sc-for list="{{ modulos }}" as="m" hint-placeholder-count="16">
+      <div style="{{ m.card }}">
+        <div style="display:flex; align-items:center; gap:12px; min-height:56px">
+          <div style="{{ m.num }}">{{ m.n }}</div>
+          <div style="font-size:21px; font-weight:700; line-height:1.15">{{ m.titulo }}</div>
+        </div>
+        <div style="{{ m.pill }}"><span style="{{ m.pillDot }}">{{ m.pillIco }}</span><span style="flex:1">{{ m.estado }}</span><span>{{ m.dato }}</span></div>
+        <div style="display:flex; flex-direction:column; gap:7px">
+          <sc-for list="{{ m.items }}" as="it" hint-placeholder-count="3">
+            <div style="display:flex; gap:10px; align-items:flex-start; font-size:17px; line-height:1.3; color:#3A3742"><span style="{{ it.box }}">{{ it.ico }}</span><span>{{ it.t }}</span></div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-for>
+    <div style="grid-column:span 2; background:#FFFFFF; border:2px solid #E6E1EA; border-radius:18px; padding:22px 26px; display:flex; flex-direction:column; gap:16px">
+      <div style="font-size:24px; font-weight:700">Al 6 de noviembre</div>
+      <div style="display:flex; flex-direction:column; gap:18px">
+        <div style="display:flex; gap:12px; align-items:center"><span style="font-size:40px; font-weight:700; color:#1F9254">6</span><span style="font-size:18px; color:#3A3742; line-height:1.25">módulos entregados</span></div>
+        <div style="display:flex; gap:12px; align-items:center"><span style="font-size:40px; font-weight:700; color:#2563C9">4</span><span style="font-size:18px; color:#3A3742; line-height:1.25">módulos con end to end completo · 29 HU</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:grid; grid-template-columns:minmax(0,1fr) 520px; gap:120px; align-items:end">
+    <div style="position:relative; height:140px">
+      <div style="position:absolute; left:10px; width:calc(100% - 50px); top:58px; height:4px; background:linear-gradient(90deg, #1F9254, #2563C9); border-radius:2px"></div>
+      <div style="position:absolute; right:0; top:0; background:#2563C9; color:#FFFFFF; font-size:17px; font-weight:700; padding:8px 14px; border-radius:10px">Lo que tendremos a esta fecha</div>
+      <div style="position:absolute; inset:50px 0 0 0; display:grid; grid-template-columns:1fr 1fr 60px">
+        <div style="display:flex; flex-direction:column; gap:10px"><span style="width:20px; height:20px; border-radius:50%; background:#1F9254"></span><span style="font-size:19px; font-weight:700">Entregas 1 y 2</span><span style="font-size:17px; color:#5A5662">Entregadas</span></div>
+        <div style="display:flex; flex-direction:column; gap:10px"><span style="width:20px; height:20px; border-radius:50%; background:#1F9254"></span><span style="font-size:19px; font-weight:700">Entrega 3</span><span style="font-size:17px; color:#5A5662">30 oct 2026</span></div>
+        <div style="display:flex; flex-direction:column; gap:10px; align-items:flex-end; white-space:nowrap"><span style="width:20px; height:20px; border-radius:50%; background:#2563C9; box-shadow:0 0 0 6px #D6E4FA"></span><span style="font-size:19px; font-weight:700">End to end</span><span style="font-size:17px; color:#5A5662">6 nov 2026</span></div>
+      </div>
+    </div>
+    <div style="background:#FFFFFF; border:2px solid #E6E1EA; border-radius:16px; padding:18px 24px; display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:12px 20px; font-size:18px">
+      <div style="display:flex; gap:10px; align-items:center"><span style="width:16px; height:16px; border-radius:50%; background:#1F9254"></span><span>Entregado</span></div>
+      <div style="display:flex; gap:10px; align-items:center"><span style="width:16px; height:16px; border-radius:50%; background:#2563C9"></span><span>Próximo a entregar</span></div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1920,&quot;height&quot;:1120}}">
+class Component extends DCLogic {
+  renderVals() {
+    const S = {
+      ok: { c: "#1F9254", bg: "#F2FAF5", bd: "#D3EBDC", pill: "#E2F3E8", l: "Entregado", ico: "✓" },
+      e2e: { c: "#2563C9", bg: "#F1F6FF", bd: "#CFE0FA", pill: "#DFEAFC", l: "Próximo a entregar", ico: "✓" },
+      prog: { c: "#7C4DDB", bg: "#F6F2FE", bd: "#E1D6FA", pill: "#ECE4FD", l: "En progreso", ico: "•" },
+      sin: { c: "#7A7F89", bg: "#F5F5F7", bd: "#E2E3E7", pill: "#E9EAED", l: "Sin iniciar", ico: "–" }
+    };
+    const M = [
+      ["ok", "Usuarios comunicadores", "Entrega 1", ["Gestión de usuarios comunicadores", "Acceso a la administración", "Rol Comunicador"]],
+      ["ok", "Administración de micrositios", "Entregas 1–3", ["Información general del Home", "Activar e inactivar", "Edición de nombre e imagen", "Séptimo micrositio y URL pública"]],
+      ["ok", "Micrositio Bienestar Emocional", "Entregas 1–2", ["Conócete y Gestiona tus emociones", "Navegar, Conectar y Florecer", "Secciones opcionales"]],
+      ["ok", "Micrositios Ser + Stem, Observatorio y Formación", "Entrega 2", ["Secciones de cada micrositio", "Micrositios opcionales 5 y 6", "Activación de secciones"]],
+      ["ok", "Editor, plantillas y multimedia", "Entrega 2", ["Editor de texto enriquecido", "Plantillas visuales", "Imágenes, video y documentos"]],
+      ["ok", "Micrositios en el portal", "Entrega 3", ["Visualización de micrositios", "Visualización de secciones", "Sección de micrositios del Home"]],
+      ["e2e", "Hero del Home", "6 HU", ["Contenido principal", "Destacados", "Publicación en el Home", "Restricción de inactivación"]],
+      ["e2e", "Menús de navegación", "12 HU", ["Cabecera y pie de página", "Submenús y orden", "Vista previa", "Restricciones por menú"]],
+      ["e2e", "Cifras destacadas", "4 HU", ["De 3 a 4 cifras", "Agregar, editar y eliminar", "Franja de cifras del Home"]],
+      ["e2e", "Páginas informativas", "7 HU", ["Crear, editar y eliminar", "Contenidos y estados", "Publicación en el portal", "Uso como elemento de menú"]]
+    ];
+    return {
+      modulos: M.map((m, i) => {
+        const s = S[m[0]];
+        const hechos = m[0] === "ok" || m[0] === "e2e" ? m[3].length : (m[4] || 0);
+        return {
+          n: String(i + 1), titulo: m[1], estado: s.l, dato: m[2], pillIco: s.ico,
+          card: "background:" + s.bg + "; border:2px solid " + s.bd + "; border-radius:18px; padding:18px 18px 20px; display:flex; flex-direction:column; gap:14px",
+          num: "flex-shrink:0; width:40px; height:40px; border-radius:50%; background:" + s.c + "; color:#FFFFFF; display:flex; align-items:center; justify-content:center; font-size:20px; font-weight:700",
+          pill: "display:flex; align-items:center; gap:10px; background:" + s.pill + "; color:" + s.c + "; border-radius:10px; padding:8px 12px; font-size:16px; font-weight:700; white-space:nowrap",
+          pillDot: "width:22px; height:22px; border-radius:50%; background:" + s.c + "; color:#FFFFFF; display:flex; align-items:center; justify-content:center; font-size:14px",
+          items: m[3].map((t, k) => {
+            const done = k < hechos;
+            return { t, ico: done ? "✓" : "", box: "flex-shrink:0; margin-top:2px; width:18px; height:18px; border-radius:5px; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:#FFFFFF; " + (done ? "background:" + s.c : "border:2px solid " + s.c + "; box-sizing:border-box; opacity:.6") };
+          })
+        };
+      })
+    };
+  }
+}
+</script>
+</body>
+</html>

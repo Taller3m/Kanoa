@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet" />
+<style>
+  body { margin:0; background:#EEF4F4; font-family:Figtree, system-ui, sans-serif; }
+  a { color:#14555C; } a:hover { color:#0B3A3F; }
+  * { box-sizing:border-box; }
+</style>
+</helmet>
+<div style="width:1880px; background:#FFFFFF; color:#0F1A1C; font-family:Figtree,system-ui,sans-serif; padding:48px 56px 56px; display:flex; flex-direction:column; gap:34px">
+  <div style="display:flex; justify-content:space-between; align-items:flex-end; gap:30px">
+    <div style="display:flex; flex-direction:column; gap:8px">
+      <div style="font-size:15px; font-weight:700; letter-spacing:.14em; color:#14555C">PORTAL WEB KANOA LAB · ADMINISTRACIÓN DE CONTENIDO</div>
+      <h1 style="margin:0; font-size:46px; font-weight:800; letter-spacing:-0.01em">Diagrama to-be · Juegos</h1>
+      <div style="font-size:19px; color:#3C4A4C; max-width:110ch">Flujo propuesto para crear y parametrizar juegos en el módulo Juegos y publicarlos como tipo de contenido en las secciones de los micrositios.</div>
+    </div>
+    <div style="display:flex; gap:16px; font-size:14px; color:#3C4A4C; flex-wrap:wrap; justify-content:flex-end">
+      <span style="display:flex; align-items:center; gap:8px"><span style="width:18px; height:14px; border-radius:4px; background:#DCEFF0; border:1.5px solid #14555C"></span>Actividad del usuario</span>
+      <span style="display:flex; align-items:center; gap:8px"><span style="width:18px; height:14px; border-radius:4px; background:#EEF5FC; border:1.5px solid #2F6FB0"></span>Acción del sistema</span>
+      <span style="display:flex; align-items:center; gap:8px"><span style="width:16px; height:16px; background:#FFF6E5; border:1.5px solid #B08A3E; transform:rotate(45deg)"></span>Decisión</span>
+      <span style="display:flex; align-items:center; gap:8px"><span style="width:18px; height:14px; border-radius:999px; background:#FFFFFF; border:1.5px solid #3E8E63"></span>Estado del juego</span>
+    </div>
+  </div>
+
+  <div style="border:1.5px solid #CBE2E4; border-radius:16px; overflow:hidden">
+    <sc-for list="{{ lanes }}" as="ln" hint-placeholder-count="5">
+      <div style="{{ ln.rowStyle }}">
+        <div style="{{ ln.labelStyle }}">
+          <span style="font-size:12px; font-weight:800; letter-spacing:.12em; opacity:.8">{{ ln.kicker }}</span>
+          <span style="font-size:19px; font-weight:800; line-height:1.2">{{ ln.name }}</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:10px; padding:22px 24px; flex-wrap:nowrap; min-width:0">
+          <sc-for list="{{ ln.steps }}" as="st" hint-placeholder-count="4">
+            <div style="display:flex; align-items:center; gap:10px">
+              <sc-if value="{{ st.arrow }}" hint-placeholder-val="{{ false }}"><span style="font-size:22px; color:#7FA3A6; font-weight:700">→</span></sc-if>
+              <div style="{{ st.style }}">
+                <div style="display:flex; align-items:center; gap:8px"><span style="{{ st.numStyle }}">{{ st.n }}</span><span style="font-size:15px; font-weight:800; line-height:1.25">{{ st.t }}</span></div>
+                <div style="font-size:13px; color:#25383B; line-height:1.45">{{ st.d }}</div>
+                <sc-if value="{{ st.hasTags }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:2px">
+                    <sc-for list="{{ st.tags }}" as="tg" hint-placeholder-count="2"><span style="{{ tg.style }}">{{ tg.t }}</span></sc-for>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ st.hasGo }}" hint-placeholder-val="{{ false }}"><div style="font-size:12px; font-weight:700; color:#14555C">{{ st.go }}</div></sc-if>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-for>
+  </div>
+
+  <div style="display:grid; grid-template-columns:1.25fr 1fr 1fr; gap:26px">
+    <div style="border:1.5px solid #CBE2E4; border-radius:16px; padding:26px 28px; display:flex; flex-direction:column; gap:18px">
+      <div style="font-size:21px; font-weight:800">Ciclo de estados del juego</div>
+      <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap">
+        <div style="display:flex; flex-direction:column; align-items:center; gap:6px"><span style="border:1.5px solid #B08A3E; color:#8A6100; border-radius:999px; padding:8px 18px; font-size:16px; font-weight:700">Borrador</span><span style="font-size:12px; color:#5B6E71">configuración incompleta</span></div>
+        <div style="display:flex; flex-direction:column; align-items:center; font-size:12px; color:#3C4A4C; text-align:center; max-width:130px"><span style="font-size:22px; color:#7FA3A6">→</span>se completa la configuración y se guarda</div>
+        <div style="display:flex; flex-direction:column; align-items:center; gap:6px"><span style="border:1.5px solid #2F6FB0; color:#1F5A94; border-radius:999px; padding:8px 18px; font-size:16px; font-weight:700">Completado</span><span style="font-size:12px; color:#5B6E71">disponible para secciones</span></div>
+        <div style="display:flex; flex-direction:column; align-items:center; font-size:12px; color:#3C4A4C; text-align:center; max-width:130px"><span style="font-size:22px; color:#7FA3A6">→</span>se publica un contenido que lo usa</div>
+        <div style="display:flex; flex-direction:column; align-items:center; gap:6px"><span style="border:1.5px solid #3E8E63; color:#26734A; border-radius:999px; padding:8px 18px; font-size:16px; font-weight:700">Publicado</span><span style="font-size:12px; color:#5B6E71">visible en el portal</span></div>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:8px; font-size:14px; line-height:1.5; color:#25383B">
+        <div>← <b>Completado → Borrador:</b> si al editar se quita información obligatoria (solo si el juego no está publicado).</div>
+        <div>← <b>Publicado → Completado:</b> cuando ya no está en ningún contenido publicado (el contenido se inactiva, se elimina o se quita el juego).</div>
+        <div>El estado lo calcula el sistema; el Comunicador no lo cambia manualmente.</div>
+      </div>
+    </div>
+    <div style="border:1.5px solid #CBE2E4; border-radius:16px; padding:26px 28px; display:flex; flex-direction:column; gap:12px">
+      <div style="font-size:21px; font-weight:800">Reglas del flujo</div>
+      <sc-for list="{{ reglas }}" as="rg" hint-placeholder-count="5"><div style="display:flex; gap:10px; font-size:14px; line-height:1.5; color:#25383B"><span style="color:#14555C; font-weight:800">•</span><span>{{ rg }}</span></div></sc-for>
+    </div>
+    <div style="border:1.5px solid #CBE2E4; border-radius:16px; padding:26px 28px; display:flex; flex-direction:column; gap:14px">
+      <div style="font-size:21px; font-weight:800">Requisitos para quedar Completado</div>
+      <sc-for list="{{ completos }}" as="cp" hint-placeholder-count="3">
+        <div style="display:flex; gap:12px; align-items:flex-start">
+          <span style="{{ cp.icoStyle }}">{{ cp.g }}</span>
+          <div><div style="font-size:15px; font-weight:800">{{ cp.t }}</div><div style="font-size:13px; color:#25383B; line-height:1.5; margin-top:2px">{{ cp.d }}</div></div>
+        </div>
+      </sc-for>
+      <div style="font-size:13px; color:#5B6E71; border-top:1px solid #E3EEEF; padding-top:12px">Matica queda visible como «Próximamente» hasta definir sus reglas.</div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1880,&quot;height&quot;:1500}}">
+const U = "user", S = "sys", D = "dec", ST = "state";
+const BOX = {
+  user: "background:#DCEFF0; border:1.5px solid #14555C",
+  sys: "background:#EEF5FC; border:1.5px solid #2F6FB0",
+  dec: "background:#FFF6E5; border:1.5px dashed #B08A3E",
+  state: "background:#FFFFFF; border:1.5px solid #3E8E63"
+};
+const TAG = {
+  b: "border:1px solid #B08A3E; color:#8A6100", c: "border:1px solid #2F6FB0; color:#1F5A94", p: "border:1px solid #3E8E63; color:#26734A", n: "border:1px solid #9FB5B7; color:#3C4A4C"
+};
+const LANES = [
+  ["COMUNICADOR", "Módulo Juegos", "#14555C", [
+    [U, "1", "Ingresa a Juegos", "Menú lateral › Juegos. Ve el listado con nombre, tipo, estado, uso y fecha.", [], ""],
+    [U, "2", "Crea un juego", "Botón + CREAR JUEGO.", [], ""],
+    [U, "3", "Elige el tipo", "Crucigrama, Cuenta cuentos o Memoria.", [["Matica: próximamente", "n"]], ""],
+    [U, "4", "Parametriza", "Nombre, instrucciones, mensaje de cierre y el contenido propio del tipo de juego.", [], "→ El sistema valida (5)"],
+    [U, "6", "Vista previa", "Opcional. Prueba el juego como lo verá el visitante.", [], ""],
+    [U, "7", "Guarda", "Botón GUARDAR.", [], "→ El sistema calcula el estado (8)"]
+  ]],
+  ["SISTEMA", "Validación y estado", "#2F6FB0", [
+    [S, "5", "Valida en tiempo real", "Crucigrama: ajuste al límite, intersección perfecta y sin palabras pegadas. Cuenta cuentos y Memoria: campos obligatorios.", [], ""],
+    [D, "8", "¿Configuración completa?", "Revisa los requisitos mínimos del tipo de juego.", [["No → Borrador", "b"], ["Sí → Completado", "c"]], ""],
+    [S, "9", "Ajusta el juego al guardar", "Crucigrama: las casillas sin usar pasan a negras. Memoria: duplica y mezcla las cartas al iniciar cada partida.", [], ""],
+    [ST, "10", "Juego disponible", "Los juegos Completados aparecen al crear contenido en las secciones.", [["Completado", "c"]], "→ Continúa en Micrositios (11)"]
+  ]],
+  ["COMUNICADOR", "Micrositios · Sección", "#14555C", [
+    [U, "11", "Crea contenido en una sección", "Micrositio › Sección › + CREAR CONTENIDO › Juego (6.º tipo de contenido).", [], ""],
+    [U, "12", "Elige el tipo de juego", "Crucigrama, Cuenta cuentos o Memoria.", [], ""],
+    [U, "13", "Selecciona los juegos", "Uno o varios juegos Completados o Publicados del tipo elegido.", [["Varios = rotativo", "n"]], ""],
+    [U, "14", "Guarda el contenido", "El contenido queda en Borrador.", [["Contenido: Borrador", "b"]], ""],
+    [U, "15", "Publica el contenido", "Desde el listado de contenidos de la sección.", [], "→ El sistema actualiza el juego (16)"]
+  ]],
+  ["SISTEMA", "Publicación", "#2F6FB0", [
+    [ST, "16", "Juego publicado", "Los juegos del contenido publicado pasan a Publicado.", [["Publicado", "p"]], ""],
+    [S, "17", "Protege el juego publicado", "No se puede eliminar y, al editarlo, debe quedar completo. Los cambios se ven de inmediato.", [], ""],
+    [D, "18", "¿Sigue en algún contenido publicado?", "Al inactivar o eliminar contenidos, o al quitar el juego.", [["No → Completado", "c"], ["Sí → Publicado", "p"]], ""]
+  ]],
+  ["VISITANTE", "Portal WEB", "#B5651D", [
+    [U, "19", "Ingresa a la sección", "Ve el título del contenido y el juego.", [], ""],
+    [S, "20", "Muestra un juego", "Si el contenido tiene varios juegos, muestra uno de forma rotativa en cada visita.", [], ""],
+    [U, "21", "Juega", "Crucigrama: escribe y comprueba. Cuenta cuentos: responde, reintenta o sigue. Memoria: voltea cartas.", [], ""],
+    [S, "22", "Pantalla de cierre", "Mensaje de cierre, VOLVER A JUGAR y CONTÁCTANOS. No se muestra puntaje.", [], ""],
+    [U, "23", "Contáctanos", "Opcional. Va al formulario Contáctanos del portal.", [], ""]
+  ]]
+];
+const REGLAS = [
+  "El módulo Juegos es independiente: allí se crean, editan, eliminan y prueban los juegos.",
+  "El tipo de contenido Juego solo lista juegos Completados o Publicados; los Borradores no se pueden seleccionar.",
+  "Un mismo juego se puede usar en varias secciones y micrositios, y una sección puede tener varios contenidos de tipo Juego.",
+  "Cada contenido de tipo Juego usa un solo tipo de juego; si incluye varios juegos, se muestran de forma rotativa.",
+  "Un juego Publicado no se puede eliminar; primero se retira de las secciones.",
+  "El portal no almacena ni muestra puntajes. Al terminar, invita a contactar a KANOA LAB."
+];
+const COMP = [
+  ["▦", "#C3DAFA", "Crucigrama", "Nombre y mínimo 3 palabras, cada una con su pista, sin errores de validación."],
+  ["❡", "#FAD2A5", "Cuenta cuentos", "Nombre y mínimo 2 páginas; cada página con ilustración, texto, pregunta, 2 a 4 opciones con una correcta y sus dos mensajes."],
+  ["◫", "#C7C2F2", "Memoria", "Nombre, tipo de emparejamiento y todas las parejas completas según el número elegido (4, 6, 8 o 12)."]
+];
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      lanes: LANES.map(([k, n, col, steps], li) => ({
+        kicker: k, name: n,
+        rowStyle: "display:grid; grid-template-columns:230px minmax(0,1fr); " + (li ? "border-top:1.5px solid #CBE2E4; " : "") + "background:" + (li % 2 ? "#FAFCFC" : "#FFFFFF"),
+        labelStyle: "display:flex; flex-direction:column; justify-content:center; gap:6px; padding:20px 22px; color:#FFFFFF; background:" + col,
+        steps: steps.map(([t, num, title, desc, tags, go], i) => ({
+          arrow: i > 0, n: num, t: title, d: desc, go, hasGo: !!go, hasTags: tags.length > 0,
+          tags: tags.map(([tt, c]) => ({ t: tt, style: "border-radius:999px; padding:3px 10px; font-size:12px; font-weight:700; background:#FFFFFF; " + TAG[c] })),
+          style: "width:" + (t === D ? 226 : 208) + "px; border-radius:" + (t === ST ? 22 : 12) + "px; padding:14px 16px; display:flex; flex-direction:column; gap:8px; " + BOX[t],
+          numStyle: "flex-shrink:0; min-width:26px; height:26px; padding:0 6px; border-radius:999px; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:800; color:#FFFFFF; background:" + (t === D ? "#B08A3E" : t === ST ? "#3E8E63" : t === S ? "#2F6FB0" : "#14555C")
+        }))
+      })),
+      reglas: REGLAS,
+      completos: COMP.map(([g, c, t, d]) => ({ g, t, d, icoStyle: "flex-shrink:0; width:36px; height:36px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:17px; background:" + c }))
+    };
+  }
+}
+</script>
+</body>
+</html>

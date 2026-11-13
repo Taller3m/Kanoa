@@ -1,0 +1,1692 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  body { margin: 0; background: #FFFFFF; font-family: Figtree, system-ui, sans-serif; }
+  a { color: #14555C; }
+  a:hover { color: #0B3A3F; }
+  * { box-sizing: border-box; }
+</style>
+</helmet>
+<div style="display:flex; min-height:100vh; color:#0F1A1C; font-family:Figtree,system-ui,sans-serif; background:#FFFFFF">
+
+  <aside style="width:82px; flex:0 0 82px; border-right:1px solid #EAEFEF; display:flex; flex-direction:column; align-items:center; padding-bottom:20px; gap:8px">
+    <div style="width:60px; height:60px; border-radius:12px; background:#0E3B3B; color:#FFFFFF; display:flex; align-items:center; justify-content:center; font-size:28px; font-weight:800; margin:14px 0 20px; letter-spacing:-0.02em">K</div>
+    <sc-for list="{{ rail }}" as="r" hint-placeholder-count="9">
+      <button onClick="{{ r.go }}" title="{{ r.label }}" style="{{ r.style }}">{{ r.glyph }}</button>
+    </sc-for>
+  </aside>
+
+  <main style="flex:1; min-width:0; display:flex; flex-direction:column; padding:22px 28px 60px">
+
+    <div style="display:flex; align-items:center; gap:8px; font-size:15px; color:#8A9A9C; margin-bottom:16px; flex-wrap:wrap">{{ crumbs }}</div>
+
+    <div style="background:#CDE7EA; border-radius:12px; padding:22px 26px; display:flex; align-items:center; gap:16px; margin-bottom:26px; flex-wrap:wrap">
+      <button onClick="{{ goBack }}" style="background:none; border:none; font-size:22px; color:#0F1A1C; cursor:pointer; padding:0 4px; line-height:1; font-family:inherit">‹</button>
+      <h1 style="font-size:27px; font-weight:700; margin:0; letter-spacing:-0.01em; flex:1; min-width:200px">{{ pageTitle }}</h1>
+      <sc-if value="{{ showFormActions }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex; align-items:center; gap:18px">
+          <span style="font-size:20px; color:#14555C">◉</span>
+          <button onClick="{{ goTipo }}" style="background:none; border:none; color:#14555C; font-size:14px; font-weight:700; letter-spacing:.06em; cursor:pointer; font-family:inherit">CANCELAR</button>
+          <button onClick="{{ guardar }}" style="background:transparent; border:1.5px solid #14555C; color:#14555C; border-radius:999px; padding:11px 26px; font-size:14px; font-weight:700; letter-spacing:.06em; cursor:pointer; font-family:inherit">GUARDAR</button>
+        </div>
+      </sc-if>
+      <sc-if value="{{ isTipo }}" hint-placeholder-val="{{ false }}">
+        <button onClick="{{ goSeccion }}" style="background:transparent; border:1.5px solid #14555C; color:#14555C; border-radius:999px; padding:11px 26px; font-size:14px; font-weight:700; letter-spacing:.06em; cursor:pointer; font-family:inherit">CANCELAR</button>
+      </sc-if>
+      <sc-if value="{{ isMenuForm }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex; align-items:center; gap:12px">
+          <button onClick="{{ previewFromForm }}" title="Vista previa" style="background:none; border:1.5px solid #14555C; color:#14555C; border-radius:999px; width:40px; height:40px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-family:inherit; padding:0">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+          </button>
+          <button onClick="{{ menuCancelar }}" style="background:none; border:none; color:#14555C; font-size:14px; font-weight:700; letter-spacing:.06em; cursor:pointer; font-family:inherit">CANCELAR</button>
+          <button onClick="{{ menuGuardar }}" style="background:transparent; border:1.5px solid #14555C; color:#14555C; border-radius:999px; padding:11px 26px; font-size:14px; font-weight:700; letter-spacing:.06em; cursor:pointer; font-family:inherit">GUARDAR</button>
+        </div>
+      </sc-if>
+    </div>
+
+    <sc-if value="{{ isMicrositios }}" hint-placeholder-val="{{ true }}">
+      <div>
+        <h2 style="font-size:21px; font-weight:700; margin:0 0 14px">Información general</h2>
+        <div style="background:#DCEFF0; border-radius:12px; padding:26px; margin-bottom:36px">
+          <sc-if value="{{ homeView }}" hint-placeholder-val="{{ true }}">
+            <div>
+              <div style="font-size:15px; font-weight:700; margin-bottom:4px">Título</div>
+              <div style="font-size:16px; color:#25383B; margin-bottom:20px">{{ homeTitulo }}</div>
+              <div style="font-size:15px; font-weight:700; margin-bottom:4px">Descripción</div>
+              <div style="font-size:16px; color:#25383B; line-height:1.55; max-width:80ch">{{ homeDesc }}</div>
+              <div style="display:flex; justify-content:flex-end; margin-top:22px">
+                <button onClick="{{ homeEdit }}" style="background:#14555C; color:#FFFFFF; border:none; border-radius:999px; padding:13px 28px; font-size:14px; font-weight:700; letter-spacing:.06em; cursor:pointer; font-family:inherit">EDITAR INFORMACIÓN</button>
+              </div>
+            </div>
+          </sc-if>
+          <sc-if value="{{ homeEditing }}" hint-placeholder-val="{{ false }}">
+            <div>
+              <label style="display:block; font-size:15px; font-weight:700; margin-bottom:8px">Título <span style="color:#D0382B">*</span></label>
+              <input value="{{ homeTituloDraft }}" onChange="{{ onHomeTitulo }}" style="width:100%; background:#E8F5F6; border:1px solid #CBE2E4; border-radius:8px; padding:14px 16px; font-family:inherit; font-size:16px; color:#0F1A1C" />
+              <div style="font-size:13px; color:#8A9A9C; margin:6px 0 18px">Mínimo 3, máximo 50 caracteres. Sin espacios al inicio o final.</div>
+              <div style="{{ homeTituloErrStyle }}">{{ homeTituloErr }}</div>
+
+              <label style="display:block; font-size:15px; font-weight:700; margin-bottom:8px">Descripción <span style="color:#D0382B">*</span></label>
+              <div style="background:#E8F5F6; border:1px solid #CBE2E4; border-radius:8px; overflow:hidden">
+                <textarea value="{{ homeDescDraft }}" onChange="{{ onHomeDesc }}" rows="3" style="width:100%; background:transparent; border:none; padding:14px 16px; font-family:inherit; font-size:16px; color:#0F1A1C; resize:vertical; outline:none"></textarea>
+                <div style="display:flex; gap:16px; padding:10px 16px; color:#14555C; font-size:14px; font-weight:700; border-top:1px solid #D6EAEB">
+                  <sc-for list="{{ toolbarIconos }}" as="t" hint-placeholder-count="12">
+                    <span style="cursor:pointer">{{ t }}</span>
+                  </sc-for>
+                </div>
+              </div>
+              <div style="font-size:13px; color:#8A9A9C; margin:6px 0 6px">Mínimo 3, máximo 150 caracteres. Sin espacios al inicio o final.</div>
+              <div style="{{ homeDescErrStyle }}">{{ homeDescErr }}</div>
+              <div style="display:flex; justify-content:flex-end; gap:12px; margin-top:18px">
+                <button onClick="{{ homeCancel }}" style="background:transparent; border:1.5px solid #14555C; color:#14555C; border-radius:999px; padding:13px 26px; font-size:14px; font-weight:700; letter-spacing:.06em; cursor:pointer; font-family:inherit">CANCELAR</button>
+                <button onClick="{{ homeSave }}" style="{{ homeSaveStyle }}">GUARDAR CAMBIOS</button>
+              </div>
+            </div>
+          </sc-if>
+        </div>
+
+        <h2 style="font-size:21px; font-weight:700; margin:0 0 16px">Micrositios configurados</h2>
+        <div style="display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:20px">
+          <sc-for list="{{ micrositios }}" as="m" hint-placeholder-count="7">
+            <div style="background:#DCEFF0; border-radius:16px; padding:22px; display:flex; flex-direction:column; gap:14px">
+              <div style="display:flex; align-items:flex-start; justify-content:space-between">
+                <div style="width:52px; height:52px; border-radius:12px; background:#B7EFC5; display:flex; align-items:center; justify-content:center; font-size:22px">◆</div>
+                <button onClick="{{ m.toggle }}" title="{{ m.accion }}" style="{{ m.dot }}"></button>
+              </div>
+              <div>
+                <div style="font-size:21px; font-weight:700; letter-spacing:-0.01em">{{ m.nombre }}</div>
+                <div style="font-size:15px; color:#4B5E61; line-height:1.5; margin-top:6px">{{ m.descripcion }}</div>
+                <div style="font-size:13px; color:#8A9A9C; margin-top:8px">{{ m.estadoTexto }}</div>
+              </div>
+              <button onClick="{{ m.open }}" style="{{ m.adminBtn }}">ADMINISTRAR CONTENIDO →</button>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isMicrositio }}" hint-placeholder-val="{{ false }}">
+      <div>
+        <sc-if value="{{ microInactivo }}" hint-placeholder-val="{{ false }}">
+          <div style="border:1px solid #E0B36A; background:#FFFFFF; border-radius:10px; padding:18px 22px; margin-bottom:24px; display:flex; gap:14px; align-items:center; justify-content:space-between; flex-wrap:wrap">
+            <div style="display:flex; gap:12px; align-items:flex-start">
+              <span style="color:#A96B10; font-size:18px">ⓘ</span>
+              <div>
+                <div style="font-weight:700; color:#A96B10; margin-bottom:2px">Micrositio inactivo</div>
+                <div style="font-size:15px; color:#6B5330; line-height:1.5; max-width:70ch">No se muestra en el portal público y no permite editar su información ni gestionar sus secciones y contenidos.</div>
+              </div>
+            </div>
+            <button onClick="{{ toggleMicro }}" style="background:#14555C; color:#FFFFFF; border:none; border-radius:999px; padding:12px 24px; font-size:14px; font-weight:700; letter-spacing:.06em; cursor:pointer; font-family:inherit; white-space:nowrap">ACTIVAR</button>
+          </div>
+        </sc-if>
+
+        <h2 style="font-size:21px; font-weight:700; margin:0 0 14px">Información general</h2>
+        <div style="background:#DCEFF0; border-radius:12px; padding:26px">
+          <div style="background:#E8F5F6; border-radius:8px; padding:16px 18px; display:flex; align-items:center; gap:12px; margin-bottom:22px">
+            <span style="font-size:18px; color:#14555C">▣</span>
+            <span style="font-size:15px; font-weight:600">imagen-micrositio.png</span>
+            <span style="font-size:13px; color:#8A9A9C; margin-left:auto">proporción 1:1 · .jpg .jpeg .png</span>
+          </div>
+
+          <sc-if value="{{ viewMode }}" hint-placeholder-val="{{ true }}">
+            <div>
+              <div style="font-size:15px; font-weight:700; margin-bottom:4px">Título</div>
+              <div style="font-size:16px; color:#25383B; margin-bottom:20px">{{ microNombre }}</div>
+              <div style="font-size:15px; font-weight:700; margin-bottom:4px">Descripción</div>
+              <div style="font-size:16px; color:#25383B; line-height:1.55; max-width:80ch">{{ desc }}</div>
+              <div style="display:flex; align-items:center; gap:10px; margin-top:20px; flex-wrap:wrap">
+                <span style="font-size:15px; font-weight:700">URL pública</span>
+                <input value="{{ microUrl }}" readOnly="{{ true }}" style="background:#E8F5F6; border:1px solid #CBE2E4; border-radius:8px; padding:10px 14px; font-size:14px; color:#5B6E71; min-width:300px; max-width:100%; font-family:inherit; cursor:default" />
+                <button onClick="{{ copyMicroUrl }}" style="background:transparent; border:1.5px solid #14555C; color:#14555C; border-radius:999px; padding:9px 20px; font-size:13px; font-weight:700; letter-spacing:.06em; cursor:pointer; font-family:inherit">COPIAR</button>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ editMode }}" hint-placeholder-val="{{ false }}">
+            <div>
+              <label style="display:block; font-size:15px; font-weight:700; margin-bottom:8px">Titulo <span style="color:#D0382B">*</span></label>
+              <input value="{{ nombreDraft }}" onChange="{{ onNombre }}" style="width:100%; background:#E8F5F6; border:1px solid #CBE2E4; border-radius:8px; padding:14px 16px; font-family:inherit; font-size:16px" />
+              <div style="font-size:13px; color:#8A9A9C; margin:6px 0 4px">Mínimo 3, máximo 50 caracteres. Sin espacios al inicio o final.</div>
+              <div style="{{ nombreErrStyle }}">{{ nombreErr }}</div>
+
+              <label style="display:block; font-size:15px; font-weight:700; margin:18px 0 8px">Descripción <span style="color:#D0382B">*</span></label>
+              <div style="background:#E8F5F6; border:1px solid #CBE2E4; border-radius:8px; overflow:hidden">
+                <textarea value="{{ descDraft }}" onChange="{{ onDesc }}" rows="3" style="width:100%; background:transparent; border:none; padding:14px 16px; font-family:inherit; font-size:16px; resize:vertical; outline:none"></textarea>
+                <div style="display:flex; gap:16px; padding:10px 16px; color:#14555C; font-size:14px; font-weight:700; border-top:1px solid #D6EAEB">
+                  <sc-for list="{{ toolbarIconos }}" as="t" hint-placeholder-count="12">
+                    <span style="cursor:pointer">{{ t }}</span>
+                  </sc-for>
+                </div>
+              </div>
+              <div style="font-size:13px; color:#8A9A9C; margin:6px 0 4px">Mínimo 3, máximo 120 caracteres. Sin espacios al inicio o final.</div>
+              <div style="{{ descErrStyle }}">{{ descErr }}</div>
+            </div>
+          </sc-if>
+        </div>
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:20px; margin-top:20px">
+          <div style="background:#DCEFF0; border-radius:12px; padding:22px">
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px">
+              <span style="font-size:16px; font-weight:700">Botón principal</span>
+              <button onClick="{{ toggleBtn1 }}" style="{{ btn1Switch }}"><span style="{{ btn1Knob }}"></span></button>
+            </div>
+            <label style="display:block; font-size:15px; font-weight:600; margin-bottom:6px; color:{{ btn1LabelColor }}">Nombre <span style="color:#D0382B">*</span></label>
+            <input value="{{ btn1Nombre }}" placeholder="Explorar" style="{{ btn1FieldStyle }}" />
+            <div style="font-size:13px; color:#9DADAF; margin:6px 0 16px">Máximo 20 caracteres</div>
+            <label style="display:block; font-size:15px; font-weight:600; margin-bottom:6px; color:{{ btn1LabelColor }}">Link <span style="color:#D0382B">*</span></label>
+            <input value="{{ btn1Url }}" placeholder="Agrega un link para direccionar al dar click" style="{{ btn1FieldStyle }}" />
+          </div>
+          <div style="background:#DCEFF0; border-radius:12px; padding:22px">
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px">
+              <span style="font-size:16px; font-weight:700">Botón secundario</span>
+              <button onClick="{{ toggleBtn2 }}" style="{{ btn2Switch }}"><span style="{{ btn2Knob }}"></span></button>
+            </div>
+            <label style="display:block; font-size:15px; font-weight:600; margin-bottom:6px; color:{{ btn2LabelColor }}">Nombre <span style="color:#D0382B">*</span></label>
+            <input value="{{ btn2Nombre }}" placeholder="Explorar" style="{{ btn2FieldStyle }}" />
+            <div style="font-size:13px; color:#9DADAF; margin:6px 0 16px">Máximo 20 caracteres</div>
+            <label style="display:block; font-size:15px; font-weight:600; margin-bottom:6px; color:{{ btn2LabelColor }}">Link <span style="color:#D0382B">*</span></label>
+            <input value="{{ btn2Url }}" placeholder="Agrega un link para direccionar al dar click" style="{{ btn2FieldStyle }}" />
+          </div>
+        </div>
+
+        <div style="display:flex; justify-content:flex-end; gap:12px; margin-top:22px">
+          <sc-if value="{{ viewMode }}" hint-placeholder-val="{{ true }}">
+            <button onClick="{{ startEdit }}" style="{{ editarInfoBtn }}">EDITAR INFORMACIÓN</button>
+          </sc-if>
+          <sc-if value="{{ editMode }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex; gap:12px">
+              <button onClick="{{ cancelEdit }}" style="background:transparent; border:1.5px solid #14555C; color:#14555C; border-radius:999px; padding:13px 26px; font-size:14px; font-weight:700; letter-spacing:.06em; cursor:pointer; font-family:inherit">CANCELAR</button>
+              <button onClick="{{ saveInfo }}" style="{{ saveBtnStyle }}">GUARDAR CAMBIOS</button>
+            </div>
+          </sc-if>
+        </div>
+
+        <h2 style="font-size:21px; font-weight:700; margin:40px 0 16px">Gestionar secciones</h2>
+        <div style="display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:20px">
+          <sc-for list="{{ secciones }}" as="s" hint-placeholder-count="7">
+            <div style="background:#DCEFF0; border-radius:16px; padding:22px; display:flex; flex-direction:column; gap:14px">
+              <div style="display:flex; align-items:flex-start; justify-content:space-between">
+                <div style="width:52px; height:52px; border-radius:12px; background:#B7EFC5; display:flex; align-items:center; justify-content:center; font-size:22px">◆</div>
+                <button onClick="{{ s.toggle }}" title="{{ s.accion }}" style="{{ s.dot }}"></button>
+              </div>
+              <div>
+                <div style="font-size:20px; font-weight:700; letter-spacing:-0.01em">{{ s.nombre }}</div>
+                <div style="font-size:15px; color:#4B5E61; line-height:1.5; margin-top:6px">{{ s.descripcion }}</div>
+                <div style="font-size:13px; color:#8A9A9C; margin-top:8px">{{ s.estadoTexto }}</div>
+              </div>
+              <button onClick="{{ s.open }}" style="{{ s.editStyle }}">EDITAR →</button>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isSeccion }}" hint-placeholder-val="{{ false }}">
+      <div>
+        <h2 style="font-size:21px; font-weight:700; margin:0 0 14px">Información general</h2>
+        <div style="background:#DCEFF0; border-radius:12px; padding:26px">
+          <sc-if value="{{ secViewMode }}" hint-placeholder-val="{{ true }}">
+            <div>
+              <div style="font-size:15px; font-weight:700; margin-bottom:4px">Nombre de la sección</div>
+              <div style="font-size:16px; color:#25383B; margin-bottom:20px">{{ seccionNombre }}</div>
+              <div style="font-size:15px; font-weight:700; margin-bottom:4px">Descripción</div>
+              <div style="font-size:16px; color:#25383B; line-height:1.55; max-width:80ch; margin-bottom:20px">{{ seccionDesc }}</div>
+              <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap">
+                <span style="font-size:15px; font-weight:700">URL pública</span>
+                <input value="{{ seccionUrl }}" readOnly="{{ true }}" style="background:#E8F5F6; border:1px solid #CBE2E4; border-radius:8px; padding:10px 14px; font-size:14px; color:#5B6E71; min-width:300px; max-width:100%; font-family:inherit; cursor:default" />
+                <button onClick="{{ copySeccionUrl }}" style="background:transparent; border:1.5px solid #14555C; color:#14555C; border-radius:999px; padding:9px 20px; font-size:13px; font-weight:700; letter-spacing:.06em; cursor:pointer; font-family:inherit">COPIAR</button>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ secEditMode }}" hint-placeholder-val="{{ false }}">
+            <div>
+              <label style="display:block; font-size:15px; font-weight:700; margin-bottom:8px">Nombre de la sección <span style="color:#D0382B">*</span></label>
+              <input value="{{ secNombreDraft }}" onChange="{{ onSecNombre }}" style="width:100%; background:#E8F5F6; border:1px solid #CBE2E4; border-radius:8px; padding:14px 16px; font-family:inherit; font-size:16px" />
+              <div style="font-size:13px; color:#8A9A9C; margin:6px 0 4px">Mínimo 3, máximo 30 caracteres. Sin espacios al inicio o final.</div>
+              <div style="{{ secNombreErrStyle }}">{{ secNombreErr }}</div>
+
+              <label style="display:block; font-size:15px; font-weight:700; margin:18px 0 8px">Descripción <span style="color:#D0382B">*</span></label>
+              <div style="background:#E8F5F6; border:1px solid #CBE2E4; border-radius:8px; overflow:hidden">
+                <textarea value="{{ secDescDraft }}" onChange="{{ onSecDesc }}" rows="3" style="width:100%; background:transparent; border:none; padding:14px 16px; font-family:inherit; font-size:16px; resize:vertical; outline:none"></textarea>
+                <div style="display:flex; gap:16px; padding:10px 16px; color:#14555C; font-size:14px; font-weight:700; border-top:1px solid #D6EAEB; flex-wrap:wrap">
+                  <sc-for list="{{ toolbarIconos }}" as="t" hint-placeholder-count="12">
+                    <span style="cursor:pointer">{{ t }}</span>
+                  </sc-for>
+                </div>
+              </div>
+              <div style="font-size:13px; color:#8A9A9C; margin:6px 0 4px">Mínimo 3, máximo 150 caracteres. Sin espacios al inicio o final.</div>
+              <div style="{{ secDescErrStyle }}">{{ secDescErr }}</div>
+            </div>
+          </sc-if>
+
+          <div style="display:flex; justify-content:flex-end; gap:12px; margin-top:22px">
+            <sc-if value="{{ secViewMode }}" hint-placeholder-val="{{ true }}">
+              <button onClick="{{ startSecEdit }}" style="{{ secEditBtnStyle }}">EDITAR INFORMACIÓN</button>
+            </sc-if>
+            <sc-if value="{{ secEditMode }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex; gap:12px">
+                <button onClick="{{ cancelSecEdit }}" style="background:transparent; border:1.5px solid #14555C; color:#14555C; border-radius:999px; padding:13px 26px; font-size:14px; font-weight:700; letter-spacing:.06em; cursor:pointer; font-family:inherit">CANCELAR</button>
+                <button onClick="{{ saveSecInfo }}" style="{{ saveSecBtnStyle }}">GUARDAR CAMBIOS</button>
+              </div>
+            </sc-if>
+          </div>
+        </div>
+
+        <div style="background:#DCEFF0; border-radius:12px; padding:26px; margin-top:24px">
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:20px">
+            <h2 style="font-size:21px; font-weight:700; margin:0">Listado de contenidos</h2>
+            <button onClick="{{ goTipo }}" style="background:#14555C; color:#FFFFFF; border:none; border-radius:999px; padding:13px 26px; font-size:14px; font-weight:700; letter-spacing:.06em; cursor:pointer; font-family:inherit">+  CREAR CONTENIDO</button>
+          </div>
+
+          <div style="display:flex; gap:16px; align-items:center; flex-wrap:wrap; margin-bottom:20px">
+            <div style="flex:1; min-width:220px; display:flex; align-items:center; gap:10px; background:#E8F5F6; border:1px solid #CBE2E4; border-radius:8px; padding:12px 16px">
+              <span style="color:#8A9A9C">⌕</span>
+              <input value="{{ q }}" onChange="{{ onQ }}" placeholder="Buscar por nombre" style="flex:1; background:transparent; border:none; outline:none; font-family:inherit; font-size:15px" />
+            </div>
+            <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap">
+              <span style="font-size:15px; font-weight:700">Estado:</span>
+              <sc-for list="{{ filtros }}" as="f" hint-placeholder-count="4">
+                <button onClick="{{ f.set }}" style="{{ f.style }}">{{ f.label }}</button>
+              </sc-for>
+            </div>
+          </div>
+
+          <sc-if value="{{ hasResultados }}" hint-placeholder-val="{{ true }}">
+            <div style="background:#FFFFFF; border-radius:10px; overflow-x:auto">
+              <div style="display:grid; grid-template-columns:minmax(240px,2.2fr) minmax(110px,auto) minmax(130px,1fr) minmax(130px,auto) minmax(190px,auto); gap:16px; min-width:900px; padding:14px 20px; border-bottom:1px solid #EAEFEF; font-size:13px; font-weight:700; color:#5B6E71; letter-spacing:.04em; text-transform:uppercase">
+                <div>Nombre</div><div>Estado</div><div>Autor</div><div>Últ. modificación</div><div>Acciones</div>
+              </div>
+              <sc-for list="{{ contenidos }}" as="c" hint-placeholder-count="5">
+                <div style="display:grid; grid-template-columns:minmax(240px,2.2fr) minmax(110px,auto) minmax(130px,1fr) minmax(130px,auto) minmax(190px,auto); gap:16px; min-width:900px; padding:16px 20px; border-bottom:1px solid #F1F5F5; align-items:center; font-size:15px">
+                  <div style="min-width:0">
+                    <div style="font-weight:600">{{ c.titulo }}</div>
+                    <div style="font-size:13px; color:#9DADAF; margin-top:2px">{{ c.tipo }}</div>
+                  </div>
+                  <div><span style="{{ c.chip }}">{{ c.estado }}</span></div>
+                  <div style="color:#5B6E71; min-width:0; overflow:hidden; text-overflow:ellipsis">{{ c.autor }}</div>
+                  <div style="color:#5B6E71">{{ c.fecha }}</div>
+                  <div style="display:flex; gap:14px; font-size:13px; font-weight:700; letter-spacing:.04em">
+                    <a href="#" style="color:#14555C; text-decoration:none">VER</a>
+                    <a href="#" style="color:#14555C; text-decoration:none">EDITAR</a>
+                    <a href="#" style="color:#14555C; text-decoration:none">{{ c.accion }}</a>
+                    <a href="#" style="color:#C0392B; text-decoration:none">ELIMINAR</a>
+                  </div>
+                </div>
+              </sc-for>
+              <div style="display:flex; justify-content:space-between; align-items:center; padding:16px 20px; font-size:14px; color:#5B6E71; gap:16px; flex-wrap:wrap">
+                <div>{{ conteo }}</div>
+                <div style="display:flex; gap:6px">
+                  <button style="border:1px solid #CBE2E4; background:#FFFFFF; border-radius:8px; padding:7px 12px; font-family:inherit; font-size:14px; cursor:pointer">Anterior</button>
+                  <button style="border:1px solid #14555C; background:#14555C; color:#FFFFFF; border-radius:8px; padding:7px 13px; font-family:inherit; font-size:14px; cursor:pointer">1</button>
+                  <button style="border:1px solid #CBE2E4; background:#FFFFFF; border-radius:8px; padding:7px 12px; font-family:inherit; font-size:14px; cursor:pointer">Siguiente</button>
+                </div>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ sinResultados }}" hint-placeholder-val="{{ false }}">
+            <div style="background:#FFFFFF; border-radius:10px; padding:56px 22px; text-align:center; color:#5B6E71; font-size:16px">No se encontraron contenidos con los criterios de búsqueda seleccionados.</div>
+          </sc-if>
+
+          <sc-if value="{{ seccionVacia }}" hint-placeholder-val="{{ false }}">
+            <div style="background:#FFFFFF; border-radius:10px; padding:56px 22px; text-align:center; display:flex; flex-direction:column; gap:6px; align-items:center">
+              <div style="font-size:17px; font-weight:700">Aún no hay contenido creado en esta sección.</div>
+              <div style="font-size:15px; color:#5B6E71">Te invitamos a crear tu primer contenido.</div>
+              <button onClick="{{ goTipo }}" style="margin-top:16px; background:#14555C; color:#FFFFFF; border:none; border-radius:999px; padding:13px 26px; font-size:14px; font-weight:700; letter-spacing:.06em; cursor:pointer; font-family:inherit">CREAR CONTENIDO</button>
+            </div>
+          </sc-if>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isTipo }}" hint-placeholder-val="{{ false }}">
+      <div>
+        <h2 style="font-size:23px; font-weight:700; margin:0 0 10px; text-align:center">¿Que tipo de contenido quieres crear?</h2>
+        <p style="margin:0 0 30px; text-align:center; font-size:16px; color:#5B6E71">Elige un formato para empezar. podrás completar el título, la descripción y los archivos en el siguiente paso.</p>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:22px">
+          <sc-for list="{{ tipos }}" as="t" hint-placeholder-count="4">
+            <button onClick="{{ t.pick }}" style="text-align:left; background:#DCEFF0; border:none; border-radius:14px; padding:26px; cursor:pointer; font-family:inherit; display:flex; flex-direction:column; gap:16px" style-hover="box-shadow:0 8px 24px rgba(20,85,92,.14)">
+              <div style="{{ t.iconStyle }}">{{ t.glyph }}</div>
+              <div>
+                <div style="font-size:22px; font-weight:700; letter-spacing:-0.01em">{{ t.nombre }}</div>
+                <div style="font-size:15px; color:#4B5E61; line-height:1.5; margin-top:8px">{{ t.limite }}</div>
+              </div>
+            </button>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isForm }}" hint-placeholder-val="{{ false }}">
+      <div>
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:20px">
+          <span style="font-size:15px; font-weight:700">Estado:</span>
+          <span style="border:1px solid #B08A3E; color:#8A6100; border-radius:999px; padding:5px 16px; font-size:14px; font-weight:600">Borrador</span>
+        </div>
+
+        <sc-if value="{{ mostrarImportante }}" hint-placeholder-val="{{ false }}">
+          <div style="border:1px solid #C89A3C; border-radius:10px; padding:20px 24px; margin-bottom:24px; display:flex; gap:12px; align-items:flex-start">
+            <span style="color:#A96B10; font-size:18px">ⓘ</span>
+            <div>
+              <div style="font-weight:700; color:#A96B10; margin-bottom:6px">Importante</div>
+              <div style="font-size:15px; color:#8A6100">Completa al menos uno de los dos campos de texto.</div>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ showPlantillas }}" hint-placeholder-val="{{ false }}">
+          <div style="border:1px solid #E3EAEA; border-radius:12px; padding:24px; margin-bottom:22px">
+            <div style="font-size:16px; font-weight:700; margin-bottom:4px">Plantillas</div>
+            <div style="font-size:15px; color:#5B6E71; margin-bottom:18px">Selecciona la plantilla que desees para organizar el contenido de esta sección.</div>
+            <div style="display:flex; gap:18px; flex-wrap:wrap">
+              <sc-for list="{{ plantillas }}" as="p" hint-placeholder-count="4">
+                <button onClick="{{ p.set }}" style="background:none; border:none; padding:0; cursor:pointer; font-family:inherit; display:flex; flex-direction:column; align-items:center; gap:6px">
+                  <span style="{{ p.boxStyle }}"><span style="{{ p.barStyle }}"></span></span>
+                  <span style="{{ p.labelStyle }}">{{ p.label }}</span>
+                </button>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+
+        <div style="border:1px solid #E3EAEA; border-radius:12px; padding:26px; display:{{ layoutDisplay }}; grid-template-columns:{{ layoutCols }}; flex-direction:{{ layoutDir }}; gap:26px; align-items:start">
+
+          <sc-if value="{{ showMedia }}" hint-placeholder-val="{{ false }}">
+            <div style="order:{{ mediaOrder }}; min-width:0; width:100%">
+              <div style="display:flex; align-items:center; gap:10px; margin-bottom:4px">
+                <span style="color:#14555C; font-size:17px">▣</span>
+                <span style="font-size:16px; font-weight:700">{{ adjuntosLabel }}</span>
+              </div>
+              <div style="font-size:15px; color:#5B6E71; margin-bottom:16px">{{ adjuntosHint }}</div>
+              <div style="border:1.5px dashed #7FB8BD; border-radius:8px; padding:34px 20px; text-align:center">
+                <div style="color:#14555C; font-size:14px; font-weight:700; letter-spacing:.06em; margin-bottom:10px">＋ {{ adjuntosCta }}</div>
+                <div style="font-size:14px; color:#5B6E71">Sube tus archivos desde tu computadora arrástralos y suéltalos aquí.</div>
+                <div style="font-size:14px; color:#14555C; margin-top:4px">{{ adjuntosFormatos }}</div>
+              </div>
+              <sc-if value="{{ showVideoUrl }}" hint-placeholder-val="{{ false }}">
+                <input placeholder="o pega la URL de YouTube para embeber" style="width:100%; margin-top:14px; border:1px solid #DDE5E5; border-radius:8px; padding:13px 16px; font-family:inherit; font-size:15px" />
+              </sc-if>
+              <sc-if value="{{ showCredito }}" hint-placeholder-val="{{ false }}">
+                <div style="margin-top:22px">
+                  <label style="display:block; font-size:16px; font-weight:600; margin-bottom:8px">Crédito de imagen <span style="color:#8A9A9C; font-weight:400">(opcional)</span></label>
+                  <input value="{{ credito }}" onChange="{{ onCredito }}" placeholder="Fuente, autoría o atribución" style="width:100%; border:1px solid #DDE5E5; border-radius:8px; padding:13px 16px; font-family:inherit; font-size:15px; font-style:italic" />
+                  <div style="font-size:13px; color:#8A9A9C; margin-top:6px">Formato inicial: Cita. Siempre se muestra debajo de la imagen.</div>
+                </div>
+              </sc-if>
+            </div>
+          </sc-if>
+
+          <div style="order:{{ bloqueOrder }}; min-width:0; width:100%">
+            <label style="display:block; font-size:16px; font-weight:600; margin-bottom:10px">Titulo <span style="color:#8A9A9C; font-weight:400">(opcional)</span></label>
+            <div style="border:1px solid #DDE5E5; border-radius:8px; overflow:hidden; margin-bottom:24px">
+              <textarea value="{{ tituloDraft }}" onChange="{{ onTitulo }}" rows="3" placeholder="Agrega un titulo a este contenido" style="width:100%; border:none; padding:16px; font-family:inherit; font-size:16px; resize:vertical; outline:none"></textarea>
+              <div style="display:flex; gap:14px; padding:12px 16px; border-top:1px solid #EDF2F2; color:#14555C; font-size:15px; font-weight:700; flex-wrap:wrap">
+                <sc-for list="{{ toolbarEditor }}" as="t" hint-placeholder-count="11">
+                  <span style="cursor:pointer">{{ t }}</span>
+                </sc-for>
+              </div>
+            </div>
+
+            <label style="display:block; font-size:16px; font-weight:600; margin-bottom:10px">{{ descLabel }} <span style="color:#8A9A9C; font-weight:400">(opcional)</span></label>
+            <div style="border:1px solid #DDE5E5; border-radius:8px; overflow:hidden">
+              <textarea value="{{ cuerpo }}" onChange="{{ onCuerpo }}" rows="4" placeholder="Agrega una descripción que acompañe este contenido" style="width:100%; border:none; padding:16px; font-family:inherit; font-size:16px; resize:vertical; outline:none"></textarea>
+              <div style="display:flex; gap:14px; padding:12px 16px; border-top:1px solid #EDF2F2; color:#14555C; font-size:15px; font-weight:700; flex-wrap:wrap">
+                <sc-for list="{{ toolbarEditor }}" as="t" hint-placeholder-count="11">
+                  <span style="cursor:pointer">{{ t }}</span>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isHero }}" hint-placeholder-val="{{ false }}">
+      <div style="max-width:920px">
+        <div style="border:1px dashed #7FB8BD; border-radius:8px; padding:34px 20px; text-align:center; position:relative; margin-bottom:26px">
+          <button onClick="{{ heroImgClear }}" style="position:absolute; top:10px; right:14px; background:none; border:none; color:#C0392B; font-size:17px; cursor:pointer">🗑</button>
+          <div style="color:#14555C; font-size:14px; font-weight:700; letter-spacing:.06em; margin-bottom:10px">＋ AÑADIR IMAGEN</div>
+          <div style="font-size:14px; color:#5B6E71">Sube tus archivos desde tu computadora arrástralos y suéltalos aquí</div>
+          <div style="font-size:14px; color:#14555C; margin-top:4px">Formato: .jpg, .jpeg, .png, hasta 10 MB, Proporción 1:1 en tamaño</div>
+        </div>
+
+        <label style="display:block; font-size:16px; font-weight:600; margin-bottom:8px">Titulo <span style="color:#D0382B">*</span></label>
+        <div style="border:1px solid #DDE5E5; border-radius:8px; overflow:hidden; margin-bottom:6px">
+          <textarea value="{{ heroTitulo }}" onChange="{{ onHeroTitulo }}" rows="2" placeholder="Agrega un titulo para el Hero" style="width:100%; border:none; padding:16px; font-family:inherit; font-size:16px; resize:vertical; outline:none"></textarea>
+          <div style="display:flex; gap:14px; padding:12px 16px; border-top:1px solid #EDF2F2; color:#14555C; font-size:15px; font-weight:700; flex-wrap:wrap">
+            <sc-for list="{{ toolbarEditor }}" as="t" hint-placeholder-count="11"><span style="cursor:pointer">{{ t }}</span></sc-for>
+          </div>
+        </div>
+        <div style="font-size:13px; color:#8A9A9C; margin-bottom:22px">Mínimo 3, máximo 30 caracteres. Sin espacios al inicio o final.</div>
+
+        <label style="display:block; font-size:16px; font-weight:600; margin-bottom:8px">Descripción <span style="color:#D0382B">*</span></label>
+        <div style="border:1px solid #DDE5E5; border-radius:8px; overflow:hidden; margin-bottom:6px">
+          <textarea value="{{ heroDesc }}" onChange="{{ onHeroDesc }}" rows="3" placeholder="Agrega una descripción para el Hero" style="width:100%; border:none; padding:16px; font-family:inherit; font-size:16px; resize:vertical; outline:none"></textarea>
+          <div style="display:flex; gap:14px; padding:12px 16px; border-top:1px solid #EDF2F2; color:#14555C; font-size:15px; font-weight:700; flex-wrap:wrap">
+            <sc-for list="{{ toolbarEditor }}" as="t" hint-placeholder-count="11"><span style="cursor:pointer">{{ t }}</span></sc-for>
+          </div>
+        </div>
+        <div style="font-size:13px; color:#8A9A9C; margin-bottom:26px">Mínimo 3, máximo 120 caracteres. Sin espacios al inicio o final.</div>
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:20px; margin-bottom:26px">
+          <div style="background:#DCEFF0; border-radius:12px; padding:22px">
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px">
+              <span style="font-size:16px; font-weight:700">Botón principal</span>
+              <button onClick="{{ toggleHeroBtn1 }}" style="{{ heroBtn1Switch }}"><span style="{{ heroSwitchKnob }}"></span></button>
+            </div>
+            <label style="display:block; font-size:15px; font-weight:600; margin-bottom:6px; color:{{ heroBtn1LabelColor }}">Nombre <span style="color:#D0382B">*</span></label>
+            <input value="{{ heroBtn1Nombre }}" onChange="{{ onHeroBtn1Nombre }}" placeholder="Explorar" style="{{ heroBtn1FieldStyle }}" />
+            <div style="font-size:13px; color:#9DADAF; margin:6px 0 16px">Máximo 20 caracteres</div>
+            <label style="display:block; font-size:15px; font-weight:600; margin-bottom:6px; color:{{ heroBtn1LabelColor }}">Link <span style="color:#D0382B">*</span></label>
+            <input value="{{ heroBtn1Url }}" onChange="{{ onHeroBtn1Url }}" placeholder="Agrega un link para direccionar al dar click" style="{{ heroBtn1FieldStyle }}" />
+          </div>
+          <div style="background:#DCEFF0; border-radius:12px; padding:22px">
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px">
+              <span style="font-size:16px; font-weight:700">Botón secundario</span>
+              <button onClick="{{ toggleHeroBtn2 }}" style="{{ heroBtn2Switch }}"><span style="{{ heroSwitchKnob }}"></span></button>
+            </div>
+            <label style="display:block; font-size:15px; font-weight:600; margin-bottom:6px; color:{{ heroBtn2LabelColor }}">Nombre <span style="color:#D0382B">*</span></label>
+            <input value="{{ heroBtn2Nombre }}" onChange="{{ onHeroBtn2Nombre }}" placeholder="Explorar" style="{{ heroBtn2FieldStyle }}" />
+            <div style="font-size:13px; color:#9DADAF; margin:6px 0 16px">Máximo 20 caracteres</div>
+            <label style="display:block; font-size:15px; font-weight:600; margin-bottom:6px; color:{{ heroBtn2LabelColor }}">Link <span style="color:#D0382B">*</span></label>
+            <input value="{{ heroBtn2Url }}" onChange="{{ onHeroBtn2Url }}" placeholder="Agrega un link para direccionar al dar click" style="{{ heroBtn2FieldStyle }}" />
+          </div>
+        </div>
+
+        <div style="border-top:1px solid #E3EAEA; padding-top:24px">
+          <div style="background:#DCEFF0; border-radius:12px; padding:18px 22px; display:flex; align-items:center; gap:16px; margin-bottom:22px">
+            <button onClick="{{ toggleDestacados }}" style="{{ destacadosSwitch }}"><span style="{{ heroSwitchKnob }}"></span></button>
+            <span style="font-size:18px; font-weight:700">Destacados</span>
+          </div>
+
+          <sc-if value="{{ destacados }}" hint-placeholder-val="{{ true }}">
+            <div style="display:flex; flex-direction:column; gap:26px">
+              <sc-for list="{{ destacadosSlots }}" as="d" hint-placeholder-count="3">
+                <div>
+                  <div style="font-size:15px; font-weight:700; margin-bottom:10px">{{ d.titulo }} <span style="color:#D0382B">*</span></div>
+                  <div style="display:flex; gap:26px; margin-bottom:14px">
+                    <button onClick="{{ d.pickMicro }}" style="background:none; border:none; display:flex; align-items:center; gap:8px; cursor:pointer; font-family:inherit; font-size:15px; color:#3C4A4C">
+                      <span style="{{ d.radioMicroStyle }}"></span>Micrositio
+                    </button>
+                    <button onClick="{{ d.pickSeccion }}" style="background:none; border:none; display:flex; align-items:center; gap:8px; cursor:pointer; font-family:inherit; font-size:15px; color:#3C4A4C">
+                      <span style="{{ d.radioSeccionStyle }}"></span>Sección
+                    </button>
+                  </div>
+
+                  <sc-if value="{{ d.esMicrositio }}" hint-placeholder-val="{{ true }}">
+                    <select value="{{ d.microValue }}" onChange="{{ d.onMicro }}" style="width:100%; background:#E8F5F6; border:1px solid #CBE2E4; border-radius:8px; padding:13px 16px; font-family:inherit; font-size:15px; color:#3C4A4C">
+                      <option value="">Seleccione un micrositio activo</option>
+                      <sc-for list="{{ micrositiosActivosOpts }}" as="o" hint-placeholder-count="5">
+                        <option value="{{ o }}">{{ o }}</option>
+                      </sc-for>
+                    </select>
+                  </sc-if>
+
+                  <sc-if value="{{ d.esSeccion }}" hint-placeholder-val="{{ false }}">
+                    <select value="{{ d.secMicroValue }}" onChange="{{ d.onSecMicro }}" style="width:100%; background:#E8F5F6; border:1px solid #CBE2E4; border-radius:8px; padding:13px 16px; font-family:inherit; font-size:15px; color:#3C4A4C; margin-bottom:14px">
+                      <option value="">Seleccione un micrositio para ver sus secciones activas</option>
+                      <sc-for list="{{ micrositiosActivosOpts }}" as="o" hint-placeholder-count="5">
+                        <option value="{{ o }}">{{ o }}</option>
+                      </sc-for>
+                    </select>
+                    <sc-if value="{{ d.secOpts }}" hint-placeholder-val="{{ false }}">
+                      <div>
+                        <div style="font-size:14px; font-weight:600; margin-bottom:2px">Selección de sección</div>
+                        <div style="font-size:13px; color:#8A9A9C; margin-bottom:10px">Selecciona máximo (1) sección para destacar en el Hero.</div>
+                        <div style="display:flex; gap:22px; flex-wrap:wrap">
+                          <sc-for list="{{ d.secOpts }}" as="so" hint-placeholder-count="3">
+                            <button onClick="{{ so.pick }}" style="background:none; border:none; display:flex; align-items:center; gap:8px; cursor:pointer; font-family:inherit; font-size:15px; color:#3C4A4C">
+                              <span style="{{ so.radioStyle }}"></span>{{ so.nombre }}
+                            </button>
+                          </sc-for>
+                        </div>
+                      </div>
+                    </sc-if>
+                  </sc-if>
+                </div>
+              </sc-for>
+              <p style="margin:0; font-size:13px; color:#8A9A9C">Un elemento destacado no puede inactivarse mientras esté asociado al Hero.</p>
+            </div>
+          </sc-if>
+          <sc-if value="{{ sinDestacados }}" hint-placeholder-val="{{ false }}">
+            <p style="margin:0; font-size:15px; color:#5B6E71">Destacados desactivados: el contenido principal del Hero ocupa todo el espacio disponible.</p>
+          </sc-if>
+        </div>
+
+        <div style="display:flex; justify-content:flex-end; gap:12px; margin-top:30px">
+          <button onClick="{{ heroCancel }}" style="background:transparent; border:1.5px solid #14555C; color:#14555C; border-radius:999px; padding:13px 26px; font-size:14px; font-weight:700; letter-spacing:.06em; cursor:pointer; font-family:inherit">CANCELAR</button>
+          <button onClick="{{ heroSave }}" style="background:#14555C; color:#FFFFFF; border:none; border-radius:999px; padding:13px 28px; font-size:14px; font-weight:700; letter-spacing:.06em; cursor:pointer; font-family:inherit">GUARDAR</button>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isMenus }}" hint-placeholder-val="{{ false }}">
+      <div>
+        <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:20px; flex-wrap:wrap; margin-bottom:22px">
+          <p style="margin:0; font-size:15px; color:#5B6E71; max-width:64ch">Administra de forma centralizada los menús de navegación del Portal WEB y su ubicación (Cabecera, Pie de página).</p>
+          <div style="display:flex; gap:12px; flex-wrap:wrap">
+            <button onClick="{{ goCrearMenu }}" style="background:#14555C; color:#FFFFFF; border:none; border-radius:999px; padding:12px 24px; font-size:14px; font-weight:700; letter-spacing:.05em; cursor:pointer; font-family:inherit; white-space:nowrap">+ CREAR MENÚ</button>
+          </div>
+        </div>
+
+        <div style="border:1px solid #B9DEE0; border-radius:10px; padding:18px 22px; display:flex; gap:12px; align-items:flex-start; margin-bottom:24px">
+          <span style="color:#14555C; font-size:18px">ⓘ</span>
+          <div>
+            <div style="font-weight:700; color:#14555C; margin-bottom:2px">Nota de navegación.</div>
+            <div style="font-size:15px; color:#14555C; line-height:1.5">Los menús sin ubicación asignada se conservan como borradores de trabajo y no son visibles para los usuarios en el Portal WEB.</div>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:14px; align-items:center; flex-wrap:wrap; margin-bottom:20px">
+          <span style="font-size:15px; color:#3C4A4C">Ordenar por: <strong>Fecha de última edición</strong></span>
+        </div>
+
+        <sc-if value="{{ menusVacio }}" hint-placeholder-val="{{ false }}">
+          <div style="background:#DCEFF0; border-radius:12px; padding:60px; text-align:center; color:#5B6E71; font-size:16px">Aún no hay menús configurados. Crea el primero con "Crear menú".</div>
+        </sc-if>
+
+        <div style="overflow-x:auto">
+          <div style="display:grid; grid-template-columns:minmax(180px,1.8fr) 130px minmax(160px,1.4fr) 140px 150px 60px; gap:16px; min-width:900px; padding:14px 4px; border-bottom:1px solid #E3EAEA; font-size:13px; font-weight:700; color:#5B6E71; letter-spacing:.03em">
+            <div>Nombre Menú</div><div>Fecha de creación</div><div>Usuario creador</div><div>Fecha últ. edición</div><div>Ubicación asignada</div><div></div>
+          </div>
+          <sc-for list="{{ menusFiltrados }}" as="mm" hint-placeholder-count="3">
+            <div style="display:grid; grid-template-columns:minmax(180px,1.8fr) 130px minmax(160px,1.4fr) 140px 150px 60px; gap:16px; min-width:900px; padding:18px 4px; border-bottom:1px solid #F1F5F5; align-items:center; font-size:15px">
+              <div style="font-weight:600">{{ mm.nombre }}</div>
+              <div style="color:#5B6E71">{{ mm.fecha }}</div>
+              <div style="color:#5B6E71; min-width:0; overflow:hidden; text-overflow:ellipsis">{{ mm.creador }}</div>
+              <div style="color:#5B6E71">{{ mm.editada }}</div>
+              <div><span style="{{ mm.tipoChip }}">{{ mm.tipoLabel }}</span></div>
+              <div style="text-align:right">
+                <button onClick="{{ mm.toggleActions }}" style="background:none; border:1px solid #DDE5E5; border-radius:8px; color:#3C4A4C; font-size:18px; cursor:pointer; padding:4px 10px; line-height:1; font-family:inherit">⋮</button>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isMenuForm }}" hint-placeholder-val="{{ false }}">
+      <div>
+        <label style="display:block; font-size:15px; font-weight:700; margin-bottom:8px">Nombre del menú <span style="color:#D0382B">*</span></label>
+        <input value="{{ menuNombre }}" onChange="{{ onMenuNombre }}" placeholder="Ej. Menú principal Header" style="width:100%; max-width:480px; background:#E8F5F6; border:1px solid #CBE2E4; border-radius:8px; padding:13px 16px; font-family:inherit; font-size:16px; margin-bottom:4px" />
+        <div style="{{ menuNombreErrStyle }}">{{ menuNombreErr }}</div>
+        <div style="font-size:13px; color:#8A9A9C; margin:6px 0 26px">Mínimo 3, máximo 50 caracteres.</div>
+
+        <div style="display:grid; grid-template-columns:minmax(240px,1fr) minmax(0,1.6fr); gap:24px; align-items:start">
+          <div style="border:1px solid #E3EAEA; border-radius:12px; padding:20px">
+            <div style="font-size:16px; font-weight:700; margin-bottom:14px">Elementos disponibles</div>
+            <div style="font-size:13px; font-weight:700; color:#5B6E71; text-transform:uppercase; letter-spacing:.04em; margin-bottom:8px">Micrositios y secciones activas</div>
+            <div style="display:flex; flex-direction:column; gap:2px; margin-bottom:16px">
+              <sc-for list="{{ microsDisponibles }}" as="mi" hint-placeholder-count="3">
+                <div>
+                  <div style="display:flex; align-items:center; justify-content:space-between; gap:8px; padding:9px 8px; border-radius:6px" style-hover="background:#E8F5F6">
+                    <span style="font-size:14px; font-weight:700; color:#0F1A1C">{{ mi.nombre }}</span>
+                    <button onClick="{{ mi.add }}" title="Agregar al menú" style="width:24px; height:24px; border-radius:50%; border:1.5px solid #14555C; background:none; color:#14555C; font-size:15px; line-height:1; display:flex; align-items:center; justify-content:center; cursor:pointer; font-family:inherit; flex-shrink:0" style-hover="background:#14555C; color:#FFFFFF">＋</button>
+                  </div>
+                  <sc-for list="{{ mi.secciones }}" as="se" hint-placeholder-count="2">
+                    <div style="display:flex; align-items:center; justify-content:space-between; gap:8px; padding:8px 8px 8px 22px; border-radius:6px" style-hover="background:#E8F5F6">
+                      <span style="font-size:13px; color:#3C4A4C">{{ se.nombre }}</span>
+                      <button onClick="{{ se.add }}" title="Agregar al menú" style="width:22px; height:22px; border-radius:50%; border:1.5px solid #14555C; background:none; color:#14555C; font-size:14px; line-height:1; display:flex; align-items:center; justify-content:center; cursor:pointer; font-family:inherit; flex-shrink:0" style-hover="background:#14555C; color:#FFFFFF">＋</button>
+                    </div>
+                  </sc-for>
+                </div>
+              </sc-for>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:2px; border-top:1px solid #EDF2F2; padding-top:12px">
+              <div style="display:flex; align-items:center; justify-content:space-between; gap:8px; padding:9px 8px; border-radius:6px" style-hover="background:#E8F5F6">
+                <span style="font-size:14px; font-weight:600; color:#14555C">Opción personalizada</span>
+                <button onClick="{{ addPersonalizada }}" title="Agregar al menú" style="width:24px; height:24px; border-radius:50%; border:1.5px solid #14555C; background:none; color:#14555C; font-size:15px; line-height:1; display:flex; align-items:center; justify-content:center; cursor:pointer; font-family:inherit; flex-shrink:0" style-hover="background:#14555C; color:#FFFFFF">＋</button>
+              </div>
+              <div style="display:flex; align-items:center; justify-content:space-between; gap:8px; padding:9px 8px; border-radius:6px" style-hover="background:#E8F5F6">
+                <span style="font-size:14px; font-weight:600; color:#14555C">Enlace directo</span>
+                <button onClick="{{ addEnlace }}" title="Agregar al menú" style="width:24px; height:24px; border-radius:50%; border:1.5px solid #14555C; background:none; color:#14555C; font-size:15px; line-height:1; display:flex; align-items:center; justify-content:center; cursor:pointer; font-family:inherit; flex-shrink:0" style-hover="background:#14555C; color:#FFFFFF">＋</button>
+              </div>
+              <div style="display:flex; align-items:center; justify-content:space-between; gap:8px; padding:9px 8px; border-radius:6px" style-hover="background:#E8F5F6">
+                <span style="font-size:14px; font-weight:600; color:#14555C">Botón</span>
+                <button onClick="{{ addBoton }}" title="Agregar al menú" style="width:24px; height:24px; border-radius:50%; border:1.5px solid #14555C; background:none; color:#14555C; font-size:15px; line-height:1; display:flex; align-items:center; justify-content:center; cursor:pointer; font-family:inherit; flex-shrink:0" style-hover="background:#14555C; color:#FFFFFF">＋</button>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex; flex-direction:column; gap:20px">
+          <div style="border:1px solid #E3EAEA; border-radius:12px; padding:20px">
+            <div style="display:flex; justify-content:space-between; align-items:baseline; gap:16px; margin-bottom:6px; flex-wrap:wrap">
+              <div style="font-size:16px; font-weight:700">Estructura del menú</div>
+              <span style="{{ contadorEstilo }}">{{ contadorPrincipales }}/7 elementos principales (mínimo 3)</span>
+            </div>
+            <div style="font-size:13px; color:#8A9A9C; margin-bottom:16px">Arrastra los elementos para ordenarlos o suéltalos a la derecha para convertirlos en submenú del que está justo encima.</div>
+
+            <sc-if value="{{ estructuraVacia }}" hint-placeholder-val="{{ true }}">
+              <div style="text-align:center; padding:40px 10px; color:#8A9A9C; font-size:15px">Agrega elementos desde el panel izquierdo para construir el menú.</div>
+            </sc-if>
+
+            <sc-for list="{{ estructuraItems }}" as="it" hint-placeholder-count="4">
+              <div draggable="{{ true }}" onDragStart="{{ it.dragStart }}" onDragOver="{{ it.dragOver }}" onDrop="{{ it.drop }}" onDragEnd="{{ it.dragEnd }}" style="{{ it.indentStyle }}">
+                <span style="cursor:grab; color:#9DADAF; font-size:16px; line-height:1">⠿</span>
+                <span style="font-size:11px; text-transform:uppercase; letter-spacing:.04em; color:#8A9A9C; min-width:96px">{{ it.tipo }}</span>
+                <input value="{{ it.nombre }}" onChange="{{ it.onNombre }}" style="flex:1; min-width:100px; border:1px solid #DDE5E5; border-radius:6px; padding:7px 10px; font-family:inherit; font-size:14px" />
+                <sc-if value="{{ it.showUrl }}" hint-placeholder-val="{{ false }}">
+                  <input value="{{ it.url }}" onChange="{{ it.onUrl }}" placeholder="https://" style="flex:1; min-width:100px; border:1px solid #DDE5E5; border-radius:6px; padding:7px 10px; font-family:inherit; font-size:14px; color:#5B6E71" />
+                </sc-if>
+                <sc-if value="{{ it.puedeAnidar }}" hint-placeholder-val="{{ false }}">
+                  <button onClick="{{ it.anidar }}" style="background:none; border:1px solid #CBE2E4; border-radius:6px; padding:6px 10px; font-size:12px; color:#14555C; cursor:pointer; font-family:inherit; white-space:nowrap">Anidar</button>
+                </sc-if>
+                <sc-if value="{{ it.puedeDesanidar }}" hint-placeholder-val="{{ false }}">
+                  <button onClick="{{ it.desanidar }}" style="background:none; border:1px solid #CBE2E4; border-radius:6px; padding:6px 10px; font-size:12px; color:#14555C; cursor:pointer; font-family:inherit; white-space:nowrap">Quitar submenú</button>
+                </sc-if>
+                <button onClick="{{ it.eliminar }}" style="background:none; border:none; color:#C0392B; font-size:15px; cursor:pointer">🗑</button>
+              </div>
+              <sc-if value="{{ it.nestHint }}" hint-placeholder-val="{{ false }}">
+                <div style="padding-left:{{ it.nestHintIndent }}px; font-size:12px; color:#14555C; font-style:italic; padding-bottom:4px">↳ se soltará como submenú</div>
+              </sc-if>
+            </sc-for>
+          </div>
+          <div style="border:1px solid #E3EAEA; border-radius:12px; padding:20px">
+            <div style="font-size:16px; font-weight:700; margin-bottom:4px">Ajustes del menú</div>
+            <div style="font-size:13px; color:#8A9A9C; margin-bottom:16px">Define dónde se mostrará este menú en el Portal WEB. Es opcional y cada ubicación solo puede usarla un menú a la vez.</div>
+            <div style="font-size:13px; font-weight:700; color:#5B6E71; text-transform:uppercase; letter-spacing:.04em; margin-bottom:10px">Ubicación del menú</div>
+            <div style="display:flex; flex-direction:column; gap:12px">
+              <sc-for list="{{ ubicacionOpciones }}" as="ub" hint-placeholder-count="2">
+                <div onClick="{{ ub.pick }}" style="display:flex; align-items:center; gap:10px; cursor:pointer">
+                  <span style="{{ ub.boxStyle }}">{{ ub.check }}</span>
+                  <span style="font-size:14px; color:#0F1A1C; font-weight:600">{{ ub.nombre }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+          </div>
+        </div>
+
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isPlaceholder }}" hint-placeholder-val="{{ false }}">
+      <div style="background:#DCEFF0; border-radius:12px; padding:60px; text-align:center">
+        <div style="font-size:20px; font-weight:700; margin-bottom:8px">{{ pageTitle }}</div>
+        <div style="color:#5B6E71; font-size:15px">Módulo fuera del alcance de los mockups 2 y 3.</div>
+      </div>
+    </sc-if>
+
+  </main>
+
+  <sc-if value="{{ confirmMsg }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed; inset:0; background:rgba(15,26,28,.45); display:flex; align-items:center; justify-content:center; padding:24px; z-index:40">
+      <div style="background:#FFFFFF; border-radius:16px; padding:30px; max-width:560px; width:100%; box-shadow:0 24px 60px rgba(0,0,0,.25)">
+        <h2 style="font-size:21px; font-weight:700; margin:0 0 12px">Confirmar acción</h2>
+        <p style="margin:0 0 26px; font-size:16px; line-height:1.6; color:#3C4A4C">{{ confirmMsg }}</p>
+        <div style="display:flex; gap:12px; justify-content:flex-end">
+          <button onClick="{{ confirmCancel }}" style="background:transparent; border:1.5px solid #14555C; color:#14555C; border-radius:999px; padding:12px 24px; font-size:14px; font-weight:700; letter-spacing:.06em; cursor:pointer; font-family:inherit">{{ confirmCancelLabel }}</button>
+          <button onClick="{{ confirmOk }}" style="background:#14555C; color:#FFFFFF; border:none; border-radius:999px; padding:12px 26px; font-size:14px; font-weight:700; letter-spacing:.06em; cursor:pointer; font-family:inherit">{{ confirmOkLabel }}</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ previewOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed; inset:0; background:rgba(15,26,28,.55); display:flex; align-items:center; justify-content:center; padding:24px; z-index:45; overflow:auto">
+      <div style="background:#FFFFFF; border-radius:16px; padding:28px; max-width:820px; width:100%; box-shadow:0 24px 60px rgba(0,0,0,.3); max-height:90vh; overflow:auto">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:16px; margin-bottom:6px">
+          <div>
+            <h2 style="font-size:20px; font-weight:700; margin:0">Vista previa · {{ previewNombre }}</h2>
+            <div style="font-size:13px; color:#8A9A9C; margin-top:4px">{{ previewSubtitulo }}</div>
+          </div>
+          <button onClick="{{ previewClose }}" style="background:none; border:none; font-size:22px; color:#5B6E71; cursor:pointer; line-height:1">✕</button>
+        </div>
+
+        <sc-if value="{{ previewEstructural }}" hint-placeholder-val="{{ true }}">
+          <div style="margin-top:20px; display:flex; flex-wrap:wrap; gap:20px">
+            <sc-for list="{{ previewRaiz }}" as="r" hint-placeholder-count="3">
+              <div style="background:#F4F9F9; border:1px solid #DCEFF0; border-radius:10px; padding:14px 16px; min-width:180px">
+                <div style="font-size:13px; text-transform:uppercase; letter-spacing:.04em; color:#8A9A9C; margin-bottom:4px">{{ r.tipo }}</div>
+                <div style="font-weight:700; font-size:15px; margin-bottom:6px">{{ r.nombre }}</div>
+                <sc-for list="{{ r.hijos }}" as="h" hint-placeholder-count="2">
+                  <div style="font-size:14px; color:#3C4A4C; padding:5px 0 5px 14px; border-left:2px solid #CBE2E4; margin-top:4px">{{ h.nombre }}</div>
+                </sc-for>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ previewIsDesktop }}" hint-placeholder-val="{{ false }}">
+          <div style="font-size:13px; font-weight:700; color:#5B6E71; text-transform:uppercase; letter-spacing:.04em; margin-top:20px">Vista de escritorio</div>
+          <div style="margin-top:10px; background:#DCEFF0; border-radius:14px; padding:18px 32px; display:flex; align-items:center; gap:32px">
+            <div style="width:34px; height:34px; border-radius:8px; background:#FFFFFF; display:flex; align-items:center; justify-content:center; flex-shrink:0">
+              <span style="font-size:18px; font-weight:800; color:#14555C">K</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:28px; flex-wrap:wrap; flex:1">
+              <sc-for list="{{ previewNavItems }}" as="r" hint-placeholder-count="4">
+                <span style="font-size:13px; font-weight:700; letter-spacing:.04em; color:#0E3B3B; text-transform:uppercase; white-space:nowrap">{{ r.nombre }}{{ r.caret }}</span>
+              </sc-for>
+            </div>
+            <div style="display:flex; gap:10px">
+              <sc-for list="{{ previewBotonItems }}" as="r" hint-placeholder-count="1">
+                <span style="background:#0E3B3B; color:#FFFFFF; border-radius:999px; padding:10px 24px; font-size:13px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; white-space:nowrap">{{ r.nombre }}</span>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ previewIsMobile }}" hint-placeholder-val="{{ false }}">
+          <div style="font-size:13px; font-weight:700; color:#5B6E71; text-transform:uppercase; letter-spacing:.04em; margin-top:20px">Vista en móvil</div>
+          <div style="margin-top:10px; display:flex; justify-content:center">
+            <div style="width:300px; border:1px solid #E3EAEA; border-radius:24px; overflow:hidden; box-shadow:0 10px 26px rgba(0,0,0,.14)">
+              <div style="background:#FFFFFF; padding:16px 18px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid #EEF4F4">
+                <div style="width:26px; height:26px; border-radius:6px; background:#E8F5F6; display:flex; align-items:center; justify-content:center">
+                  <span style="font-size:14px; font-weight:800; color:#14555C">K</span>
+                </div>
+                <span style="font-size:20px; color:#14555C">☰</span>
+              </div>
+              <div style="background:#FFFFFF; padding:4px 0">
+                <sc-for list="{{ previewRaiz }}" as="r" hint-placeholder-count="6">
+                  <div>
+                    <div style="padding:13px 20px; font-size:14px; font-weight:600; color:#0F1A1C; border-bottom:1px solid #F1F5F5">{{ r.nombre }}</div>
+                    <sc-for list="{{ r.hijos }}" as="h" hint-placeholder-count="2">
+                      <div style="padding:13px 20px; font-size:14px; font-weight:600; color:#0F1A1C; border-bottom:1px solid #F1F5F5">{{ h.nombre }}</div>
+                    </sc-for>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ previewIsFooter }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top:20px; background:#DCEFF0; border-radius:14px; padding:32px 36px">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:24px; flex-wrap:wrap">
+              <div style="font-size:20px; font-weight:800; color:#14555C; letter-spacing:-.01em">Kanoa Lab</div>
+              <div style="display:flex; flex-direction:column; gap:10px; align-items:flex-end">
+                <sc-for list="{{ previewRaiz }}" as="r" hint-placeholder-count="6">
+                  <span style="font-size:14px; color:#25383B">{{ r.nombre }}</span>
+                </sc-for>
+              </div>
+            </div>
+            <div style="display:flex; gap:10px; margin-top:34px">
+              <sc-for list="{{ previewSocial }}" as="soc" hint-placeholder-count="4">
+                <span style="width:32px; height:32px; border-radius:50%; background:#14555C; color:#FFFFFF; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700">{{ soc }}</span>
+              </sc-for>
+            </div>
+            <div style="border-top:1px solid #B9DEE0; margin-top:22px; padding-top:16px; display:flex; gap:24px; flex-wrap:wrap; font-size:13px; color:#3C4A4C">
+              <span>© 2026 · Todos los derechos reservados</span>
+              <span style="text-decoration:underline">contacto@kanoalab.co</span>
+              <span>Bogotá, Colombia</span>
+              <span>Política de privacidad</span>
+              <span>Términos y condiciones</span>
+            </div>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ menuActionsOpen }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeMenuActions }}" style="position:fixed; inset:0; z-index:59"></div>
+    <div style="{{ menuActionsStyle }}">
+      <button onClick="{{ menuActionsPreview }}" style="display:flex; align-items:center; gap:10px; width:100%; text-align:left; background:none; border:none; padding:12px 16px; font-size:14px; color:#14555C; cursor:pointer; font-family:inherit">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+        Vista previa
+      </button>
+      <button onClick="{{ menuActionsEdit }}" style="display:flex; align-items:center; gap:10px; width:100%; text-align:left; background:none; border:none; padding:12px 16px; font-size:14px; color:#14555C; cursor:pointer; font-family:inherit; border-top:1px solid #F1F5F5">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5z"></path></svg>
+        Editar
+      </button>
+      <button onClick="{{ menuActionsDel }}" style="display:flex; align-items:center; gap:10px; width:100%; text-align:left; background:none; border:none; padding:12px 16px; font-size:14px; color:#C0392B; cursor:pointer; font-family:inherit; border-top:1px solid #F1F5F5">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path><path d="M10 11v6"></path><path d="M14 11v6"></path></svg>
+        Eliminar
+      </button>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ toast }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed; bottom:28px; left:50%; transform:translateX(-50%); background:#0E3B3B; color:#FFFFFF; padding:15px 24px; border-radius:10px; font-size:15px; font-weight:500; box-shadow:0 10px 30px rgba(0,0,0,.22); z-index:50; max-width:90vw; text-align:center">{{ toast }}</div>
+  </sc-if>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+const TEAL = "#14555C";
+const CHIP = {
+  Publicado: "border:1px solid #3E8E63; color:#26734A; border-radius:999px; padding:4px 12px; font-size:13px; font-weight:600; display:inline-block",
+  Borrador: "border:1px solid #B08A3E; color:#8A6100; border-radius:999px; padding:4px 12px; font-size:13px; font-weight:600; display:inline-block",
+  Inactivo: "border:1px solid #B9C4C5; color:#6B7B7D; border-radius:999px; padding:4px 12px; font-size:13px; font-weight:600; display:inline-block"
+};
+const PILL = "background:#14555C; color:#FFFFFF; border:none; border-radius:999px; padding:13px 26px; font-size:14px; font-weight:700; letter-spacing:.06em; cursor:pointer; font-family:inherit; width:100%";
+const PILL_OFF = "background:#B3C7C9; color:#FFFFFF; border:none; border-radius:999px; padding:13px 26px; font-size:14px; font-weight:700; letter-spacing:.06em; cursor:not-allowed; font-family:inherit; width:100%";
+const BTN = "background:#14555C; color:#FFFFFF; border:none; border-radius:999px; padding:13px 28px; font-size:14px; font-weight:700; letter-spacing:.06em; cursor:pointer; font-family:inherit";
+const BTN_DIS = "background:#B3C7C9; color:#FFFFFF; border:none; border-radius:999px; padding:13px 28px; font-size:14px; font-weight:700; letter-spacing:.06em; cursor:not-allowed; font-family:inherit";
+const DOT_ON = "width:26px; height:26px; border-radius:50%; background:#14555C; border:none; cursor:pointer; padding:0";
+const DOT_OFF = "width:26px; height:26px; border-radius:50%; background:#FFFFFF; border:2px solid #B3C7C9; cursor:pointer; padding:0";
+const FIELD = "width:100%; background:#E8F5F6; border:1px solid #CBE2E4; border-radius:8px; padding:13px 16px; font-family:inherit; font-size:16px; color:#0F1A1C";
+const FIELD_OFF = "width:100%; background:#EDF4F4; border:1px solid #DCE7E7; border-radius:8px; padding:13px 16px; font-family:inherit; font-size:16px; color:#A9B8B9";
+
+const MICROSITIOS = [
+  ["Bienestar emocional", "Recursos, guías y acompañamiento para la salud mental de la comunidad académica.", "Activo"],
+  ["Ser + Stem", "Experimentación, pensamiento computacional y retos de ciencia aplicada.", "Activo"],
+  ["Observatorio Ser + Stem", "Datos, estudios y seguimiento de las iniciativas STEM del laboratorio.", "Activo"],
+  ["Aprendizaje", "Estrategias de estudio, acompañamiento docente y rutas formativas.", "Activo"],
+  ["Formación y Cursos", "Oferta formativa abierta y programas de certificación.", "Activo"],
+  ["Noticias y convocatorias", "Novedades del laboratorio, convocatorias abiertas y eventos.", "Inactivo"],
+  ["Micrositio configurable 7", "Nueva línea de contenidos. Siete secciones configurables disponibles.", "Inactivo"]
+];
+
+const SEC_BIENESTAR = [
+  ["Conócete", "Recursos, guías y acompañamiento para la salud mental de la comunidad académica.", "Activo"],
+  ["Gestiona tus emociones", "Herramientas para identificar, nombrar y regular las emociones.", "Activo"],
+  ["Conciencia y entorno seguro", "Relaciones sanas, prevención del acoso y entornos protectores.", "Activo"],
+  ["Hábitos saludables", "Sueño, alimentación, actividad física y uso equilibrado de pantallas.", "Activo"],
+  ["Sección opcional 5", "Sin configurar.", "Inactivo"],
+  ["Sección opcional 6", "Sin configurar.", "Inactivo"],
+  ["Sección opcional 7", "Sin configurar.", "Inactivo"]
+];
+const SEC_M7 = [1, 2, 3, 4, 5, 6, 7].map(n => ["Sección configurable " + n, "Sin configurar. Admite información, contenido, estados y ordenamiento como cualquier otra sección.", "Inactivo"]);
+const SEC_SERSTEM = [
+  ["Retos STEM", "Desafíos de ciencia aplicada y pensamiento computacional para estudiantes.", "Activo"],
+  ["Laboratorios y talleres", "Espacios de experimentación práctica con herramientas y tecnología.", "Activo"],
+  ["Proyectos destacados", "Muestra de proyectos desarrollados por la comunidad estudiantil.", "Activo"],
+  ["Recursos para docentes", "Guías y materiales de apoyo para la enseñanza STEM.", "Activo"],
+  ["Sección opcional 5", "Sin configurar.", "Inactivo"],
+  ["Sección opcional 6", "Sin configurar.", "Inactivo"],
+  ["Sección opcional 7", "Sin configurar.", "Inactivo"]
+];
+const SEC_OBSERVATORIO = [
+  ["Indicadores y cifras", "Datos y métricas de seguimiento de las iniciativas STEM del laboratorio.", "Activo"],
+  ["Estudios y publicaciones", "Investigaciones y documentos técnicos producidos por el observatorio.", "Activo"],
+  ["Seguimiento de iniciativas", "Avance y resultados de los programas monitoreados.", "Activo"],
+  ["Alianzas y cooperación", "Convenios y colaboraciones con otras instituciones.", "Activo"],
+  ["Sección opcional 5", "Sin configurar.", "Inactivo"],
+  ["Sección opcional 6", "Sin configurar.", "Inactivo"],
+  ["Sección opcional 7", "Sin configurar.", "Inactivo"]
+];
+const SEC_APRENDIZAJE = [
+  ["Estrategias de estudio", "Técnicas y hábitos para mejorar el rendimiento académico.", "Activo"],
+  ["Acompañamiento docente", "Apoyo y mentoría para el cuerpo docente.", "Activo"],
+  ["Rutas formativas", "Trayectorias sugeridas según el nivel y los intereses del estudiante.", "Activo"],
+  ["Recursos didácticos", "Materiales y herramientas de apoyo para el aprendizaje.", "Activo"],
+  ["Sección opcional 5", "Sin configurar.", "Inactivo"],
+  ["Sección opcional 6", "Sin configurar.", "Inactivo"],
+  ["Sección opcional 7", "Sin configurar.", "Inactivo"]
+];
+const SEC_FORMACION = [
+  ["Oferta formativa abierta", "Catálogo de cursos y programas disponibles para inscripción.", "Activo"],
+  ["Programas de certificación", "Rutas de certificación con validez institucional.", "Activo"],
+  ["Calendario académico", "Fechas y periodos relevantes de la oferta formativa.", "Activo"],
+  ["Testimonios y egresados", "Experiencias de quienes han completado los programas.", "Activo"],
+  ["Sección opcional 5", "Sin configurar.", "Inactivo"],
+  ["Sección opcional 6", "Sin configurar.", "Inactivo"],
+  ["Sección opcional 7", "Sin configurar.", "Inactivo"]
+];
+const SEC_NOTICIAS = [
+  ["Noticias del laboratorio", "Novedades y actualizaciones institucionales.", "Activo"],
+  ["Convocatorias abiertas", "Procesos vigentes de participación y postulación.", "Activo"],
+  ["Eventos y agenda", "Actividades y fechas próximas del laboratorio.", "Activo"],
+  ["Boletín informativo", "Resumen periódico de novedades para la comunidad.", "Activo"],
+  ["Sección opcional 5", "Sin configurar.", "Inactivo"],
+  ["Sección opcional 6", "Sin configurar.", "Inactivo"],
+  ["Sección opcional 7", "Sin configurar.", "Inactivo"]
+];
+const SEC_GEN = [
+  ["Sección 1", "Recursos, guías y acompañamiento para la comunidad académica.", "Activo"],
+  ["Sección 2", "Recursos, guías y acompañamiento para la comunidad académica.", "Activo"],
+  ["Sección 3", "Sin configurar.", "Inactivo"]
+];
+
+const CONTENIDOS = [
+  ["¿Quién soy cuando nadie me mira?", "Solo texto", "Publicado", "María Castaño", "12 sep 2026"],
+  ["Mapa de fortalezas personales", "Imágenes · 4 · plantilla Izquierda", "Publicado", "María Castaño", "09 sep 2026"],
+  ["Video: reconocer lo que siento", "Video · plantilla Superior", "Borrador", "Julián Ospina", "05 sep 2026"],
+  ["Guía de autoconocimiento (PDF)", "Documentos · 2 · plantilla Inferior", "Publicado", "Julián Ospina", "01 sep 2026"],
+  ["Diario emocional para imprimir", "Documentos · 1", "Inactivo", "María Castaño", "24 ago 2026"],
+  ["Rueda de emociones ilustrada", "Imágenes · 5 · plantilla Derecha", "Borrador", "Laura Pineda", "18 ago 2026"]
+];
+
+const TIPOS = [
+  ["Solo texto", "Titulo y texto enriquecido como base del contenido", "Tт", "#8FEAC8"],
+  ["Imágenes", "Hasta 5 imágenes con descripción. con mas de una se muestran en carrusel", "▣", "#AFC4F5"],
+  ["Video", "Un video subido o embebido desde YouTube con descripción", "▷", "#FAD2A5"],
+  ["Documentos descargables", "Hasta 3 archivos adjuntos (PDF,DOC,DOCX, XLS, XLSX,PPTX) con descripción", "▤", "#C7C2F2"]
+];
+
+const TOOLBAR_CORTA = ["B", "I", "T̶", "☰", "1.", "H1", "H2", "H3", "H4", "H5", "H6", "< >"];
+const TOOLBAR_EDITOR = ["B", "I", "T̶", "☰", "1.", "H1", "H2", "H3", "Tт", "99"];
+const PLANTILLAS = ["Superior", "Inferior", "Derecha", "Izquierda"];
+
+const RAIL = [
+  ["Portada", "⌂", "hero"],
+  ["Cifras destacadas", "▥", "cifras"],
+  ["Noticias", "▦", "noticias"],
+  ["Juegos", "◲", "juegos"],
+  ["Micrositios", "◉", "micrositios"],
+  ["¿Quiénes somos?", "ⓘ", "quienes"],
+  ["Menús", "☰", "menus"]
+];
+const UBICACIONES = ["Cabecera", "Pie de página"];
+
+const SLUG = (t) => t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+const BASE = "https://www.kanoalab.co";
+
+function seccionesDe(n) {
+  if (n === "Bienestar emocional") return SEC_BIENESTAR;
+  if (n === "Ser + Stem") return SEC_SERSTEM;
+  if (n === "Observatorio Ser + Stem") return SEC_OBSERVATORIO;
+  if (n === "Aprendizaje") return SEC_APRENDIZAJE;
+  if (n === "Formación y Cursos") return SEC_FORMACION;
+  if (n === "Noticias y convocatorias") return SEC_NOTICIAS;
+  if (n === "Micrositio configurable 7") return SEC_M7;
+  return SEC_GEN;
+}
+
+class Component extends DCLogic {
+  state = {
+    screen: "micrositios",
+    microIdx: 0,
+    secIdx: 0,
+    mode: "view",
+    secMode: "view",
+    secDraft: null,
+    secTouched: false,
+    secInfoAll: {},
+    homeMode: "view",
+    home: { titulo: "Micrositios", desc: "Explora las temáticas disponibles en KANOA LAB y accede al micrositio de tu interés." },
+    homeDraft: null,
+    homeTouched: false,
+    info: MICROSITIOS.reduce((a, m, i) => {
+      a[i] = { nombre: m[0], desc: m[1], b1: { on: true, nombre: "Explorar", url: "/secciones" }, b2: { on: false, nombre: "", url: "" } };
+      return a;
+    }, {}),
+    microEstados: MICROSITIOS.map(m => m[2]),
+    secEstados: MICROSITIOS.reduce((a, m, i) => { a[i] = seccionesDe(m[0]).map(s => s[2]); return a; }, {}),
+    draft: null,
+    touched: false,
+    q: "",
+    filtro: "Todos los estados",
+    tipo: null,
+    titulo: "",
+    cuerpo: "",
+    credito: "",
+    plantilla: "Superior",
+    intento: false,
+    hero: {
+      titulo: "Aprender también es cuidar de ti",
+      desc: "Recursos, cursos y experiencias para el bienestar y el aprendizaje.",
+      b1: { on: true, nombre: "Explorar micrositios", url: "/micrositios" },
+      b2: { on: false, nombre: "", url: "" }
+    },
+    destacados: true,
+    destacadosSel: [
+      { tipo: "Micrositio", micro: "Bienestar emocional", secMicro: "", sec: "" },
+      { tipo: "Sección", micro: "", secMicro: "Bienestar emocional", sec: "Gestiona tus emociones" },
+      { tipo: "Micrositio", micro: "Ser + Stem", secMicro: "", sec: "" }
+    ],
+    menus: [
+      { id: "m1", nombre: "Menú principal Header", fecha: "10/08/2026", creador: "pepito123456789@gmail.com", editada: "12/09/2026", ubicacion: "Cabecera",
+        items: [
+          { tipo: "Micrositio", nombre: "Bienestar emocional", nivel: 0 },
+          { tipo: "Micrositio", nombre: "Ser + Stem", nivel: 0 },
+          { tipo: "Enlace directo", nombre: "Cursos", url: "/cursos", nivel: 0 },
+          { tipo: "Botón", nombre: "Ingresar", url: "/login", nivel: 0 }
+        ] },
+      { id: "m2", nombre: "Menú Footer institucional", fecha: "10/08/2026", creador: "pepito123456789@gmail.com", editada: "05/09/2026", ubicacion: "Pie de página",
+        items: [
+          { tipo: "Opción personalizada", nombre: "Institucional", nivel: 0 },
+          { tipo: "Enlace directo", nombre: "Privacidad", url: "/privacidad", nivel: 1 },
+          { tipo: "Enlace directo", nombre: "Términos", url: "/terminos", nivel: 1 },
+          { tipo: "Enlace directo", nombre: "Contacto", url: "/contacto", nivel: 0 }
+        ] },
+      { id: "m3", nombre: "Menú principal Mobile", fecha: "01/09/2026", creador: "pepito123456789@gmail.com", editada: "01/09/2026", ubicacion: null,
+        items: [
+          { tipo: "Micrositio", nombre: "Bienestar emocional", nivel: 0 },
+          { tipo: "Sección", nombre: "Gestiona tus emociones", nivel: 0 },
+          { tipo: "Enlace directo", nombre: "Blog", url: "/blog", nivel: 0 }
+        ] },
+      { id: "m4", nombre: "Menú lateral Micrositios", fecha: "14/09/2026", creador: "anagomez987654321@gmail.com", editada: "14/09/2026", ubicacion: null,
+        items: [
+          { tipo: "Micrositio", nombre: "Ser + Stem", nivel: 0 },
+          { tipo: "Micrositio", nombre: "Bienestar emocional", nivel: 0 },
+          { tipo: "Enlace directo", nombre: "Recursos", url: "/recursos", nivel: 0 }
+        ] },
+      { id: "m5", nombre: "Menú promociones especiales", fecha: "08/09/2026", creador: "carlossilva12345678@gmail.com", editada: "13/09/2026", ubicacion: null,
+        items: [
+          { tipo: "Opción personalizada", nombre: "Novedades", nivel: 0 },
+          { tipo: "Enlace directo", nombre: "Eventos", url: "/eventos", nivel: 0 }
+        ] }
+    ],
+    menuSeq: 6,
+    preview: null,
+    menuEditId: null,
+    menuDraft: null,
+    dragIdx: null,
+    dragOverIdx: null,
+    dragNest: false,
+    menuQ: "",
+    menuTipoF: "Todas las ubicaciones",
+    menuActionsOpen: null,
+    confirm: null,
+    toast: null
+  };
+
+  flash(m) { this.setState({ toast: m }); clearTimeout(this._t); this._t = setTimeout(() => this.setState({ toast: null }), 3200); }
+  componentWillUnmount() { clearTimeout(this._t); }
+  ask(msg, onOk, okLabel, cancelLabel) { this.setState({ confirm: { msg, onOk, okLabel: okLabel || "CONFIRMAR", cancelLabel: cancelLabel || "CANCELAR" } }); }
+  copy(t) { try { navigator.clipboard && navigator.clipboard.writeText(t); } catch (e) {} this.flash("La URL ha sido copiada correctamente."); }
+  openPreview(nombre, items, tipo) { this.setState({ preview: { nombre, items, tipo } }); }
+  closePreview() { this.setState({ preview: null }); }
+
+  err(v, min, max) {
+    if (v.trim().length === 0) return "La información de este campo es obligatoria.";
+    if (v.trim().length < min) return "La información ingresada en este campo debe contener al menos " + min + " caracteres.";
+    if (v.length > max) return "La información que ingresaste excede el límite máximo de caracteres permitidos.";
+    if (v !== v.trim()) return "La información ingresada en este campo no puede comenzar ni terminar con espacios.";
+    return "";
+  }
+
+  renderVals() {
+    const s = this.state;
+    const i = s.microIdx;
+    const info = s.info[i];
+    const microNombre = info.nombre;
+    const activo = s.microEstados[i] === "Activo";
+    const lista = seccionesDe(MICROSITIOS[i][0]);
+    const secEstados = s.secEstados[i];
+    const secIdx = Math.min(s.secIdx, lista.length - 1);
+    const secOv = (s.secInfoAll[i] || [])[secIdx];
+    const secNombre = secOv ? secOv.nombre : lista[secIdx][0];
+    const secDescActual = secOv ? secOv.desc : lista[secIdx][1];
+    const microUrl = BASE + "/" + SLUG(microNombre);
+    const seccionUrl = microUrl + "/" + SLUG(secNombre);
+    const draft = s.draft || { nombre: microNombre, desc: info.desc, b1: info.b1, b2: info.b2 };
+    const hDraft = s.homeDraft || s.home;
+
+    const crumbMap = {
+      micrositios: ["Panel", "Micrositios"],
+      micrositio: ["Panel", microNombre],
+      seccion: ["Panel", microNombre, secNombre],
+      tipo: ["Panel", microNombre, secNombre, "Crear contenido"],
+      form: ["Panel", microNombre, secNombre, "Crear contenido"],
+      hero: ["Panel", "Configuración del Hero"],
+      cifras: ["Panel", "Cifras destacadas"],
+      noticias: ["Panel", "Noticias"], juegos: ["Panel", "Juegos"],
+      quienes: ["Panel", "¿Quiénes somos?"], menus: ["Panel", "Menús"],
+      menuForm: ["Panel", "Menús", s.menuEditId === null ? "Crear menú" : "Editar menú"]
+    };
+    const crumbTargets = {
+      micrositios: [() => this.setState({ screen: "micrositios", mode: "view" })],
+      micrositio: [() => this.setState({ screen: "micrositios", mode: "view" }), null],
+      seccion: [() => this.setState({ screen: "micrositios", mode: "view" }), () => this.setState({ screen: "micrositio", mode: "view" }), null],
+      tipo: [() => this.setState({ screen: "micrositios", mode: "view" }), () => this.setState({ screen: "micrositio", mode: "view" }), () => this.setState({ screen: "seccion" }), null],
+      form: [() => this.setState({ screen: "micrositios", mode: "view" }), () => this.setState({ screen: "micrositio", mode: "view" }), () => this.setState({ screen: "seccion" }), () => this.setState({ screen: "tipo" })],
+      hero: [() => this.setState({ screen: "micrositios", mode: "view" }), null],
+      cifras: [() => this.setState({ screen: "micrositios", mode: "view" }), null],
+      noticias: [() => this.setState({ screen: "micrositios", mode: "view" }), null],
+      juegos: [() => this.setState({ screen: "micrositios", mode: "view" }), null],
+      quienes: [() => this.setState({ screen: "micrositios", mode: "view" }), null],
+      menus: [() => this.setState({ screen: "micrositios", mode: "view" }), null],
+      menuForm: [() => this.setState({ screen: "micrositios", mode: "view" }), () => this.setState({ screen: "menus" }), null]
+    };
+    const crumbTgt = crumbTargets[s.screen] || [];
+    const crumbs = (crumbMap[s.screen] || []).map((c, k, a) => {
+      const last = k === a.length - 1;
+      const go = crumbTgt[k];
+      return React.createElement(React.Fragment, { key: k },
+        k > 0 ? React.createElement("span", { style: { color: "#B7C4C5" } }, "›") : null,
+        go
+          ? React.createElement("span", { style: { color: last ? "#3C4A4C" : "#8A9A9C", cursor: "pointer", fontWeight: last ? 700 : 400 }, onClick: go }, c)
+          : React.createElement("span", { style: { color: last ? "#3C4A4C" : "#8A9A9C" } }, c));
+    });
+    const titleMap = {
+      micrositios: "Administración de micrositios portal web",
+      micrositio: microNombre, seccion: secNombre,
+      tipo: "Crear contenido", form: "Crear contenido",
+      hero: "Configuración del Hero", cifras: "Cifras destacadas",
+      noticias: "Noticias", juegos: "Juegos", quienes: "¿Quiénes somos?", menus: "Administración de menús del Portal WEB",
+      menuForm: s.menuEditId === null ? "Crear menú" : "Editar menú"
+    };
+
+    const errN = this.err(draft.nombre, 3, 50);
+    const errD = this.err(draft.desc, 3, 120);
+    const sinCambios = draft.nombre === microNombre && draft.desc === info.desc;
+    const hErrT = this.err(hDraft.titulo, 3, 50);
+    const hErrD = this.err(hDraft.desc, 3, 150);
+    const secDraft = s.secDraft || { nombre: secNombre, desc: secDescActual };
+    const secErrN = this.err(secDraft.nombre, 3, 30);
+    const secErrD = this.err(secDraft.desc, 3, 150);
+    const secSinCambios = secDraft.nombre === secNombre && secDraft.desc === secDescActual;
+
+    const q = s.q.trim().toLowerCase();
+    const vacia = lista[secIdx][1].indexOf("Sin configurar") === 0;
+    const fuente = vacia ? [] : CONTENIDOS;
+    const contenidos = fuente
+      .filter(c => (s.filtro === "Todos los estados" || c[2] === s.filtro) && (q === "" || c[0].toLowerCase().includes(q)))
+      .map(c => ({ titulo: c[0], tipo: c[1], estado: c[2], autor: c[3], fecha: c[4], chip: CHIP[c[2]], accion: c[2] === "Publicado" ? "INACTIVAR" : "PUBLICAR" }));
+
+    const tipo = s.tipo;
+    const soloTexto = tipo === "Solo texto";
+    const showMedia = !!tipo && !soloTexto;
+    const pl = s.plantilla;
+    const horiz = showMedia && (pl === "Izquierda" || pl === "Derecha");
+
+    const back = () => {
+      if (s.screen === "form") this.setState({ screen: "tipo" });
+      else if (s.screen === "tipo") this.setState({ screen: "seccion" });
+      else if (s.screen === "seccion") this.setState({ screen: "micrositio" });
+      else if (s.screen === "menuForm") this.setState({ screen: "menus" });
+      else this.setState({ screen: "micrositios", mode: "view" });
+    };
+
+    const prev = s.preview;
+    const buildRaiz = (items) => {
+      const roots = [];
+      (items || []).forEach(it => {
+        if (it.nivel === 0) roots.push({ nombre: it.nombre, tipo: it.tipo, hijos: [] });
+        else if (roots.length) roots[roots.length - 1].hijos.push({ nombre: it.nombre });
+      });
+      return roots.map(r => Object.assign({}, r, { caret: r.hijos.length ? " ▾" : "" }));
+    };
+
+    return {
+      crumbs,
+      pageTitle: titleMap[s.screen] || "",
+      goBack: back,
+      rail: RAIL.map(r => ({
+        label: r[0], glyph: r[1],
+        style: (s.screen === r[2] || (r[2] === "micrositios" && ["micrositios", "micrositio", "seccion", "tipo", "form"].includes(s.screen)) || (r[2] === "menus" && ["menus", "menuForm"].includes(s.screen)))
+          ? "width:48px; height:48px; border-radius:12px; border:1px solid #CBE2E4; background:#EEF7F7; color:#0E3B3B; font-size:19px; cursor:pointer; font-family:inherit"
+          : "width:48px; height:48px; border-radius:12px; border:1px solid transparent; background:transparent; color:#43575A; font-size:19px; cursor:pointer; font-family:inherit",
+        go: () => this.setState({ screen: r[2] === "micrositios" ? "micrositios" : r[2], mode: "view" })
+      })),
+
+      isMicrositios: s.screen === "micrositios",
+      isMicrositio: s.screen === "micrositio",
+      isSeccion: s.screen === "seccion",
+      isTipo: s.screen === "tipo",
+      isForm: s.screen === "form",
+      isHero: s.screen === "hero",
+      isPlaceholder: ["cifras", "noticias", "juegos", "quienes"].includes(s.screen),
+      isMenus: s.screen === "menus",
+      isMenuForm: s.screen === "menuForm",
+      showFormActions: s.screen === "form",
+      goSeccion: () => this.setState({ screen: "seccion" }),
+      goTipo: () => this.setState({ screen: "tipo", intento: false }),
+
+      toolbarIconos: TOOLBAR_CORTA,
+      toolbarEditor: TOOLBAR_EDITOR,
+
+      homeTitulo: s.home.titulo,
+      homeDesc: s.home.desc,
+      homeView: s.homeMode === "view",
+      homeEditing: s.homeMode === "edit",
+      homeTituloDraft: hDraft.titulo,
+      homeDescDraft: hDraft.desc,
+      homeTituloErr: hErrT,
+      homeTituloErrStyle: s.homeTouched && hErrT ? "font-size:13px; color:#C0392B; margin:-12px 0 16px" : "display:none",
+      homeDescErr: hErrD,
+      homeDescErrStyle: s.homeTouched && hErrD ? "font-size:13px; color:#C0392B" : "display:none",
+      onHomeTitulo: (e) => this.setState({ homeDraft: Object.assign({}, hDraft, { titulo: e.target.value }), homeTouched: true }),
+      onHomeDesc: (e) => this.setState({ homeDraft: Object.assign({}, hDraft, { desc: e.target.value }), homeTouched: true }),
+      homeEdit: () => this.setState({ homeMode: "edit", homeDraft: s.home, homeTouched: false }),
+      homeCancel: () => this.ask("¿Estás seguro que deseas cancelar la edición?", () => this.setState({ homeMode: "view", homeDraft: null, confirm: null })),
+      homeSaveStyle: (hErrT || hErrD) ? BTN_DIS : BTN,
+      homeSave: () => {
+        if (hErrT || hErrD) { this.setState({ homeTouched: true }); return; }
+        this.setState({ home: { titulo: hDraft.titulo.trim(), desc: hDraft.desc.trim() }, homeMode: "view", homeDraft: null });
+        this.flash("La información ha sido actualizada correctamente.");
+      },
+
+      micrositios: MICROSITIOS.map((m, k) => {
+        const on = s.microEstados[k] === "Activo";
+        return {
+          nombre: s.info[k].nombre, descripcion: s.info[k].desc,
+          estadoTexto: on ? "Activo · visible en el portal" : "Inactivo · oculto en el portal",
+          accion: on ? "Inactivar" : "Activar",
+          dot: on ? DOT_ON : DOT_OFF,
+          adminBtn: PILL,
+          open: () => this.setState({ screen: "micrositio", microIdx: k, secIdx: 0, mode: "view", draft: null }),
+          toggle: () => this.ask(
+            on ? "¿Estás seguro de que deseas inactivar este micrositio? Este dejará de mostrarse en el portal público y no permitirá la gestión de sus secciones y contenidos hasta que sea activado nuevamente."
+               : "¿Estás seguro de que deseas activar este micrositio? Todas las secciones activas y los contenidos publicados asociados volverán a ser visibles en el Portal WEB.",
+            () => {
+              const n = s.microEstados.slice(); n[k] = on ? "Inactivo" : "Activo";
+              this.setState({ microEstados: n, confirm: null });
+              this.flash(on ? "El micrositio ha sido inactivado correctamente." : "El micrositio ha sido activado correctamente.");
+            })
+        };
+      }),
+
+      microNombre, microUrl, desc: info.desc,
+      microInactivo: !activo,
+      copyMicroUrl: () => this.copy(microUrl),
+      viewMode: s.mode === "view",
+      editMode: s.mode === "edit",
+      editarInfoBtn: activo ? BTN : BTN_DIS,
+      startEdit: () => {
+        if (!activo) { this.flash("El micrositio está inactivo: la edición está deshabilitada."); return; }
+        this.setState({ mode: "edit", draft: { nombre: microNombre, desc: info.desc, b1: info.b1, b2: info.b2 }, touched: false });
+      },
+      cancelEdit: () => this.ask("¿Estás seguro que deseas cancelar la edición?", () => this.setState({ mode: "view", draft: null, confirm: null })),
+      saveBtnStyle: (errN || errD || sinCambios) ? BTN_DIS : BTN,
+      saveInfo: () => {
+        if (errN || errD || sinCambios) { this.setState({ touched: true }); return; }
+        const n = Object.assign({}, s.info);
+        n[i] = Object.assign({}, info, { nombre: draft.nombre.trim(), desc: draft.desc.trim(), b1: draft.b1, b2: draft.b2 });
+        this.setState({ info: n, mode: "view", draft: null });
+        this.flash("La información ha sido actualizada correctamente.");
+      },
+      nombreDraft: draft.nombre,
+      nombreErr: errN,
+      nombreErrStyle: s.touched && errN ? "font-size:13px; color:#C0392B; margin-bottom:6px" : "display:none",
+      onNombre: (e) => this.setState({ draft: Object.assign({}, draft, { nombre: e.target.value }), touched: true }),
+      descDraft: draft.desc,
+      descErr: errD,
+      descErrStyle: s.touched && errD ? "font-size:13px; color:#C0392B" : "display:none",
+      onDesc: (e) => this.setState({ draft: Object.assign({}, draft, { desc: e.target.value }), touched: true }),
+
+      btn1Nombre: draft.b1.nombre, btn1Url: draft.b1.url,
+      btn1FieldStyle: draft.b1.on ? FIELD : FIELD_OFF,
+      btn1LabelColor: draft.b1.on ? "#0F1A1C" : "#A9B8B9",
+      btn1Switch: "width:52px; height:28px; border-radius:999px; border:none; cursor:pointer; padding:3px; display:flex; align-items:center; background:" + (draft.b1.on ? TEAL : "#DCE7E7") + "; justify-content:" + (draft.b1.on ? "flex-end" : "flex-start"),
+      btn1Knob: "width:22px; height:22px; border-radius:50%; background:#FFFFFF; display:block; box-shadow:0 1px 3px rgba(0,0,0,.2)",
+      toggleBtn1: () => this.setState({ draft: Object.assign({}, draft, { b1: Object.assign({}, draft.b1, { on: !draft.b1.on }) }), touched: true }),
+      btn2Nombre: draft.b2.nombre, btn2Url: draft.b2.url,
+      btn2FieldStyle: draft.b2.on ? FIELD : FIELD_OFF,
+      btn2LabelColor: draft.b2.on ? "#0F1A1C" : "#A9B8B9",
+      btn2Switch: "width:52px; height:28px; border-radius:999px; border:none; cursor:pointer; padding:3px; display:flex; align-items:center; background:" + (draft.b2.on ? TEAL : "#DCE7E7") + "; justify-content:" + (draft.b2.on ? "flex-end" : "flex-start"),
+      btn2Knob: "width:22px; height:22px; border-radius:50%; background:#FFFFFF; display:block; box-shadow:0 1px 3px rgba(0,0,0,.2)",
+      toggleBtn2: () => this.setState({ draft: Object.assign({}, draft, { b2: Object.assign({}, draft.b2, { on: !draft.b2.on }) }), touched: true }),
+
+      toggleMicro: () => this.ask(
+        activo ? "¿Estás seguro de que deseas inactivar este micrositio? Este dejará de mostrarse en el portal público y no permitirá la gestión de sus secciones y contenidos hasta que sea activado nuevamente."
+               : "¿Estás seguro de que deseas activar este micrositio? Todas las secciones activas y los contenidos publicados asociados volverán a ser visibles en el Portal WEB.",
+        () => {
+          const n = s.microEstados.slice(); n[i] = activo ? "Inactivo" : "Activo";
+          this.setState({ microEstados: n, confirm: null, mode: "view" });
+          this.flash(activo ? "El micrositio ha sido inactivado correctamente." : "El micrositio ha sido activado correctamente.");
+        }),
+
+      secciones: lista.map((sec, k) => {
+        const on = secEstados[k] === "Activo";
+        const gest = activo && on;
+        const ov = (s.secInfoAll[i] || [])[k];
+        return {
+          nombre: ov ? ov.nombre : sec[0], descripcion: ov ? ov.desc : sec[1],
+          estadoTexto: on ? "Activa · visible en el portal" : "Inactiva · oculta en el portal",
+          accion: on ? "Inactivar" : "Activar",
+          dot: on ? DOT_ON : DOT_OFF,
+          editStyle: gest ? PILL : PILL_OFF,
+          toggle: () => {
+            if (!activo) { this.flash("El micrositio está inactivo: no permite gestionar sus secciones."); return; }
+            this.ask(
+              on ? "¿Estás seguro de que deseas inactivar esta sección? Esta dejará de mostrarse en el portal público y no podrá ser editada hasta que sea activada nuevamente."
+                 : "¿Estás seguro de que deseas activar esta sección? Todos los contenidos que se encuentren en estado publicado dentro de esta sección serán visibles en el portal público.",
+              () => {
+                const arr = secEstados.slice(); arr[k] = on ? "Inactivo" : "Activo";
+                const all = Object.assign({}, s.secEstados); all[i] = arr;
+                this.setState({ secEstados: all, confirm: null });
+                this.flash(on ? "La sección ha sido inactivada correctamente." : "La sección ha sido activada correctamente.");
+              });
+          },
+          open: () => {
+            if (!gest) { this.flash("Sección inactiva o micrositio inactivo: la gestión está deshabilitada."); return; }
+            this.setState({ screen: "seccion", secIdx: k, secMode: "view", secDraft: null });
+          }
+        };
+      }),
+
+      seccionNombre: secNombre,
+      seccionDesc: secDescActual,
+      seccionUrl,
+      copySeccionUrl: () => this.copy(seccionUrl),
+      secViewMode: s.secMode !== "edit",
+      secEditMode: s.secMode === "edit",
+      secEditBtnStyle: BTN,
+      startSecEdit: () => this.setState({ secMode: "edit", secDraft: { nombre: secNombre, desc: secDescActual }, secTouched: false }),
+      cancelSecEdit: () => this.ask("¿Estás seguro que deseas cancelar la edición?", () => this.setState({ secMode: "view", secDraft: null, confirm: null })),
+      saveSecBtnStyle: (secErrN || secErrD || secSinCambios) ? BTN_DIS : BTN,
+      saveSecInfo: () => {
+        if (secErrN || secErrD || secSinCambios) { this.setState({ secTouched: true }); return; }
+        const arr = (s.secInfoAll[i] || []).slice();
+        arr[secIdx] = { nombre: secDraft.nombre.trim(), desc: secDraft.desc.trim() };
+        const all = Object.assign({}, s.secInfoAll, { [i]: arr });
+        this.setState({ secInfoAll: all, secMode: "view", secDraft: null });
+        this.flash("La información ha sido actualizada correctamente.");
+      },
+      secNombreDraft: secDraft.nombre,
+      secNombreErr: secErrN,
+      secNombreErrStyle: s.secTouched && secErrN ? "font-size:13px; color:#C0392B; margin:6px 0 18px" : "display:none",
+      onSecNombre: (e) => this.setState({ secDraft: Object.assign({}, secDraft, { nombre: e.target.value }), secTouched: true }),
+      secDescDraft: secDraft.desc,
+      secDescErr: secErrD,
+      secDescErrStyle: s.secTouched && secErrD ? "font-size:13px; color:#C0392B; margin:6px 0 0" : "display:none",
+      onSecDesc: (e) => this.setState({ secDraft: Object.assign({}, secDraft, { desc: e.target.value }), secTouched: true }),
+
+      q: s.q,
+      onQ: (e) => this.setState({ q: e.target.value }),
+      filtros: ["Todos los estados", "Borrador", "Publicado", "Inactivo"].map(f => ({
+        label: f,
+        style: s.filtro === f
+          ? "background:#14555C; color:#FFFFFF; border:1px solid #14555C; border-radius:999px; padding:9px 16px; font-size:14px; font-weight:600; cursor:pointer; font-family:inherit"
+          : "background:#E8F5F6; color:#3C4A4C; border:1px solid #CBE2E4; border-radius:999px; padding:9px 16px; font-size:14px; font-weight:600; cursor:pointer; font-family:inherit",
+        set: () => this.setState({ filtro: f })
+      })),
+      contenidos,
+      hasResultados: contenidos.length > 0,
+      sinResultados: contenidos.length === 0 && !vacia,
+      seccionVacia: vacia,
+      conteo: contenidos.length + " de " + fuente.length + " contenidos · máximo 20 por página",
+
+      tipos: TIPOS.map(t => ({
+        nombre: t[0], limite: t[1], glyph: t[2],
+        iconStyle: "width:56px; height:56px; border-radius:12px; background:" + t[3] + "; display:flex; align-items:center; justify-content:center; font-size:22px; color:#1B3038",
+        pick: () => this.setState({ screen: "form", tipo: t[0], titulo: "", cuerpo: "", credito: "", plantilla: "Superior", intento: false })
+      })),
+      mostrarImportante: soloTexto,
+      tituloDraft: s.titulo,
+      onTitulo: (e) => this.setState({ titulo: e.target.value }),
+      cuerpo: s.cuerpo,
+      onCuerpo: (e) => this.setState({ cuerpo: e.target.value }),
+      credito: s.credito,
+      onCredito: (e) => this.setState({ credito: e.target.value }),
+      descLabel: soloTexto ? "Texto enriquecido" : tipo === "Imágenes" ? "Descripción imágenes" : tipo === "Video" ? "Descripción video" : "Descripción documentos",
+      showMedia, showVideoUrl: tipo === "Video", showCredito: tipo === "Imágenes", showPlantillas: showMedia,
+      adjuntosLabel: tipo === "Imágenes" ? "Imagenes" : tipo === "Video" ? "Video" : "Documentos",
+      adjuntosCta: tipo === "Imágenes" ? "AÑADIR IMAGEN" : tipo === "Video" ? "AÑADIR VIDEO" : "AÑADIR DOCUMENTO",
+      adjuntosHint: tipo === "Imágenes" ? "Agrega entre 1 y 5 imágenes por publicación. Se mostrarán en un carrusel en el orden que se cargan."
+        : tipo === "Video" ? "Agrega un video por publicación, subido o embebido desde YouTube."
+        : "Agrega hasta 3 archivos adjuntos por publicación.",
+      adjuntosFormatos: tipo === "Imágenes" ? "Formatos: .jpg, .jpeg, .png hasta 5 imágenes por publicación, hasta 10 MB"
+        : tipo === "Video" ? "Formatos: .mp4 hasta 1 video por publicación, hasta 100 MB"
+        : "Formatos: .pdf, .doc, .docx, .xls, .xlsx, .pptx hasta 3 archivos, hasta 10 MB",
+
+      plantillas: PLANTILLAS.map(p => {
+        const on = pl === p;
+        const vert = p === "Superior" || p === "Inferior";
+        return {
+          label: p,
+          set: () => this.setState({ plantilla: p }),
+          boxStyle: "width:48px; height:30px; border-radius:6px; border:1.5px solid #14555C; display:flex; padding:4px; background:" + (on ? TEAL : "#FFFFFF") + "; " +
+            (vert ? "flex-direction:column; " : "") +
+            (p === "Inferior" || p === "Derecha" ? "justify-content:flex-end" : "justify-content:flex-start"),
+          barStyle: (vert ? "width:100%; height:9px;" : "width:15px; height:100%;") + " background:" + (on ? "#FFFFFF" : TEAL) + "; border-radius:2px; display:block",
+          labelStyle: "font-size:13px; color:" + (on ? "#0F1A1C" : "#5B6E71") + "; font-weight:" + (on ? "700" : "400")
+        };
+      }),
+      layoutDisplay: horiz ? "grid" : "flex",
+      layoutCols: horiz ? "minmax(0,0.9fr) minmax(0,1.1fr)" : "none",
+      layoutDir: horiz ? "row" : "column",
+      mediaOrder: (pl === "Derecha" || pl === "Inferior") ? 2 : 1,
+      bloqueOrder: (pl === "Derecha" || pl === "Inferior") ? 1 : 2,
+      guardar: () => {
+        if (soloTexto && s.titulo.trim() === "" && s.cuerpo.trim() === "") { this.flash("Debes diligenciar al menos un campo de contenido para continuar."); return; }
+        this.setState({ screen: "tipo" });
+        this.flash("El contenido ha sido creado correctamente.");
+      },
+
+      heroTitulo: s.hero.titulo,
+      heroDesc: s.hero.desc,
+      onHeroTitulo: (e) => this.setState({ hero: Object.assign({}, s.hero, { titulo: e.target.value }) }),
+      onHeroDesc: (e) => this.setState({ hero: Object.assign({}, s.hero, { desc: e.target.value }) }),
+      heroImgClear: () => this.flash("Imagen eliminada."),
+      heroSwitchKnob: "width:22px; height:22px; border-radius:50%; background:#FFFFFF; display:block; box-shadow:0 1px 3px rgba(0,0,0,.2)",
+      heroBtn1Nombre: s.hero.b1.nombre, heroBtn1Url: s.hero.b1.url,
+      heroBtn1LabelColor: s.hero.b1.on ? "#0F1A1C" : "#A9B8B9",
+      heroBtn1FieldStyle: s.hero.b1.on ? FIELD : FIELD_OFF,
+      heroBtn1Switch: "width:52px; height:28px; border-radius:999px; border:none; cursor:pointer; padding:3px; display:flex; align-items:center; background:" + (s.hero.b1.on ? TEAL : "#DCE7E7") + "; justify-content:" + (s.hero.b1.on ? "flex-end" : "flex-start"),
+      toggleHeroBtn1: () => this.setState({ hero: Object.assign({}, s.hero, { b1: Object.assign({}, s.hero.b1, { on: !s.hero.b1.on }) }) }),
+      onHeroBtn1Nombre: (e) => this.setState({ hero: Object.assign({}, s.hero, { b1: Object.assign({}, s.hero.b1, { nombre: e.target.value }) }) }),
+      onHeroBtn1Url: (e) => this.setState({ hero: Object.assign({}, s.hero, { b1: Object.assign({}, s.hero.b1, { url: e.target.value }) }) }),
+      heroBtn2Nombre: s.hero.b2.nombre, heroBtn2Url: s.hero.b2.url,
+      heroBtn2LabelColor: s.hero.b2.on ? "#0F1A1C" : "#A9B8B9",
+      heroBtn2FieldStyle: s.hero.b2.on ? FIELD : FIELD_OFF,
+      heroBtn2Switch: "width:52px; height:28px; border-radius:999px; border:none; cursor:pointer; padding:3px; display:flex; align-items:center; background:" + (s.hero.b2.on ? TEAL : "#DCE7E7") + "; justify-content:" + (s.hero.b2.on ? "flex-end" : "flex-start"),
+      toggleHeroBtn2: () => this.setState({ hero: Object.assign({}, s.hero, { b2: Object.assign({}, s.hero.b2, { on: !s.hero.b2.on }) }) }),
+      onHeroBtn2Nombre: (e) => this.setState({ hero: Object.assign({}, s.hero, { b2: Object.assign({}, s.hero.b2, { nombre: e.target.value }) }) }),
+      onHeroBtn2Url: (e) => this.setState({ hero: Object.assign({}, s.hero, { b2: Object.assign({}, s.hero.b2, { url: e.target.value }) }) }),
+
+      destacados: s.destacados,
+      sinDestacados: !s.destacados,
+      destacadosSwitch: "width:52px; height:28px; border-radius:999px; border:none; cursor:pointer; padding:3px; display:flex; align-items:center; background:" + (s.destacados ? TEAL : "#DCE7E7") + "; justify-content:" + (s.destacados ? "flex-end" : "flex-start"),
+      toggleDestacados: () => this.setState({ destacados: !s.destacados }),
+      micrositiosActivosOpts: MICROSITIOS.filter((m, k) => s.microEstados[k] === "Activo").map(m => s.info[MICROSITIOS.indexOf(m)] ? s.info[MICROSITIOS.indexOf(m)].nombre : m[0]),
+      destacadosSlots: s.destacadosSel.map((d, k) => {
+        const setSel = (patch) => {
+          const arr = s.destacadosSel.slice();
+          arr[k] = Object.assign({}, d, patch);
+          this.setState({ destacadosSel: arr });
+        };
+        const microActivoIdx = d.secMicro ? MICROSITIOS.findIndex(m => (s.info[MICROSITIOS.indexOf(m)] || {}).nombre === d.secMicro || m[0] === d.secMicro) : -1;
+        const seccionesActivas = microActivoIdx >= 0
+          ? seccionesDe(MICROSITIOS[microActivoIdx][0]).filter((sec, si) => (s.secEstados[microActivoIdx] || [])[si] === "Activo").map(sec => sec[0])
+          : [];
+        return {
+          titulo: "Destacado " + (k + 1),
+          esMicrositio: d.tipo === "Micrositio",
+          esSeccion: d.tipo === "Sección",
+          radioMicroStyle: "width:16px; height:16px; border-radius:50%; display:inline-block; border:2px solid " + (d.tipo === "Micrositio" ? TEAL : "#B9C4C5") + "; background:" + (d.tipo === "Micrositio" ? "radial-gradient(circle,#14555C 0 5px,transparent 5px)" : "transparent"),
+          radioSeccionStyle: "width:16px; height:16px; border-radius:50%; display:inline-block; border:2px solid " + (d.tipo === "Sección" ? TEAL : "#B9C4C5") + "; background:" + (d.tipo === "Sección" ? "radial-gradient(circle,#14555C 0 5px,transparent 5px)" : "transparent"),
+          pickMicro: () => setSel({ tipo: "Micrositio" }),
+          pickSeccion: () => setSel({ tipo: "Sección" }),
+          microValue: d.micro,
+          onMicro: (e) => setSel({ micro: e.target.value }),
+          secMicroValue: d.secMicro,
+          onSecMicro: (e) => setSel({ secMicro: e.target.value, sec: "" }),
+          secOpts: seccionesActivas.length ? seccionesActivas.map(nombre => ({
+            nombre,
+            radioStyle: "width:16px; height:16px; border-radius:50%; display:inline-block; border:2px solid " + (d.sec === nombre ? TEAL : "#B9C4C5") + "; background:" + (d.sec === nombre ? "radial-gradient(circle,#14555C 0 5px,transparent 5px)" : "transparent"),
+            pick: () => setSel({ sec: nombre })
+          })) : null
+        };
+      }),
+      heroCancel: () => this.ask("¿Estás seguro que deseas cancelar la edición?", () => this.setState({ confirm: null, screen: "micrositios" })),
+      heroSave: () => { this.flash("La información ha sido actualizada correctamente."); },
+
+      menuQ: s.menuQ,
+      onMenuQ: (e) => this.setState({ menuQ: e.target.value }),
+      menuTipoF: s.menuTipoF,
+      onMenuTipoF: (e) => this.setState({ menuTipoF: e.target.value }),
+      goCrearMenu: () => this.setState({ screen: "menuForm", menuEditId: null, menuDraft: { nombre: "", items: [], ubicacion: null } }),
+      menusFiltrados: (() => {
+        const q = s.menuQ.trim().toLowerCase();
+        return s.menus
+          .map(m => ({ m, tipo: m.ubicacion || null }))
+          .filter(({ m, tipo }) => (!UBICACIONES.concat(["Sin asignar"]).includes(s.menuTipoF) || (s.menuTipoF === "Sin asignar" ? !tipo : tipo === s.menuTipoF)) &&
+            (q === "" || m.nombre.toLowerCase().includes(q) || m.creador.toLowerCase().includes(q)))
+          .sort((a, b) => b.m.editada.split("/").reverse().join("").localeCompare(a.m.editada.split("/").reverse().join("")))
+          .map(({ m, tipo }) => ({
+            nombre: m.nombre, fecha: m.fecha, creador: m.creador, editada: m.editada,
+            tipoChip: tipo
+              ? "border:1px solid #3E8E63; color:#26734A; border-radius:6px; padding:4px 12px; font-size:13px; font-weight:600; display:inline-block"
+              : "border:1px solid #C89A3C; color:#8A6100; border-radius:6px; padding:4px 12px; font-size:13px; font-weight:600; display:inline-block",
+            tipoLabel: tipo || "Sin asignar",
+            toggleActions: (e) => {
+              e.stopPropagation();
+              if (s.menuActionsOpen && s.menuActionsOpen.id === m.id) { this.setState({ menuActionsOpen: null }); return; }
+              const rect = e.currentTarget.getBoundingClientRect();
+              const doPreview = () => { this.setState({ menuActionsOpen: null }); this.openPreview(m.nombre, m.items, tipo); };
+              const doEdit = () => this.setState({ screen: "menuForm", menuEditId: m.id, menuDraft: { nombre: m.nombre, items: m.items.map(it => Object.assign({}, it)), ubicacion: m.ubicacion || null }, menuActionsOpen: null });
+              const doDel = () => {
+                this.setState({ menuActionsOpen: null });
+                if (tipo) { this.flash("No es posible eliminar este menú porque actualmente está asignado como " + tipo + ". Si deseas eliminarlo, primero edítalo y retira su ubicación."); return; }
+                this.ask("¿Estás seguro de que deseas eliminar este menú? Esta acción no podrá deshacerse.", () => {
+                  this.setState({ menus: s.menus.filter(x => x.id !== m.id), confirm: null });
+                  this.flash("El menú ha sido eliminado correctamente.");
+                }, "SÍ, ELIMINAR", "CANCELAR");
+              };
+              this.setState({ menuActionsOpen: { id: m.id, top: rect.bottom + 6, left: rect.right - 176, preview: doPreview, edit: doEdit, del: doDel } });
+            }
+          }));
+      })(),
+      menusVacio: s.menus.length === 0,
+      menuActionsOpen: !!s.menuActionsOpen,
+      closeMenuActions: () => this.setState({ menuActionsOpen: null }),
+      menuActionsStyle: s.menuActionsOpen ? ("position:fixed; top:" + s.menuActionsOpen.top + "px; left:" + s.menuActionsOpen.left + "px; background:#FFFFFF; border:1px solid #E3EAEA; border-radius:10px; box-shadow:0 14px 32px rgba(0,0,0,.18); min-width:176px; z-index:60; overflow:hidden") : "",
+      menuActionsPreview: s.menuActionsOpen ? s.menuActionsOpen.preview : () => {},
+      menuActionsEdit: s.menuActionsOpen ? s.menuActionsOpen.edit : () => {},
+      menuActionsDel: s.menuActionsOpen ? s.menuActionsOpen.del : () => {},
+
+      ubicacionOpciones: UBICACIONES.map(u => {
+        const draft = s.menuDraft || {};
+        const val = draft.ubicacion || null;
+        const selected = val === u;
+        const ocupadoPor = s.menus.find(m => m.ubicacion === u && m.id !== s.menuEditId);
+        return {
+          nombre: u,
+          boxStyle: selected
+            ? "width:20px; height:20px; border-radius:4px; background:#14555C; border:1.5px solid #14555C; color:#FFFFFF; display:flex; align-items:center; justify-content:center; font-size:13px; flex-shrink:0"
+            : "width:20px; height:20px; border-radius:4px; background:#FFFFFF; border:1.5px solid #CBE2E4; display:flex; align-items:center; justify-content:center; font-size:13px; flex-shrink:0",
+          check: selected ? "✓" : "",
+          pick: () => {
+            if (!s.menuDraft) return;
+            if (!selected && ocupadoPor) {
+              this.flash("La ubicación \"" + u + "\" ya está asignada al menú \"" + ocupadoPor.nombre + "\". Retírala de ese menú para poder usarla aquí.");
+              return;
+            }
+            this.setState({ menuDraft: Object.assign({}, s.menuDraft, { ubicacion: selected ? null : u }) });
+          }
+        };
+      }),
+
+      menuNombre: s.menuDraft ? s.menuDraft.nombre : "",
+      onMenuNombre: (e) => this.setState({ menuDraft: Object.assign({}, s.menuDraft, { nombre: e.target.value }) }),
+      menuNombreErr: s.menuDraft ? this.err(s.menuDraft.nombre, 3, 50) : "",
+      menuNombreErrStyle: (s.menuDraft && s.menuDraft.nombre.length > 0 && this.err(s.menuDraft.nombre, 3, 50)) ? "font-size:13px; color:#C0392B; margin-top:6px" : "display:none",
+      menuCancelar: () => this.ask("Hay cambios sin guardar. ¿Deseas descartarlos?", () => this.setState({ confirm: null, screen: "menus", menuDraft: null })),
+      previewFromForm: () => {
+        if (!s.menuDraft) return;
+        this.openPreview(s.menuDraft.nombre || "Menú sin nombre", s.menuDraft.items, s.menuDraft.ubicacion || null);
+      },
+      menuGuardar: () => {
+        const d = s.menuDraft;
+        const principales = d.items.filter(it => it.nivel === 0).length;
+        const errN = this.err(d.nombre, 3, 50);
+        if (errN) { this.flash(errN); return; }
+        if (principales < 3) { this.flash("Debes configurar al menos tres elementos en el menú."); return; }
+        if (principales > 7) { this.flash("Solo puedes configurar hasta siete elementos en el menú."); return; }
+        if (d.ubicacion && s.menus.some(x => x.id !== s.menuEditId && x.ubicacion === d.ubicacion)) {
+          this.flash("La ubicación \"" + d.ubicacion + "\" ya está asignada a otro menú. Retírala antes de guardar.");
+          return;
+        }
+        const arr = s.menus.slice();
+        const hoy = "14/09/2026";
+        if (s.menuEditId === null) {
+          arr.unshift({ id: "m" + s.menuSeq, nombre: d.nombre.trim(), fecha: hoy, creador: "maria.castano@kanoalab.co", editada: hoy, items: d.items, ubicacion: d.ubicacion || null });
+        } else {
+          const idx = arr.findIndex(x => x.id === s.menuEditId);
+          arr[idx] = Object.assign({}, arr[idx], { nombre: d.nombre.trim(), editada: hoy, items: d.items, ubicacion: d.ubicacion || null });
+        }
+        this.setState({ menus: arr, menuSeq: s.menuSeq + 1, screen: "menus", menuDraft: null });
+        this.flash("La configuración del menú ha sido almacenada correctamente.");
+      },
+      microsDisponibles: MICROSITIOS.map((m, k) => ({ m, k })).filter(({ k }) => s.microEstados[k] === "Activo").map(({ m, k }) => {
+        const nombre = (s.info[k] || {}).nombre || m[0];
+        const secciones = seccionesDe(m[0]).map((sec, si) => ({ sec, si })).filter(({ si }) => (s.secEstados[k] || [])[si] === "Activo").map(({ sec }) => ({
+          nombre: sec[0],
+          add: () => {
+            if (!this.state.menuDraft) return;
+            this.setState(prev => ({ menuDraft: Object.assign({}, prev.menuDraft, { items: prev.menuDraft.items.concat([{ tipo: "Sección", nombre: sec[0], nivel: 0 }]) }) }));
+          }
+        }));
+        return {
+          nombre,
+          secciones,
+          add: () => {
+            if (!this.state.menuDraft) return;
+            this.setState(prev => ({ menuDraft: Object.assign({}, prev.menuDraft, { items: prev.menuDraft.items.concat([{ tipo: "Micrositio", nombre, nivel: 0 }]) }) }));
+          }
+        };
+      }),
+      addPersonalizada: () => { if (!this.state.menuDraft) return; this.setState(prev => ({ menuDraft: Object.assign({}, prev.menuDraft, { items: prev.menuDraft.items.concat([{ tipo: "Opción personalizada", nombre: "Nueva opción", nivel: 0 }]) }) })); },
+      addEnlace: () => { if (!this.state.menuDraft) return; this.setState(prev => ({ menuDraft: Object.assign({}, prev.menuDraft, { items: prev.menuDraft.items.concat([{ tipo: "Enlace directo", nombre: "Nuevo enlace", url: "https://", nivel: 0 }]) }) })); },
+      addBoton: () => { if (!this.state.menuDraft) return; this.setState(prev => ({ menuDraft: Object.assign({}, prev.menuDraft, { items: prev.menuDraft.items.concat([{ tipo: "Botón", nombre: "Nuevo botón", url: "https://", nivel: 0 }]) }) })); },
+
+      estructuraItems: s.menuDraft ? s.menuDraft.items.map((it, k) => {
+        const items = s.menuDraft.items;
+        const setAt = (idx, patch) => this.setState(prev => {
+          const arr = prev.menuDraft.items.slice();
+          arr[idx] = Object.assign({}, arr[idx], patch);
+          return { menuDraft: Object.assign({}, prev.menuDraft, { items: arr }) };
+        });
+        const isDragging = s.dragIdx === k;
+        const isOver = s.dragOverIdx === k && s.dragIdx !== null && s.dragIdx !== k;
+        return {
+          nombre: it.nombre, tipo: it.tipo, url: it.url || "",
+          indentStyle: "padding-left:" + (it.nivel * 32) + "px; display:flex; align-items:center; gap:10px; padding-top:12px; padding-bottom:12px; border-bottom:1px solid #EDF2F2" +
+            (isDragging ? "; opacity:0.4" : "") +
+            (isOver ? "; background:#E8F5F6; border-radius:8px" : ""),
+          nestHint: isOver && s.dragNest,
+          nestHintIndent: (it.nivel + 1) * 32,
+          dragStart: () => this.setState({ dragIdx: k }),
+          dragOver: (e) => {
+            e.preventDefault();
+            const rect = e.currentTarget.getBoundingClientRect();
+            const nest = k > 0 && (e.clientX - rect.left) > 70;
+            if (this.state.dragOverIdx !== k || this.state.dragNest !== nest) this.setState({ dragOverIdx: k, dragNest: nest });
+          },
+          drop: (e) => {
+            e.preventDefault();
+            this.setState(prev => {
+              const from = prev.dragIdx;
+              if (from === null || from === k) return { dragIdx: null, dragOverIdx: null, dragNest: false };
+              const arr = prev.menuDraft.items.slice();
+              const moved = arr.splice(from, 1)[0];
+              let to = from < k ? k - 1 : k;
+              moved.nivel = prev.dragNest ? 1 : 0;
+              arr.splice(to + 1, 0, moved);
+              return { menuDraft: Object.assign({}, prev.menuDraft, { items: arr }), dragIdx: null, dragOverIdx: null, dragNest: false };
+            });
+          },
+          dragEnd: () => this.setState({ dragIdx: null, dragOverIdx: null, dragNest: false }),
+          onNombre: (e) => setAt(k, { nombre: e.target.value }),
+          showUrl: it.tipo === "Enlace directo" || it.tipo === "Botón",
+          onUrl: (e) => setAt(k, { url: e.target.value }),
+          nivel: it.nivel,
+          puedeAnidar: it.nivel === 0 && k > 0,
+          puedeDesanidar: it.nivel > 0,
+          anidar: () => setAt(k, { nivel: 1 }),
+          desanidar: () => setAt(k, { nivel: 0 }),
+          eliminar: () => this.setState(prev => {
+            const arr = prev.menuDraft.items.slice();
+            arr.splice(k, 1);
+            return { menuDraft: Object.assign({}, prev.menuDraft, { items: arr }) };
+          })
+        };
+      }) : [],
+      contadorPrincipales: s.menuDraft ? s.menuDraft.items.filter(it => it.nivel === 0).length : 0,
+      contadorEstilo: (s.menuDraft && (s.menuDraft.items.filter(it => it.nivel === 0).length < 3 || s.menuDraft.items.filter(it => it.nivel === 0).length > 7)) ? "font-size:13px; color:#C0392B; font-weight:600" : "font-size:13px; color:#5B6E71",
+      estructuraVacia: s.menuDraft ? s.menuDraft.items.length === 0 : true,
+
+      confirmMsg: s.confirm ? s.confirm.msg : "",
+      confirmOkLabel: s.confirm ? s.confirm.okLabel : "CONFIRMAR",
+      confirmCancelLabel: s.confirm ? s.confirm.cancelLabel : "CANCELAR",
+      confirmOk: () => { if (s.confirm) s.confirm.onOk(); },
+      confirmCancel: () => this.setState({ confirm: null }),
+
+      previewOpen: !!prev,
+      previewNombre: prev ? prev.nombre : "",
+      previewSubtitulo: prev ? (prev.tipo ? "Ubicación asignada: " + prev.tipo : "Sin ubicación asignada · vista estructural") : "",
+      previewEstructural: prev ? !prev.tipo : true,
+      previewIsDesktop: prev ? prev.tipo === "Cabecera" : false,
+      previewIsMobile: prev ? prev.tipo === "Cabecera" : false,
+      previewIsFooter: prev ? prev.tipo === "Pie de página" : false,
+      previewRaiz: prev ? buildRaiz(prev.items) : [],
+      previewNavItems: prev ? buildRaiz(prev.items).filter(r => r.tipo !== "Botón") : [],
+      previewBotonItems: prev ? buildRaiz(prev.items).filter(r => r.tipo === "Botón") : [],
+      previewSocial: ["f", "in", "ig", "x"],
+      previewClose: () => this.closePreview(),
+
+      toast: s.toast
+    };
+  }
+}
+
+</script>
+</body>
+</html>

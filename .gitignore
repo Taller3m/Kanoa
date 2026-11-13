@@ -1,0 +1,23 @@
+# Sistema operativo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Archivos temporales / bloqueo de Office
+~$*
+*.tmp
+*.bak
+*.swp
+
+# Logs
+*.log
+
+# Secretos y entornos locales
+.env
+.env.*
+
+# Dependencias (si se agregan prototipos con npm)
+node_modules/
+
+# Configuración local de Claude Code
+.claude/settings.local.json

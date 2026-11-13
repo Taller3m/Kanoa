@@ -1,0 +1,1006 @@
+FEATURE 6 - GESTIÓN DE MENÚS Y UBICACIONES DE NAVEGACIÓN DEL PORTAL WEB 
+HU-PW-103 – Administrar menús de navegación 
+Como: 
+Usuario Comunicador autenticado en el módulo de Administración de Contenido del Portal WEB 
+Quiero: 
+Visualizar y administrar los menús de navegación configurados en el Portal WEB 
+Para: 
+Gestionar de forma centralizada las estructuras de navegación que podrán ser utilizadas en la cabecera o en el pie de página del Portal WEB. 
+Descripción 
+El sistema debe incorporar una nueva funcionalidad denominada Menús dentro del módulo administrativo del Portal WEB. 
+La funcionalidad permitirá al usuario Comunicador administrar los menús de navegación del Portal WEB desde la siguiente ruta: Módulo de Administración de Contenido del Comunicador → Menús. 
+Al acceder a la pantalla, el sistema deberá mostrar el listado de los menús previamente configurados y las acciones disponibles para su administración. 
+Esta historia tiene como objetivo administrar los menús existentes y servir como punto de acceso a las funcionalidades de: 
+Crear menú. 
+Editar menú. 
+Vista previa de menú. 
+Eliminar menú. 
+La configuración de la estructura del menú, la asociación de ubicación, la vista previa y la eliminación serán gestionadas en historias independientes. 
+Valor 
+Permitir que el Comunicador administre de manera centralizada los menús del Portal WEB y acceda a las funcionalidades necesarias para configurar la navegación pública del sitio. 
+Reglas de Negocio 
+Listado de menús 
+El sistema deberá mostrar todos los menús configurados. 
+Cada registro deberá visualizar como mínimo: 
+Nombre del menú. 
+Fecha de creación. 
+Usuario creador. 
+Fecha de última edición. 
+Ubicación del menú 
+Valores de ubicación del menú 
+La columna Ubicación del menú podrá mostrar los siguientes valores: 
+Cabecera. 
+Pie de página. 
+Sin asignación. 
+Orden del listado 
+El listado deberá mostrarse ordenado por: Fecha de última edición desde la más reciente hacia la más antigua. 
+Menús sin ubicación configurada 
+Si un menú no tiene una ubicación configurada: 
+Deberá seguir visualizándose en el listado. 
+La ubicación deberá mostrarse como Sin asignación o según el diseño aprobado. 
+El menú no será visible públicamente en el Portal WEB. 
+Funcionalidades disponibles 
+Desde la pantalla de administración de menús deberán existir las siguientes acciones: 
+Crear menú. 
+Editar menú. 
+Vista previa. 
+Eliminar menú. 
+Actualización automática del listado 
+Cuando un menú sea creado, editado o eliminado: 
+El listado deberá reflejar la información actualizada. 
+Se deberá actualizar la fecha de última edición correspondiente. 
+El orden del listado deberá recalcularse automáticamente. 
+Criterios de Aceptación 
+Escenario 1: Acceso y visualización de la administración de menús 
+Dado que el usuario accede al Módulo de Administración de Contenido del Comunicador 
+Cuando selecciona la opción Menús 
+Entonces el sistema muestra la pantalla Administración de menús del Portal WEB 
+Y visualiza el listado de menús configurados 
+Y presenta para cada menú como mínimo: 
+Nombre del menú. 
+Fecha de creación. 
+Usuario creador. 
+Fecha de última edición. 
+Ubicación del menú. 
+Escenario 2: Visualización de ubicación del menú 
+Dado que existen menús configurados en el sistema 
+Cuando el usuario visualiza el listado de menús 
+Entonces el sistema muestra la ubicación correspondiente de cada menú 
+Y presenta alguno de los siguientes valores: 
+Cabecera. 
+Pie de página. 
+Sin asignación. 
+Escenario 3: Visualización de acciones para menús con ubicación 
+Dado que existe un menú con una ubicación configurada 
+Cuando el usuario visualiza el menú de acciones 
+Entonces el sistema muestra las opciones: 
+Editar. 
+Vista previa. 
+Eliminar. 
+Escenario 4: Visualización de acciones para menús sin ubicación 
+Dado que existe un menú sin ubicación configurada 
+Cuando el usuario visualiza el menú de acciones 
+Entonces el sistema muestra las opciones: 
+Editar. 
+Eliminar. 
+Y no muestra la opción Vista previa. 
+Escenario 5: Actualización de acciones por cambio de ubicación 
+Dado que un menú cambia su estado de ubicación 
+Cuando el usuario visualiza nuevamente la Administración de Menús del Portal WEB 
+Entonces el sistema actualiza las acciones disponibles de acuerdo con la ubicación configurada. 
+Escenario 6: Ordenamiento del listado 
+Dado que existen menús configurados 
+Cuando el sistema muestra la información 
+Entonces organiza los registros desde la fecha de actualización más reciente hasta la más antigua. 
+Escenario 7: Acceso a la creación de menús 
+Dado que el usuario se encuentra en la Administración de Menús del Portal WEB 
+Cuando selecciona la opción Crear menú 
+Entonces el sistema redirige a la funcionalidad Crear estructura de menú. 
+Escenario 8: Actualización automática del listado 
+Dado que un menú es creado, editado o eliminado 
+Cuando el usuario regresa a la Administración de menús del Portal WEB 
+Entonces el sistema refleja la información actualizada conforme a la última configuración almacenada. 
+Corner Cases 
+Existe un menú asociado a Cabecera → muestra Editar, Vista previa y Eliminar. 
+Existe un menú asociado a Pie de página → muestra Editar, Vista previa y Eliminar. 
+Existe un menú sin ubicación → muestra únicamente Editar y Eliminar. 
+Un menú cambia de Sin ubicación a Cabecera → aparece la opción Vista previa. 
+Un menú cambia de Sin ubicación a Pie de página → aparece la opción Vista previa. 
+Un menú pierde la ubicación → desaparece la opción Vista previa. 
+Un menú reemplazado desde la HUPW105 pierde su ubicación → desaparece la opción Vista previa. 
+No existen menús configurados → se muestra estado vacío. 
+Existen múltiples menús → se ordenan por fecha de actualización descendente. 
+Un menú recientemente actualizado → aparece en las primeras posiciones del listado. 
+Notas y Soportes Adicionales 
+Alcance 
+Esta historia únicamente cubre: 
+Acceso a la nueva opción Menús. 
+Visualización del listado de menús. 
+Visualización de acciones disponibles. 
+No incluye: 
+Creación de menús. 
+Edición de menús. 
+Eliminación de menús. 
+Configuración de elementos. 
+Asignación de tipos de menús 
+Estas funcionalidades se documentan en historias independientes. 
+Historias de Usuario Relacionadas 
+HUPW104 – Crear estructura de menú de navegación. 
+HUPW105 – Configurar ubicación y publicación del menú. 
+HUPW106 – Vista previa de menú. 
+HUPW107 – Eliminar menú de navegación. 
+EPICPW006 – Gestión de Menús y Navegación del Portal WEB. 
+HU-PW-104– Crear estructura de menú de navegación 
+Como: 
+Usuario Comunicador autenticado en el módulo de Administración de Contenido del Portal WEB 
+Quiero: 
+Crear una estructura de menú de navegación configurable. 
+Para: 
+Definir y organizar los elementos de navegación que posteriormente podrán asociarse a una ubicación dentro del Portal WEB. 
+Descripción 
+El sistema debe permitir al usuario Comunicador construir la estructura base de un menú de navegación a partir de micrositios, secciones y elementos configurables disponibles dentro del Portal WEB. 
+La funcionalidad estará disponible desde la siguiente ruta: Módulo de Administración de Contenido del Comunicador → Menús → Crear menú 
+La pantalla deberá permitir definir la estructura lógica del menú sin configurar aún su ubicación de publicación. 
+La construcción deberá realizarse mediante una interfaz compuesta por dos paneles: 
+Panel izquierdo: Elementos disponibles 
+Contendrá los elementos que pueden incorporarse a la estructura del menú: 
+Micrositios activos. 
+Secciones activas. 
+Opción personalizada. 
+Enlace directo. 
+Botón. 
+Panel derecho: Estructura del menú 
+Permitirá construir la estructura final del menú mediante: 
+Adición de elementos. 
+Eliminación de elementos. 
+Reordenamiento de elementos. 
+Configuración de submenús. 
+Organización jerárquica mediante drag &amp; drop. 
+La configuración de ubicación y publicación del menú será gestionada en una historia independiente. 
+Valor 
+Permitir al Comunicador construir estructuras de navegación reutilizables, organizadas y alineadas con las necesidades de comunicación y navegación del Portal WEB. 
+Reglas de Negocio 
+Nombre del menú -Obligatorio 
+Longitud 
+Mínimo: 3 caracteres. 
+Máximo: 50 caracteres. 
+Mensajes 
+Campo vacío: 
+"La información de este campo es obligatoria." 
+Longitud mínima: 
+"La información ingresada en este campo debe contener al menos 3 caracteres." 
+Longitud máxima: 
+"La información que ingresaste excede el límite máximo de caracteres permitidos." 
+Identificación de menús 
+El nombre del menú corresponde a una referencia administrativa y no constituye un identificador único dentro del sistema. 
+Por lo tanto: 
+Podrán existir múltiples menús con el mismo nombre. 
+El sistema identificará internamente cada menú mediante un identificador único. 
+Cantidad de elementos principales 
+El menú deberá contener: 
+Mínimo: 3 elementos principales. 
+Máximo: 7 elementos principales. 
+Se consideran elementos principales aquellos ubicados en el primer nivel de navegación. 
+Los submenús: 
+No se contabilizan para el mínimo. 
+No se contabilizan para el máximo. 
+Los botones contabilizan dentro del límite máximo cuando se encuentren configurados como elementos principales. 
+Mensajes 
+Cantidad mínima: 
+"Debes configurar al menos tres elementos en el menú." 
+Cantidad máxima: 
+"Solo puedes configurar hasta ocho elementos en el menú." 
+Elementos permitidos 
+Solo podrán agregarse a la estructura: 
+Micrositios 
+Únicamente micrositios activos. 
+Secciones 
+Únicamente secciones activas. 
+Opción personalizada 
+Elemento configurable utilizado como agrupador de navegación. 
+Enlace directo 
+Elemento compuesto por: 
+Nombre visible. 
+URL de navegación. 
+Botón 
+Elemento compuesto por: 
+Nombre visible. 
+URL de navegación. 
+Disponibilidad de elementos 
+El panel Elementos disponibles deberá mostrar únicamente: 
+Micrositios activos. 
+Secciones activas. 
+Los elementos inactivos no deberán aparecer dentro del panel. 
+Agrupación de secciones 
+Las secciones deberán visualizarse agrupadas bajo el micrositio al que pertenecen. Actualización de elementos disponibles 
+La información visualizada en el panel Elementos disponibles deberá reflejar siempre el estado vigente de micrositios y secciones. Comportamiento esperado: Activo: Visible en Elementos disponibles Inactivo: No visible en Elementos disponibles  Elementos únicos dentro del menú 
+Un mismo elemento no podrá configurarse más de una vez dentro de la misma estructura. 
+Aplica para: 
+Micrositios. 
+Secciones. 
+Opción personalizada 
+Nombre Obligatorio. 
+Longitud 
+Mínimo: 3 caracteres. 
+Máximo: 20 caracteres. 
+Enlace directo 
+Nombre Obligatorio. 
+Longitud 
+Mínimo: 3 caracteres. 
+Máximo: 20 caracteres. 
+URL Obligatoria. 
+Mensaje 
+"La URL ingresada no tiene un formato válido." 
+Botón 
+Nombre Obligatorio. 
+Longitud 
+Mínimo: 3 caracteres. 
+Máximo: 20 caracteres. 
+URL Obligatoria. 
+Mensaje 
+"La URL ingresada no tiene un formato válido." 
+Cantidad máxima de botones 
+Un menú podrá contener máximo dos (2) botones. 
+La restricción aplica independientemente de si el botón se encuentra: 
+Como elemento principal. 
+Como submenú. 
+Mensaje 
+"Solo puedes configurar hasta dos botones dentro del menú." 
+Comportamiento de micrositios 
+Micrositio sin submenús 
+Cuando un micrositio no tenga elementos subordinados, deberá comportarse como un acceso directo al micrositio. 
+Micrositio con submenús 
+Cuando un micrositio tenga elementos subordinados, deberá comportarse como un contenedor de navegación y desplegar los submenús configurados.  
+Niveles máximos de navegación 
+La estructura podrá tener máximo dos niveles de navegación Nivel 1└── Nivel 2 
+Jerarquía de navegación 
+Los elementos podrán convertirse en submenús mediante drag &amp; drop. 
+Podrán configurarse como submenús: 
+Micrositios. 
+Secciones. 
+Opción personalizada. 
+Enlaces directos. 
+Botones. 
+Ordenamiento 
+La estructura del menú deberá poder reorganizarse mediante drag &amp; drop. 
+Toda modificación deberá reflejarse inmediatamente en la estructura configurada. 
+Criterios de Aceptación 
+Escenario 1: Acceso y visualización de la pantalla de creación 
+Dado que el usuario se encuentra en la Administración de Menús del Portal WEB 
+Cuando selecciona la opción Crear menú 
+Entonces el sistema muestra la pantalla de creación 
+Y visualiza: 
+Panel Elementos disponibles. Elementos disponibles: 
+Micrositios. 
+Secciones. 
+Opción personalizada. 
+Enlace directo. 
+Botón. 
+Panel Estructura del menú. 
+Escenario 2: Visualización y actualización de elementos disponibles 
+Dado que existen micrositios y secciones configurados en el Portal WEB 
+Cuando el usuario accede a la funcionalidad Crear menú 
+Entonces el sistema muestra únicamente micrositios activos y secciones activas 
+Y las secciones aparecen agrupadas por el micrositio correspondiente. 
+Y cuando un micrositio o sección cambian de estado 
+Entonces la información se actualiza en futuros accesos a la funcionalidad. 
+Escenario 3: Configuración de la estructura del menú 
+Dado que existen elementos disponibles 
+Cuando el usuario agrega, elimina o reorganiza elementos dentro de la estructura del menú 
+Entonces el sistema actualiza la estructura configurada 
+Y refleja los cambios realizados. 
+Escenario 4: Configuración de elementos especiales 
+Dado que el usuario agrega una opción personalizada, enlace directo o botón 
+Cuando diligencia la información requerida 
+Entonces el sistema incorpora el elemento a la estructura del menú. 
+Y el nombre de cada elemento se vuelve obligatorio 
+Escenario 5: Validación de opción personalizada sin submenús 
+Dado que el usuario configura una opción personalizada dentro de la estructura del menú 
+Y la opción personalizada no tiene elementos asociados como submenús 
+Cuando intenta almacenar la configuración del menú 
+Entonces el sistema no permite guardar la información 
+Y muestra el mensaje: 
+"La opción personalizada debe tener al menos un submenú asociado." 
+ Escenario 6: Validación de opción personalizada como submenú 
+Dado que el usuario configura una opción personalizada dentro de la estructura del menú 
+Cuando intenta convertirla en submenú de otro elemento mediante drag &amp; drop 
+Entonces el sistema no permite la acción 
+Y muestra el mensaje: 
+"La opción personalizada solo puede configurarse como elemento principal del menú." 
+ Escenario 7: Validación de elementos duplicados 
+Dado que existe un elemento configurado dentro de la estructura 
+Cuando el usuario intenta agregar nuevamente el mismo elemento 
+Entonces el sistema no permite la acción 
+Y muestra el mensaje: 
+"El elemento seleccionado ya se encuentra configurado dentro del menú." 
+Escenario 8: Validación de URLs 
+Dado que el usuario configura un enlace directo o un botón 
+Cuando ingresa una URL inválida 
+Entonces el sistema no permite guardar la configuración 
+Y muestra el mensaje: 
+"La URL ingresada no tiene un formato válido." 
+Escenario 9: Configuración y validación de jerarquía 
+Dado que existen elementos configurados dentro de la estructura 
+Cuando el usuario configura submenús 
+Entonces el sistema permite como máximo dos niveles de navegación 
+Y no permite configurar submenús de submenús 
+Escenario 10: Validación de botones 
+Dado que existen dos botones configurados dentro de la estructura 
+Cuando el usuario intenta agregar un tercer botón 
+Entonces el sistema no permite la acción 
+Y muestra el mensaje: 
+"Solo puedes configurar hasta dos botones dentro del menú." 
+Escenario 11: Reordenar elementos mediante drag &amp; drop 
+Dado que existen elementos configurados dentro de la estructura del menú 
+Cuando el usuario modifica su posición mediante drag &amp; drop 
+Entonces el sistema actualiza el orden configurado 
+Y refleja la nueva organización dentro de la estructura del menú. 
+Escenario 12: Configuración de micrositio sin submenús 
+Dado que el usuario configura un micrositio dentro de la estructura del menú 
+Y no configura elementos subordinados asociados al mismo 
+Cuando almacena la configuración del menú 
+Entonces el sistema registra el micrositio como un acceso directo al micrositio correspondiente. 
+Escenario 13: Configuración de micrositio con submenús 
+Dado que el usuario configura un micrositio dentro de la estructura del menú 
+Y asocia uno o más elementos como submenús 
+Cuando almacena la configuración del menú 
+Entonces el sistema registra el micrositio como un contenedor de navegación 
+Y conserva la relación jerárquica configurada 
+Y despliega los submenús configurados cuando el menú sea utilizado en la navegación pública. 
+Escenario 14: Validación de cantidad de elementos principales 
+Dado que el usuario configura un menú 
+Cuando la estructura contiene menos de tres elementos principales 
+O supera siete elementos principales 
+Entonces el sistema no permite guardar la configuración 
+Y muestra el mensaje correspondiente: 
+"Debes configurar al menos tres elementos en el menú." 
+o 
+"Solo puedes configurar hasta siete elementos en el menú." 
+Escenario 15: Creación exitosa del menú 
+Dado que la configuración cumple todas las validaciones definidas 
+Cuando el usuario selecciona Guardar 
+Entonces el sistema almacena la estructura del menú 
+Y muestra el mensaje: 
+"La configuración del menú ha sido almacenada correctamente." 
+Escenario 16: Cancelación de cambios 
+Dado que el usuario realiza modificaciones sobre la estructura del menú 
+Cuando selecciona Cancelar 
+Entonces el sistema muestra el mensaje: 
+"Hay cambios sin guardar. ¿Deseas descartarlos?" 
+Y cuando confirma la acción 
+Entonces el sistema descarta los cambios no almacenados.  
+Corner Cases 
+El usuario intenta guardar un menú sin nombre → no se permite almacenar. 
+El menú contiene menos de tres elementos principales → no se permite almacenar. 
+El menú supera siete elementos principales → no se permite almacenar. 
+El usuario intenta agregar un elemento ya configurado → no se permite la acción. 
+El usuario crea una opción personalizada sin elementos asociados → no se permite almacenar el menú. 
+El usuario crea una opción personalizada con al menos un submenú asociado → se permite almacenar el menú. 
+El usuario elimina el último submenú asociado a una opción personalizada → no se permite almacenar el menú. 
+El usuario configura un tercer botón → no se permite la acción. 
+El usuario elimina uno de los dos botones existentes → podrá agregar uno nuevo. 
+El usuario modifica el orden de los elementos mediante drag &amp; drop → la estructura refleja el nuevo orden configurado. 
+Un micrositio configurado sin submenús → se comporta como acceso directo al micrositio correspondiente. 
+Un micrositio configurado con submenús → se comporta como contenedor de navegación y despliega los elementos subordinados configurados. 
+El usuario intenta configurar un tercer nivel jerárquico → no se permite la acción. 
+Un elemento de segundo nivel intenta actuar como padre → no se permite la acción. 
+Los elementos principales pueden contener submenús → permitido. 
+Los submenús no pueden contener elementos subordinados → no permitido. 
+Un micrositio activo pasa a inactivo y no está asociado a ningún menú → deja de visualizarse en Elementos disponibles. 
+Una sección activa pasa a inactiva y no está asociada a ningún menú → deja de visualizarse en Elementos disponibles. 
+Un micrositio inactivo pasa a activo → vuelve a visualizarse en Elementos disponibles. 
+Una sección inactiva pasa a activa → vuelve a visualizarse en Elementos disponibles. 
+El usuario intenta convertir una opción personalizada en submenú mediante drag &amp; drop → no se permite la acción. 
+Una opción personalizada siempre se configura como elemento principal del menú. 
+Una opción personalizada puede contener elementos subordinados, pero no puede ser subordinada de otro elemento. 
+Una opción personalizada no puede ser hija de otra opción personalizada. 
+Flujo posterior 
+Una vez creada la estructura del menú, la configuración de ubicación y publicación será gestionada mediante: 
+HUPW105 – Configurar ubicación y publicación de menú. 
+Historias de Usuario Relacionadas 
+HUPW103 – Administrar menús de navegación. 
+HUPW105 – Configurar ubicación y publicación de menú. 
+HUPW106 – Editar menú de navegación. 
+HUPW107 – Vista previa de menú. 
+HUPW108 – Eliminar menú de navegación. 
+HUPW096 – Restringir la inactivación de micrositios y secciones asociados a configuraciones activas del Portal WEB. 
+EPICPW006 – Gestión de Menús y Navegación del Portal WEB. 
+HU-PW-105– Configurar ubicación y publicación de menú 
+Como: 
+Usuario Comunicador autenticado en el módulo de Administración de Contenido del Portal WEB 
+Quiero: 
+Configurar la ubicación de un menú previamente creado 
+Para: 
+Determinar dónde debe visualizarse el menú dentro del Portal WEB y controlar su publicación. 
+Descripción 
+El sistema debe permitir al usuario Comunicador asociar un menú previamente creado a una ubicación de navegación del Portal WEB. 
+La configuración de ubicación estará disponible tanto durante la creación del menú como durante su edición y permitirá determinar si el menú será visible para los usuarios finales. 
+Las ubicaciones disponibles serán: 
+Cabecera. 
+Pie de página. 
+La configuración de ubicación constituye el mecanismo de publicación del menú dentro del Portal WEB. 
+Cuando un menú tenga una ubicación configurada y el usuario almacene correctamente los cambios, el menú deberá visualizarse automáticamente en el Portal WEB. 
+Cuando una ubicación ya se encuentre asociada a otro menú, el sistema deberá permitir realizar el reemplazo desde la misma pantalla, reduciendo clics e interacciones para el usuario. 
+Valor 
+Permitir que el Comunicador controle qué estructura de navegación será utilizada en cada ubicación del Portal WEB sin requerir intervenciones técnicas. 
+Reglas de Negocio 
+Ubicación del menú 
+La configuración de ubicación es opcional. 
+El usuario podrá: 
+No seleccionar ninguna ubicación. 
+Seleccionar Cabecera. 
+Seleccionar Pie de página. 
+Menú sin ubicación 
+Un menú podrá mantenerse sin ubicación configurada. 
+En este caso: 
+El menú permanecerá almacenado en el sistema. 
+El menú no será visible en el Portal WEB. 
+El menú podrá ser asociado posteriormente desde la funcionalidad de edición. 
+Selección única de ubicación 
+Un menú podrá tener asociada únicamente una ubicación. 
+Exclusividad de ubicación 
+Una ubicación únicamente podrá estar asociada a un menú a la vez. 
+Cuando otro menú solicite la misma ubicación, el sistema deberá solicitar confirmación para realizar el reemplazo. 
+Mensaje 
+"La ubicación '{Cabecera/Pie de página}' ya se encuentra asociada al menú '{Nombre del menú}'. ¿Deseas reemplazar esta asociación?" 
+Confirmación de reemplazo 
+Si el usuario confirma el reemplazo: 
+El menú actual quedará marcado con la ubicación seleccionada. 
+El menú previamente asociado quedará sin ubicación. 
+El cambio se reflejará visualmente en pantalla. 
+El cambio permanecerá pendiente hasta que el usuario seleccione Guardar. 
+Cancelación de reemplazo 
+Si el usuario cancela el reemplazo: 
+El menú previamente asociado conservará la ubicación. 
+El menú actual permanecerá sin ubicación. 
+No se realizarán cambios. 
+Publicación automática 
+Cuando un menú se encuentre asociado a una ubicación y la configuración sea almacenada correctamente: 
+El menú deberá publicarse automáticamente. 
+No se requerirá una acción adicional de publicación. 
+El menú deberá visualizarse en la ubicación correspondiente del Portal WEB. 
+Actualización automática de navegación 
+Cuando una ubicación cambie de menú asociado: 
+La asociación anterior dejará de estar vigente. 
+La nueva asociación entrará en vigencia inmediatamente después del guardado. 
+El Portal WEB deberá reflejar automáticamente la nueva configuración. 
+Publicación posterior al reemplazo 
+Cuando el usuario confirme un reemplazo y posteriormente almacene la configuración: 
+El sistema actualizará la asociación. 
+El menú anterior quedará sin ubicación. 
+El nuevo menú quedará asociado a la ubicación seleccionada. 
+La navegación pública se actualizará automáticamente. 
+El nuevo menú será publicado en la ubicación correspondiente. 
+Cabecera 
+La ubicación Cabecera utilizará la misma estructura de menú para: 
+Navegación de escritorio. 
+Navegación móvil. 
+La representación visual se adaptará al diseño responsive definido para el Portal WEB. 
+Pie de página 
+La ubicación Pie de página utilizará la estructura configurada para la navegación inferior del Portal WEB para escritorio y móvil. 
+Criterios de Aceptación 
+Escenario 1: Acceso y configuración de ubicación del menú 
+Dado que el usuario accede al Módulo de Administración de Contenido del Comunicador a la opción de Administración de menús del Portal WEB 
+Y navega a las funcionalidades Crear Menú o Editar Menú 
+Cuando visualiza el panel Ajustes del menú 
+Entonces el sistema muestra la opción Ubicación del Menú 
+Y permite seleccionar una de las siguientes opciones: 
+Cabecera. 
+Pie de página. 
+Y registra la ubicación seleccionada para el menú. 
+Escenario 2: Configuración opcional de ubicación 
+Dado que existe un menú previamente creado 
+Cuando el usuario decide no seleccionar ninguna ubicación 
+Y almacena la configuración 
+Entonces el sistema conserva el menú 
+Y el menú no se visualiza en el Portal WEB. 
+Escenario 3: Detección de ubicación ya utilizada 
+Dado que existe un menú asociado a una ubicación 
+Y el usuario selecciona la misma ubicación para otro menú 
+Cuando el sistema valida la asociación existente 
+Entonces informa el nombre del menú actualmente asociado 
+Y muestra el mensaje: 
+"La ubicación '{Cabecera/Pie de página}' ya se encuentra asociada al menú '{Nombre del menú}'. ¿Deseas reemplazar esta asociación?" 
+Escenario 4: Reemplazo pendiente de guardar 
+Dado que la ubicación seleccionada se encuentra asociada a otro menú 
+Y el usuario confirma el reemplazo 
+Cuando aún no ha seleccionado Guardar 
+Entonces el sistema refleja visualmente la nueva asociación 
+Y mantiene el cambio pendiente de almacenamiento 
+Y no realiza cambios sobre la navegación pública. 
+Escenario 5: Cancelación del reemplazo 
+Dado que la ubicación seleccionada se encuentra asociada a otro menú 
+Cuando el usuario cancela el reemplazo 
+Entonces el menú previamente asociado conserva la ubicación 
+Y el menú actual permanece sin ubicación 
+Y no se reflejan cambios en pantalla. 
+Escenario 6: Publicación automática en Cabecera 
+Dado que existe un menú válido 
+Y el usuario selecciona la ubicación Cabecera 
+Cuando almacena la configuración 
+Entonces el sistema publica automáticamente el menú 
+Y el menú se visualiza en la cabecera del Portal WEB. 
+Escenario 7: Publicación automática en Pie de página 
+Dado que existe un menú válido 
+Y el usuario selecciona la ubicación Pie de página 
+Cuando almacena la configuración 
+Entonces el sistema publica automáticamente el menú 
+Y el menú se visualiza en el pie de página del Portal WEB. 
+Escenario 8: Confirmación y publicación posterior al reemplazo 
+Dado que la ubicación seleccionada se encuentra asociada a otro menú 
+Cuando el usuario confirma el reemplazo 
+Y selecciona Guardar 
+Entonces el sistema asigna la ubicación al menú actual 
+Y deja sin ubicación al menú previamente asociado 
+Y actualiza automáticamente la navegación pública 
+Y publica el nuevo menú en la ubicación correspondiente. 
+Escenario 9: Persistencia de la configuración 
+Dado que el usuario almacena correctamente una configuración de ubicación 
+Cuando vuelve a consultar el menú 
+Entonces el sistema muestra la última configuración almacenada. 
+Escenario 10: Eliminación de ubicación asociada 
+Dado que un menú tiene una ubicación configurada 
+Cuando el usuario elimina la asociación de ubicación 
+Y almacena la configuración 
+Entonces el sistema mantiene el menú almacenado 
+Y deja de visualizarlo en el Portal WEB. 
+Escenario 11: Cancelación de cambios 
+Dado que el usuario realiza cambios sobre la configuración de ubicación 
+Cuando selecciona Cancelar 
+Entonces el sistema muestra el mensaje: 
+"Hay cambios sin guardar. ¿Deseas descartarlos?" 
+Y cuando confirma la acción 
+Entonces conserva la última configuración almacenada. 
+Corner Cases 
+Un menú sin ubicación configurada → permanece almacenado y no se publica. 
+El usuario selecciona una ubicación utilizada por otro menú y confirma el reemplazo → el menú actual adquiere la ubicación y el anterior la pierde visualmente. 
+El usuario selecciona una ubicación utilizada por otro menú y cancela el reemplazo → no se realizan cambios. 
+El usuario confirma el reemplazo pero posteriormente cancela la pantalla sin guardar → se conserva la asociación original. 
+Un menú cambia de Cabecera a Pie de página → la nueva ubicación reemplaza la asociación anterior. 
+Un menú cambia de Pie de página a Cabecera → la nueva ubicación reemplaza la asociación anterior. 
+Un menú pierde su ubicación → deja de visualizarse en el Portal WEB. 
+La ubicación Cabecera siempre utiliza la misma estructura para escritorio y móvil. 
+La configuración almacenada debe persistir entre sesiones y futuras ediciones del menú. 
+Si una ubicación se reemplaza y la configuración no se guarda, la navegación pública no deberá verse afectada. 
+Notas y Soportes Adicionales 
+Ubicaciones soportadas 
+Las únicas ubicaciones configurables serán: 
+Cabecera  
+Pie de página 
+Publicación de menús 
+La asociación de una ubicación constituye el mecanismo de publicación del menú dentro del Portal WEB. 
+No existen estados de publicación para los menús. 
+Navegación responsive 
+El menú asociado a la ubicación Cabecera y Pie de página será utilizado tanto para navegación de escritorio como para navegación móvil. 
+La diferencia estará dada por el diseño responsive implementado en el Portal WEB y no por la configuración de menús independientes. 
+Relación con eliminación de menús 
+Los menús que pierdan una ubicación mediante reemplazo podrán ser eliminados posteriormente conforme a las reglas definidas en la HUPW108 – Eliminar menú de navegación. 
+Historias de Usuario Relacionadas 
+HUPW103 – Administrar menús de navegación. 
+HUPW104 – Crear estructura de menú de navegación. 
+HUPW106 – Editar menú de navegación. 
+HUPW107 – Vista previa de menú. 
+HUPW108 – Eliminar menú de navegación. 
+EPICPW006 – Gestión de Menús y Navegación del Portal WEB. 
+HU-PW-106– Editar menú de navegación 
+Como: 
+Usuario Comunicador autenticado en el módulo de Administración de Contenido del Portal WEB 
+Quiero: 
+Modificar la configuración de un menú previamente creado. 
+Para: 
+Mantener actualizada la estructura de navegación del Portal WEB de acuerdo con las necesidades de comunicación y navegación vigentes. 
+Descripción 
+El sistema debe permitir al usuario Comunicador editar menús previamente configurados desde la administración de menús del Portal WEB. 
+La funcionalidad estará disponible desde la siguiente ruta: Módulo de Administración de Contenido del Comunicador → Menús → Administración de Menús del Portal WEB  
+→ Editar menú 
+Al acceder a la edición, el sistema deberá cargar la última configuración almacenada del menú seleccionado. 
+El usuario podrá modificar: 
+Nombre del menú. 
+Elementos configurados. 
+Jerarquía de navegación. 
+Orden de los elementos. 
+Opciones personalizadas. 
+Enlaces directos. 
+Botones. 
+Ubicación configurada. 
+La pantalla deberá conservar la misma estructura definida en la historia: 
+HUPW104 – Crear estructura de menú de navegación. 
+HUPW105 – Configurar ubicación y publicación del menú. 
+La edición deberá permitir modificar completamente la estructura previamente configurada, respetando las mismas validaciones, reglas de negocio y comportamiento definidos en estas dos historias. 
+Valor 
+Permitir al Comunicador mantener actualizadas las estructuras de navegación existentes sin necesidad de crear nuevos menús. 
+Reglas de Negocio 
+Carga de configuración existente 
+Al ingresar a la funcionalidad de edición: 
+El sistema deberá cargar la configuración vigente del menú seleccionado. 
+La estructura deberá visualizarse exactamente como fue almacenada. 
+La ubicación configurada deberá reflejar la última configuración guardada. 
+Aplicación de reglas existentes 
+Toda modificación realizada sobre la estructura del menú deberá cumplir las reglas definidas en: 
+HUPW104 – Crear estructura de menú de navegación. 
+Toda modificación realizada sobre la ubicación del menú deberá cumplir las reglas definidas en: 
+HUPW105 – Configurar ubicación y publicación de menú. 
+Persistencia de cambios 
+Cuando el usuario almacene una modificación: 
+El sistema deberá actualizar la configuración del menú. 
+La información almacenada deberá reflejarse en futuras consultas y ediciones. 
+El sistema deberá conservar únicamente la última versión almacenada. 
+Cancelación de cambios 
+Si el usuario realiza modificaciones y decide cancelar la operación: 
+El sistema no deberá almacenar cambios parciales. 
+El sistema deberá conservar la última configuración guardada. 
+Criterios de Aceptación 
+Escenario 1: Acceso y visualización de la configuración del menú 
+Dado que el usuario accede al Módulo de Administración de Contenido del Comunicador, a la opción Administración de menús del Portal WEB 
+Y selecciona la opción Editar menú 
+Cuando el sistema abre la pantalla de edición 
+Entonces carga la última configuración almacenada del menú seleccionado 
+Y muestra la información previamente configurada del menú 
+Y presenta: 
+Nombre del menú. 
+Estructura configurada. 
+Jerarquía configurada. 
+Ubicación configurada. 
+Escenario 2: Modificación de la estructura del menú 
+Dado que existe un menú previamente configurado 
+Cuando el usuario agrega, elimina o reorganiza elementos dentro de la estructura 
+Entonces el sistema actualiza la estructura configurada 
+Y aplica las reglas definidas en la HUPW104 – Crear estructura de menú de navegación. 
+Escenario 3: Modificación de elementos especiales 
+Dado que el usuario modifica una opción personalizada, un enlace directo o un botón 
+Cuando realiza cambios sobre la configuración del elemento 
+Entonces el sistema aplica las reglas definidas en la HUPW104 – Crear estructura de menú de navegación. 
+Escenario 4: Validación de la estructura 
+Dado que el usuario modifica la configuración del menú 
+Cuando intenta almacenar una estructura que incumple alguna de las reglas definidas para construcción del menú 
+Entonces el sistema no permite almacenar la información 
+Y muestra el mensaje correspondiente definido en la HUPW104 – Crear estructura de menú de navegación. 
+Escenario 5: Modificación de ubicación del menú 
+Dado que existe un menú previamente configurado 
+Cuando el usuario modifica la ubicación del menú 
+Y almacena la configuración 
+Entonces el sistema actualiza la ubicación configurada Y aplica las reglas definidas en la HUPW105 – Configurar ubicación y publicación de menú 
+Y aplica las validaciones de ubicación definidas para el Portal WEB. 
+Escenario 6: Edición exitosa del menú 
+Dado que la configuración cumple todas las validaciones definidas 
+Cuando el usuario selecciona la opción Guardar 
+Entonces el sistema almacena la información actualizada del menú 
+Y muestra el mensaje: 
+"La configuración del menú ha sido almacenada correctamente." 
+Escenario 7: Persistencia de cambios 
+Dado que el usuario almacenó correctamente las modificaciones realizadas 
+Cuando vuelve a acceder a la edición del menú 
+Entonces el sistema muestra la última configuración almacenada. 
+Escenario 8: Cancelación de cambios 
+Dado que el usuario realiza modificaciones sobre el menú 
+Cuando selecciona Cancelar 
+Entonces el sistema muestra el mensaje: 
+"Hay cambios sin guardar. ¿Deseas descartarlos?" 
+Y cuando confirma la acción 
+Entonces conserva la última configuración almacenada. 
+Corner Cases 
+Un menú sin ubicación puede asociarse posteriormente a Cabecera o Pie de página. 
+Un menú con ubicación puede quedar sin ubicación. 
+Una modificación de ubicación debe cumplir las reglas definidas en la HUPW105. 
+Una modificación de estructura debe cumplir las reglas definidas en la HUPW104. 
+El usuario cancela la edición → se conserva la última configuración almacenada. 
+El usuario accede nuevamente al menú después de guardar → visualiza los últimos cambios almacenados. 
+Cualquier cambio que incumpla las validaciones definidas en la HUPW104 o HUPW105 no podrá ser almacenado. 
+Notas y Soportes Adicionales 
+Reutilización de reglas 
+La edición de menús reutiliza todas las reglas de construcción definidas en la HUPW104 y todas las reglas de ubicación definidas en la HUPW105. 
+Alcance 
+Esta historia cubre: 
+Edición de estructura. 
+Edición de jerarquía. 
+Edición de elementos. 
+Edición de ubicación. 
+Actualización automática de publicación. 
+No incluye: 
+Creación inicial del menú. 
+Vista previa. 
+Eliminación de menús. 
+Historia de Usuario Relacionada 
+HUPW103 – Administrar menús de navegación. 
+HUPW104 – Crear estructura de menú de navegación. 
+HUPW105 – Configurar ubicación y publicación de menú. 
+HUPW107 – Vista previa de menú. 
+HUPW108 – Eliminar menú de navegación. 
+HUPW096 – Restringir la inactivación de micrositios y secciones asociados a configuraciones activas del Portal WEB. 
+EPICPW006 – Gestión de Menús y Navegación del Portal WEB. 
+HU-PW-107– Vista Previa de Menú 
+Como: 
+Usuario Comunicador autenticado en el módulo de Administración de Contenido del Portal WEB 
+Quiero: 
+Visualizar una vista previa de un menú configurado. 
+Para: 
+Validar su representación visual antes de almacenar o publicar la configuración dentro del Portal WEB. 
+Descripción 
+El sistema debe permitir al usuario Comunicador generar una vista previa de los menús configurados en el Portal WEB. 
+La funcionalidad estará disponible desde: 
+Administración de menú: Menús/Administración de menús del Portal WEB, desde el listado de menús configurados para los menús con asignación en Cabecera y Pie de página/Vista previa. 
+Crear menú: Menús/Crear menús. 
+Editar menú: Menús/Editar menús 
+La vista previa deberá representar cómo se visualizará el menú dentro del Portal WEB según una ubicación de navegación. 
+La funcionalidad no almacenará información ni modificará la configuración del menú. 
+Si el menú ya tiene una ubicación asignada o seleccionada en pantalla, la vista previa utilizará automáticamente dicha ubicación. 
+Si el menú no tiene una ubicación seleccionada en la pantalla de creación o edición, el sistema deberá solicitar al usuario la ubicación que desea utilizar para la simulación. 
+La ubicación seleccionada para la simulación tendrá efecto únicamente sobre la vista previa y no modificará la configuración del menú. 
+Valor 
+Permitir que el Comunicador valide visualmente la apariencia final de un menú en las ubicaciones soportadas del Portal WEB antes de almacenar o publicar la configuración. 
+Reglas de Negocio 
+Disponibilidad de la vista previa 
+La opción Vista previa deberá estar disponible en: 
+Administración de Menús del Portal WEB. 
+Crear menú. 
+Editar menú. 
+Restricción 
+Desde la Administración de Menús del Portal WEB, la opción Vista previa únicamente estará disponible para menús que tengan una ubicación configurada: 
+Cabecera. 
+Pie de página. 
+Los menús sin ubicación no deberán mostrar la opción Vista previa dentro del menú de acciones. 
+Vista previa con ubicación configurada 
+Cuando el menú tenga una ubicación configurada o seleccionada en pantalla: 
+Cabecera. 
+Pie de página. 
+el sistema deberá utilizar automáticamente dicha ubicación para generar la vista previa. 
+No deberá solicitar una selección adicional al usuario. 
+Vista previa sin ubicación configurada 
+Cuando el usuario se encuentre en Crear menú o Editar menú y el menú no tenga una ubicación seleccionada: 
+El sistema deberá solicitar la ubicación a utilizar para la simulación. 
+El usuario podrá seleccionar:  
+Cabecera. 
+Pie de página. 
+La selección realizada tendrá efecto únicamente para la vista previa. 
+La selección realizada no deberá almacenarse como configuración del menú. 
+La selección realizada no deberá modificar la ubicación configurada del menú. 
+Representación de la vista previa 
+Toda vista previa deberá mostrar: 
+Vista Web 
+Representación correspondiente a escritorio. 
+Vista Móvil 
+Representación responsive correspondiente a dispositivos móviles. 
+La vista previa deberá presentar ambas representaciones independientemente de la ubicación seleccionada. 
+Vista previa utilizando Cabecera 
+Cuando la simulación utilice la ubicación Cabecera: 
+El sistema deberá utilizar el diseño definido para la navegación principal del Portal WEB. 
+La representación Web y Móvil deberá respetar la estructura configurada en el menú. 
+Vista previa utilizando Pie de página 
+Cuando la simulación utilice la ubicación Pie de página: 
+El sistema deberá utilizar el diseño definido para la navegación inferior del Portal WEB. 
+La representación Web y Móvil deberá respetar la estructura configurada en el menú. 
+Elementos visuales de la simulación 
+La vista previa deberá mostrar los elementos visuales definidos en los diseños aprobados para cada ubicación. 
+Estos elementos: 
+No serán configurables desde el menú. 
+No harán parte de la estructura administrable del menú. 
+No deberán almacenarse como parte de la configuración del menú. 
+Actualización de la vista previa 
+La vista previa deberá reflejar siempre la configuración visible en pantalla al momento de generar la simulación. 
+Vista previa sin almacenamiento 
+La generación de una vista previa: 
+No deberá modificar la configuración del menú. 
+No deberá almacenar información. 
+No deberá generar cambios sobre la navegación publicada. 
+Mensajes 
+Información 
+Selección de ubicación para simulación 
+"Selecciona la ubicación que deseas utilizar para la vista previa." 
+Advertencia 
+Vista previa con cambios sin guardar 
+"La vista previa se generará utilizando la información actualmente visible en pantalla." 
+Criterios de Aceptación 
+Escenario 1: Generación de vista previa desde la Administración de Menús 
+Dado que existe un menú con ubicación configurada 
+Y el usuario accede a la Administración de Menús del Portal WEB 
+Cuando selecciona la opción Vista previa 
+Entonces el sistema genera automáticamente la vista previa correspondiente a la ubicación configurada 
+Y muestra la representación Web 
+Y muestra la representación Móvil 
+Escenario 2: Generación de vista previa desde Crear y Editar menú 
+Dado que el usuario accede al Módulo de Administración de Contenido del Comunicador 
+Y navega a la Administración de Menús del Portal WEB, Crear menú o Editar menú 
+Cuando selecciona la opción Vista previa 
+Entonces el sistema inicia el proceso de generación de la vista previa. 
+Escenario 3: Vista previa utilizando ubicación configurada 
+Dado que el menú tiene una ubicación configurada o seleccionada en pantalla 
+Cuando el usuario selecciona la opción Vista previa 
+Entonces el sistema genera automáticamente la vista previa correspondiente a dicha ubicación 
+Y muestra la representación Web 
+Y muestra la representación Móvil. 
+Escenario 4: Solicitud de ubicación para vista previa 
+Dado que el usuario se encuentra en Crear menú o Editar menú 
+Y el menú no tiene una ubicación seleccionada 
+Cuando selecciona la opción Vista previa 
+Entonces el sistema solicita seleccionar una ubicación para la simulación 
+Y permite elegir entre: 
+Cabecera. 
+Pie de página. 
+Escenario 5: Vista previa temporal utilizando Cabecera 
+Dado que el menú no tiene una ubicación seleccionada 
+Y el usuario selecciona Cabecera como ubicación para la simulación 
+Cuando genera la vista previa 
+Entonces el sistema muestra la vista previa correspondiente a Cabecera 
+Y presenta la representación Web 
+Y presenta la representación Móvil 
+Y no almacena la selección realizada. 
+Escenario 6: Vista previa temporal utilizando Pie de página 
+Dado que el menú no tiene una ubicación seleccionada 
+Y el usuario selecciona Pie de página como ubicación para la simulación 
+Cuando genera la vista previa 
+Entonces el sistema muestra la vista previa correspondiente a Pie de página 
+Y presenta la representación Web 
+Y presenta la representación Móvil 
+Y no almacena la selección realizada. 
+Escenario 7: Vista previa de menús con submenús 
+Dado que un menú contiene elementos configurados como submenús 
+Cuando el usuario genera la vista previa 
+Entonces el sistema representa correctamente la jerarquía configurada 
+Y muestra la relación entre elementos padre e hijo. 
+Escenario 8: Actualización automática de la vista previa 
+Dado que el usuario modifica la estructura o la ubicación del menú 
+Cuando genera nuevamente la vista previa 
+Entonces el sistema refleja la última configuración visible en pantalla. 
+Escenario 9: Generación de vista previa sin alterar la configuración 
+Dado que el usuario genera una vista previa 
+Cuando finaliza la visualización 
+Entonces el sistema no modifica la configuración almacenada del menú 
+Y no genera cambios sobre la navegación publicada. 
+Corner Cases 
+El menú tiene Cabecera configurada → la vista previa utiliza automáticamente Cabecera. 
+El menú tiene Pie de página configurada → la vista previa utiliza automáticamente Pie de página. 
+El menú no tiene ubicación configurada y el usuario se encuentra en Crear o Editar → el sistema solicita seleccionar Cabecera o Pie de página para la simulación. 
+El usuario selecciona Cabecera únicamente para la simulación → no se almacena la selección. 
+El usuario selecciona Pie de página únicamente para la simulación → no se almacena la selección. 
+El usuario modifica la estructura y genera nuevamente la vista previa → se refleja la nueva configuración. 
+El usuario genera una vista previa con cambios sin guardar → la vista previa utiliza la información visible en pantalla. 
+El menú contiene submenús → la jerarquía se representa correctamente. 
+El menú contiene botones y enlaces directos → se representan conforme al diseño correspondiente. 
+Los elementos visuales de la simulación no forman parte de la configuración del menú. 
+La selección realizada para la simulación se pierde al cerrar la vista previa. 
+La vista previa nunca modifica la navegación pública ni la configuración almacenada del menú. 
+Un menú sin ubicación no muestra Vista previa desde Administración de Menús. 
+Un menú adquiere una ubicación configurada → la opción Vista previa aparece en Administración de Menús. 
+Notas y Soportes Adicionales 
+Relación con Administración de Menús 
+Desde la Administración de Menús del Portal WEB, la vista previa únicamente estará disponible para menús con ubicación configurada. 
+Consideraciones funcionales 
+La vista previa no almacena información. 
+La vista previa no modifica la configuración del menú. 
+La vista previa utiliza la información visible en pantalla. 
+La vista previa puede utilizar una ubicación configurada o una ubicación seleccionada temporalmente para la simulación. 
+Toda selección realizada únicamente para la simulación se descarta al cerrar la vista previa. 
+Consideraciones de diseño 
+La representación visual deberá implementarse conforme a los diseños aprobados por UX/UI. 
+La visualización deberá diferenciar claramente la representación Web y Móvil. 
+Los elementos visuales utilizados en la simulación deberán corresponder a los diseños definitivos del Portal WEB. 
+Los estilos visuales deberán corresponder al diseño definitivo de navegación del Portal WEB. 
+Historias de Usuario Relacionadas 
+HUPW103 – Administrar menús de navegación. 
+HUPW104 – Crear estructura de menú de navegación. 
+HUPW105 – Configurar ubicación y publicación de menú. 
+HUPW106 – Editar menú de navegación. 
+HUPW108 – Eliminar menú de navegación. 
+EPICPW006 – Gestión de Menús y Navegación del Portal WEB. 
+HU-PW-108 – Eliminar menú de navegación 
+Como: 
+Usuario Comunicador autenticado en el módulo de Administración de Contenido del Portal WEB 
+Quiero: 
+Eliminar un menú previamente configurado 
+Para: 
+Mantener actualizada la administración de menús y retirar configuraciones que ya no serán utilizadas en el Portal WEB. 
+Descripción 
+El sistema debe permitir al usuario Comunicador eliminar menús previamente configurados desde la Administración de Menús del Portal WEB. 
+La funcionalidad deberá estar disponible desde la siguiente ruta:  
+Módulo de Administración de Contenido del Comunicador/Menús/Administración de menús del Portal WEB 
+Desde el listado de menús configurados, el usuario podrá ejecutar la acción Eliminar menú. 
+Antes de realizar la eliminación, el sistema deberá validar si el menú tiene una ubicación configurada. 
+La eliminación únicamente será permitida para menús que no se encuentren asociados a ninguna ubicación. 
+Si el menú se encuentra asociado a alguna de las ubicaciones soportadas por el Portal WEB: 
+Cabecera. 
+Pie de página. 
+el sistema deberá impedir la eliminación e informar al usuario la razón de la restricción. 
+Valor 
+Permitir al Comunicador depurar la información administrada de menús evitando afectar la navegación actualmente visible dentro del Portal WEB. 
+Reglas de Negocio 
+Opción Eliminar menú 
+La opción Eliminar menú deberá estar disponible para todos los menús visualizados en la Administración de Menús del Portal WEB. 
+La validación de eliminación deberá ejecutarse únicamente cuando el usuario intente realizar la acción. 
+Eliminación permitida 
+Un menú podrá eliminarse cuando: 
+Exista en el sistema. 
+No tenga una ubicación configurada. 
+Eliminación restringida 
+Un menú no podrá eliminarse cuando tenga configurada alguna de las siguientes ubicaciones: 
+Cabecera. 
+Pie de página. 
+Menús asociados a una ubicación 
+Los menús con ubicación configurada forman parte de la navegación disponible dentro del Portal WEB. 
+Mientras exista una ubicación asociada: 
+El menú no podrá eliminarse. 
+El usuario deberá retirar la ubicación antes de intentar eliminar el menú. 
+Acción requerida para eliminar un menú asociado 
+Para eliminar un menú con ubicación configurada, el usuario deberá: 
+Acceder a la funcionalidad Editar menú. 
+Retirar la ubicación configurada. 
+Guardar la configuración. 
+Regresar a la Administración de Menús. 
+Ejecutar nuevamente la acción de eliminación. 
+Validaciones antes de eliminar 
+Antes de eliminar un menú el sistema deberá validar: 
+Existencia del menú. 
+Estado de la ubicación configurada. 
+Si alguna validación falla: 
+El menú no deberá eliminarse. 
+El sistema deberá mostrar el mensaje correspondiente. 
+Eliminación definitiva 
+La eliminación de un menú es definitiva. 
+Una vez confirmada la acción: 
+El menú dejará de existir en el sistema. 
+No podrá recuperarse desde la funcionalidad de administración. 
+Criterios de Aceptación 
+Escenario 1: Visualización de la opción Eliminar menú 
+Dado que el usuario accede a la Administración de Menús del Portal WEB 
+Cuando visualiza el listado de menús 
+Entonces el sistema muestra la opción Eliminar menú para cada menú configurado. 
+Escenario 2: Eliminación exitosa de menú sin ubicación 
+Dado que existe un menú configurado 
+Y el menú no tiene una ubicación asociada 
+Cuando el usuario selecciona la opción Eliminar menú Entonces el sistema muestra el mensaje de confirmación: "¿Estás seguro de que deseas eliminar este menú? Esta acción no podrá deshacerse." 
+Y confirma la operación 
+Entonces el sistema elimina el menú 
+Y actualiza el listado de menús 
+Y muestra el mensaje: 
+"El menú ha sido eliminado correctamente." 
+Escenario 3: Restricción de eliminación por ubicación configurada 
+Dado que existe un menú asociado a una ubicación 
+Cuando el usuario intenta eliminar el menú 
+Entonces el sistema no permite la eliminación 
+Y muestra la ubicación actualmente asociada al menú 
+Y muestra el mensaje correspondiente indicando que el menú tiene una ubicación configurada: "No es posible eliminar este menú porque actualmente se encuentra asociado a la ubicación Cabecera o Pie de página. Si deseas eliminarlo, primero debes retirar la ubicación configurada desde la edición del menú." 
+Escenario 4: Eliminación posterior al retiro de ubicación 
+Dado que un menú tenía una ubicación configurada 
+Y el usuario eliminó dicha ubicación desde la funcionalidad Editar menú 
+Y la configuración fue almacenada correctamente 
+Cuando intenta eliminar el menú 
+Entonces el sistema permite realizar la eliminación. 
+Escenario 5: Cancelación de eliminación 
+Dado que el usuario selecciona la opción Eliminar menú 
+Cuando decide cancelar la operación 
+Entonces el sistema conserva el menú 
+Y no realiza modificaciones sobre la información almacenada. 
+Escenario 6: Actualización del listado después de eliminar 
+Dado que el menú fue eliminado correctamente 
+Cuando el sistema actualiza el listado de menús 
+Entonces el menú deja de visualizarse en la Administración de Menús del Portal WEB. 
+Escenario 7: Persistencia de la eliminación 
+Dado que un menú fue eliminado correctamente 
+Cuando el usuario vuelve a consultar la Administración de Menús del Portal WEB 
+Entonces el menú no se encuentra disponible dentro del listado de menús. 
+Corner Cases 
+El menú no está asociado a ningún tipo de menú → puede eliminarse. 
+El menú estuvo asociado anteriormente, pero actualmente no tiene asociaciones activas → puede eliminarse. 
+El menú está asociado a TopBar Desktop → no puede eliminarse. 
+El menú está asociado a TopBar Mobile → no puede eliminarse. 
+El menú está asociado a Footer → no puede eliminarse. 
+El usuario cancela la eliminación → el menú permanece sin cambios. 
+El menú se encontraba asociado y posteriormente fue reemplazado por otro menú → puede eliminarse. 
+El menú eliminado deja de aparecer en los listados de administración. 
+El menú eliminado deja de aparecer automáticamente dentro de las listas disponibles para asociación en la HUPW106 – Gestionar tipos de menú. 
+La opción Eliminar menú permanece visible para todos los menús, independientemente de su estado de asociación. 
+Notas y Soportes Adicionales 
+Relación con ubicación y publicación 
+Las reglas relacionadas con: 
+Cabecera. 
+Pie de página. 
+Asociación de ubicación. 
+Publicación de menús. 
+son gestionadas mediante: 
+HUPW105 – Configurar ubicación y publicación de menú. 
+Historias de Usuario Relacionadas 
+HUPW103 – Administrar menús de navegación. 
+HUPW104 – Crear estructura de menú de navegación. 
+HUPW105 – Configurar ubicación y publicación de menú. 
+HUPW106 – Editar menú de navegación. 
+HUPW107 – Vista previa de menú. 
+EPICPW006 – Gestión de Menús y Navegación del Portal WEB. 

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><style>@keyframes bispin { to { transform: rotate(360deg); } }</style></helmet>
+<div style="font-family:Roboto, system-ui, sans-serif; color:#1A1A1A; width:100%">
+  <sc-if value="{{ hayEncabezado }}" hint-placeholder-val="{{ true }}">
+    <div style="margin-bottom:18px; max-width:760px">
+      <sc-if value="{{ hayTitulo }}" hint-placeholder-val="{{ true }}"><h2 style="font-size:24px; font-weight:700; color:#1B5E6B; margin:0 0 8px; text-wrap:pretty">{{ titulo }}</h2></sc-if>
+      <sc-if value="{{ hayDesc }}" hint-placeholder-val="{{ true }}"><p style="font-size:13.5px; line-height:1.65; color:#2F2F2F; margin:0; text-wrap:pretty">{{ desc }}</p></sc-if>
+    </div>
+  </sc-if>
+
+  <div style="{{ frameStyle }}">
+    <sc-if value="{{ esReal }}" hint-placeholder-val="{{ false }}">
+      <iframe dc-props="{{ iframeProps }}" title="{{ iframeTitulo }}" frameBorder="0" allowFullScreen="{{ true }}" style="width:100%; height:100%; border:0; display:block"></iframe>
+    </sc-if>
+
+    <sc-if value="{{ esImagen }}" hint-placeholder-val="{{ false }}">
+      <div style="height:100%; display:flex; flex-direction:column; background:#FFFFFF">
+        <div style="flex:1; min-height:0; overflow:hidden"><img src="{{ imagen }}" alt="{{ iframeTitulo }}" style="width:100%; display:block"></div>
+        <div style="flex-shrink:0; display:flex; align-items:center; justify-content:space-between; gap:12px; padding:8px 14px; background:#F3F3F3; border-top:1px solid #E1E1E1; font-size:11px; color:#444444">
+          <span style="font-weight:600">Microsoft Power BI</span>
+          <span style="display:flex; align-items:center; gap:14px"><span>‹ 1 de 2 ›</span><span>⤢</span></span>
+        </div>
+      </div>
+    </sc-if>
+    <sc-if value="{{ esMock }}" hint-placeholder-val="{{ true }}">
+      <div style="height:100%; display:flex; flex-direction:column; background:#FFFFFF">
+        <div style="flex:1; min-height:0; padding:18px 20px; display:flex; flex-direction:column; gap:14px; overflow:hidden">
+          <div style="display:flex; gap:10px; flex-wrap:wrap">
+            <sc-for list="{{ filtros }}" as="f" hint-placeholder-count="3">
+              <div style="display:flex; flex-direction:column; gap:3px; min-width:130px">
+                <span style="font-size:10px; color:#6B7280; text-transform:uppercase; letter-spacing:.05em">{{ f.l }}</span>
+                <span style="display:flex; justify-content:space-between; align-items:center; gap:8px; border:1px solid #D3EAEE; border-radius:6px; padding:6px 10px; font-size:12px">{{ f.v }}<span style="color:#1B5E6B; font-size:10px">▼</span></span>
+              </div>
+            </sc-for>
+          </div>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:10px">
+            <sc-for list="{{ kpis }}" as="k" hint-placeholder-count="3">
+              <div style="background:#F2F9FA; border-radius:8px; padding:12px 14px">
+                <div style="font-size:24px; font-weight:700; color:#1B5E6B">{{ k.v }}</div>
+                <div style="font-size:11.5px; color:#3A3A3A; margin-top:2px">{{ k.l }}</div>
+              </div>
+            </sc-for>
+          </div>
+          <div style="flex:1; min-height:0; display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:14px">
+            <div style="border:1px solid #E6EEF0; border-radius:8px; padding:12px 14px; display:flex; flex-direction:column; min-height:0">
+              <div style="font-size:12px; font-weight:700; margin-bottom:10px">Estudiantes por departamento</div>
+              <div style="display:flex; flex-direction:column; gap:7px">
+                <sc-for list="{{ barras }}" as="b" hint-placeholder-count="6">
+                  <div style="display:grid; grid-template-columns:96px minmax(0,1fr) 44px; gap:8px; align-items:center; font-size:11px">
+                    <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap">{{ b.n }}</span>
+                    <span style="height:12px; background:#EEF5F6; border-radius:3px; overflow:hidden"><span style="{{ b.style }}"></span></span>
+                    <span style="text-align:right; color:#3A3A3A">{{ b.v }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+            <div style="border:1px solid #E6EEF0; border-radius:8px; padding:12px 14px; display:flex; flex-direction:column; min-height:0">
+              <div style="font-size:12px; font-weight:700; margin-bottom:10px">Evolución anual de beneficiarios</div>
+              <div style="flex:1; min-height:90px; display:flex; align-items:flex-end; gap:10px; padding-top:6px; border-bottom:1px solid #D3EAEE">
+                <sc-for list="{{ columnas }}" as="c" hint-placeholder-count="6">
+                  <div style="flex:1; height:100%; display:flex; flex-direction:column; justify-content:flex-end; align-items:center; gap:4px">
+                    <span style="font-size:10px; color:#3A3A3A">{{ c.v }}</span>
+                    <span style="{{ c.style }}"></span>
+                  </div>
+                </sc-for>
+              </div>
+              <div style="display:flex; gap:10px; margin-top:4px">
+                <sc-for list="{{ columnas }}" as="c" hint-placeholder-count="6"><span style="flex:1; text-align:center; font-size:10px; color:#6B7280">{{ c.a }}</span></sc-for>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="flex-shrink:0; display:flex; align-items:center; justify-content:space-between; gap:12px; padding:8px 14px; background:#F3F3F3; border-top:1px solid #E1E1E1; font-size:11px; color:#444444">
+          <span style="font-weight:600">Microsoft Power BI</span>
+          <span style="display:flex; align-items:center; gap:14px"><span>‹ 1 de 2 ›</span><span>⤢</span></span>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ esCargando }}" hint-placeholder-val="{{ false }}">
+      <div style="height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; background:#F7FBFB; color:#3A3A3A; font-size:13px">
+        <span style="width:30px; height:30px; border-radius:50%; border:3px solid #D3EAEE; border-top-color:#1B5E6B; animation:bispin 0.9s linear infinite"></span>
+        Cargando tablero…
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ esError }}" hint-placeholder-val="{{ false }}">
+      <div style="height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px; background:#F7FBFB; padding:24px; text-align:center">
+        <div style="width:48px; height:48px; border-radius:50%; background:#FDECEA; color:#B42318; display:flex; align-items:center; justify-content:center; font-size:22px; font-weight:700">!</div>
+        <div style="font-size:14px; line-height:1.55; color:#1A1A1A; max-width:42ch">No fue posible cargar el tablero en este momento. Intenta nuevamente más tarde.</div>
+        <button onClick="{{ reintentar }}" style="background:#1B5E6B; color:#FFFFFF; border:none; border-radius:999px; padding:12px 22px; font-size:11px; font-weight:700; letter-spacing:.04em; cursor:pointer; font-family:inherit">REINTENTAR</button>
+      </div>
+    </sc-if>
+  </div>
+
+  <sc-if value="{{ hayPie }}" hint-placeholder-val="{{ true }}">
+    <div style="display:flex; flex-wrap:wrap; gap:6px 24px; margin-top:12px; font-size:12px; color:#3A3A3A">
+      <sc-if value="{{ hayFuente }}" hint-placeholder-val="{{ true }}"><span><strong style="font-weight:600; color:#1A1A1A">Fuente:</strong> {{ fuente }}</span></sc-if>
+      <sc-if value="{{ hayFecha }}" hint-placeholder-val="{{ true }}"><span><strong style="font-weight:600; color:#1A1A1A">Última actualización:</strong> {{ fecha }}</span></sc-if>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1320,&quot;height&quot;:900},&quot;titulo&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Cobertura del programa Ser+STEM&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;desc&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;url&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;fuente&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;fecha&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;estado&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;mock&quot;,&quot;error&quot;],&quot;default&quot;:&quot;mock&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;sinEncabezado&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;},&quot;simulado&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;},&quot;imagen&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;onReintentar&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;() =&gt; void&quot;}}">
+class Component extends DCLogic {
+  state = { retry: false };
+  renderVals() {
+    const p = this.props;
+    const url = (p.url || "").trim();
+    const real = /^https:\/\/app\.powerbi\.com\/view\?r=/.test(url) && !p.simulado;
+    const estado = this.state.retry ? "cargando" : (p.estado || (real ? "real" : "mock"));
+    const fecha = p.fecha ? p.fecha.split("-").reverse().join("/") : "";
+    const BARS = [["Antioquia", 18420], ["Cundinamarca", 15310], ["Valle del Cauca", 12040], ["Atlántico", 8930], ["Santander", 7210], ["Nariño", 5480]];
+    const COLS = [["2021", 21], ["2022", 34], ["2023", 48], ["2024", 61], ["2025", 74], ["2026", 82]];
+    return {
+      titulo: p.titulo || "", hayTitulo: !!(p.titulo || "").trim(), iframeTitulo: (p.titulo || "").trim() || "Tablero Power BI",
+      hayEncabezado: !!((p.titulo || "").trim() || (p.desc || "").trim()) && !p.sinEncabezado,
+      desc: p.desc || "", hayDesc: !!(p.desc || "").trim(),
+      fuente: p.fuente || "", hayFuente: !!(p.fuente || "").trim(), fecha, hayFecha: !!fecha,
+      hayPie: !!(p.fuente || "").trim() || !!fecha,
+      frameStyle: "position:relative; width:100%; max-width:1280px; aspect-ratio:16 / 9; border:1px solid #D3EAEE; border-radius:12px; overflow:hidden; background:#FFFFFF; box-shadow:0 2px 10px rgba(27,94,107,.06)",
+      imagen: p.imagen || "", esImagen: estado === "mock" && !!p.imagen,
+      esReal: estado === "real", esMock: estado === "mock" && !p.imagen, esCargando: estado === "cargando", esError: estado === "error",
+      iframeProps: { src: real ? url : undefined },
+      reintentar: () => { this.setState({ retry: true }); setTimeout(() => this.setState({ retry: false }), 1400); if (p.onReintentar) p.onReintentar(); },
+      filtros: [{ l: "Año", v: "2026" }, { l: "Programa", v: "Todos" }, { l: "Departamento", v: "Todos" }],
+      kpis: [{ v: "82.415", l: "Estudiantes beneficiados" }, { v: "1.236", l: "Docentes formados" }, { v: "318", l: "Instituciones educativas" }],
+      barras: BARS.map(([n, v]) => ({ n, v: (v / 1000).toFixed(1).replace(".", ",") + " mil", style: "display:block; height:100%; width:" + Math.round(v / 18420 * 100) + "%; background:#1B5E6B; border-radius:3px" })),
+      columnas: COLS.map(([a, v]) => ({ a, v: v + " mil", style: "display:block; width:100%; max-width:34px; height:" + Math.round(v / 82 * 100) + "%; background:" + (a === "2026" ? "#1B5E6B" : "#8CC4CD") + "; border-radius:3px 3px 0 0" }))
+    };
+  }
+}
+</script>
+</body>
+</html>
