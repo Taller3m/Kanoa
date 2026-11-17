@@ -1,16 +1,19 @@
 .crp-play { display: grid; grid-template-columns: minmax(0, auto) minmax(220px, 1fr); gap: var(--space-5); align-items: start; }
 @media (max-width: 800px) { .crp-play { grid-template-columns: minmax(0, 1fr); } }
 .crp-left { display: flex; flex-direction: column; gap: var(--space-3); min-width: 0; }
+/* Tablero con un tono claro de la paleta en ambos temas (en oscuro ya era #D0EBF0 vía inverse-surface) */
 .crp-board {
+  --crp-board: var(--surface-container-high);
   --crp-cell: 36px;
   display: grid; gap: 2px; padding: var(--space-2);
-  background: var(--inverse-surface); border-radius: var(--radius-md);
+  background: var(--crp-board); border-radius: var(--radius-md);
   width: max-content; max-width: 100%; overflow: auto;
 }
+.dark .crp-board { --crp-board: var(--inverse-surface); }
 .crp-board[data-n="12"] { --crp-cell: 31px; }
 .crp-board[data-n="15"] { --crp-cell: 26px; }
 .crp-cell { position: relative; width: var(--crp-cell); height: var(--crp-cell); border-radius: var(--radius-sm); background: var(--surface-container-lowest); }
-.crp-cell--black { background: var(--inverse-surface); }
+.crp-cell--black { background: var(--crp-board); }
 .crp-cell--right { background: var(--success-surface); }
 .crp-cell--wrong { background: var(--error-container); }
 .crp-cell input {
@@ -24,7 +27,7 @@
 .crp-cell--wrong input:focus-visible { outline: 2px solid var(--primary); outline-offset: -2px; }
 .crp-cell__num { position: absolute; top: 1px; left: 3px; z-index: 1; pointer-events: none; font: 600 9px/1 var(--font-family); color: var(--on-surface-variant); }
 .crp-cell__st { position: absolute; right: 1px; bottom: 1px; pointer-events: none; color: var(--on-surface); }
-.crp-check { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
+.crp-check { display: flex; flex-direction: column; align-items: flex-end; gap: var(--space-2); text-align: right; }
 .crp-check span { color: var(--on-surface-variant); }
 .crp-right { display: flex; flex-direction: column; gap: var(--space-4); min-width: 0; }
 .crp-lt { margin: 0 0 var(--space-2); color: var(--primary); }

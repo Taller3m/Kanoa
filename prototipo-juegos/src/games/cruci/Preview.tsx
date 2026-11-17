@@ -102,14 +102,14 @@ export function CruciPreview({ game }: PreviewProps) {
               style={{ gridTemplateColumns: `repeat(${N}, var(--crp-cell))` }}>
               {cells}
             </div>
-            <div className="crp-check">
-              <Button onClick={check}>COMPROBAR</Button>
-              <span className="t-body-md" role="status">{msg}</span>
-            </div>
           </div>
           <div className="crp-right">
             {list('H')}
             {list('V')}
+            <div className="crp-check">
+              <Button onClick={check}>COMPROBAR</Button>
+              <span className="t-body-md" role="status">{msg}</span>
+            </div>
           </div>
         </div>
       )}

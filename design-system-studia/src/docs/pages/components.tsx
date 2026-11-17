@@ -261,12 +261,12 @@ export function Organismos() {
         <PropsTable rows={[['items', '{ id, icon, label, badge?, disabled?, title? }[]', '—', 'Destinos.'], ['active / onSelect', 'string / (id) => void', '—', 'Destino activo.'], ['compress', 'boolean', 'false', 'Modo comprimido (card de 72 px dentro de 120 px).'], ['onToggle', '() => void', '—', 'Muestra el botón de abrir/cerrar; el estado lo controla quien lo usa.'], ['brand', 'string', "'StudIA 2.0'", 'Nombre junto al logotipo.'], ['user', '{ name, email?, tag? }', '—', 'Pie con avatar; comprimido muestra solo el avatar.'], ['footer', 'ReactNode', '—', 'Acciones extra sobre el usuario.']]} />
       </Section>
 
-      <Section id="contenedores" title="Contenedores de página" lead="Piezas que estructuran un listado: Context-bar con el título (Bold 28/36), panel de filtros (radio 12) y tabla con filas tipo tarjeta y cebra. Usan solo tokens, así que siguen el tema claro y oscuro.">
+      <Section id="contenedores" title="Contenedores de página" lead="Piezas que estructuran un listado: Banda de título (Bold 28/36 sobre surface-variant, radio 20, con las acciones dentro y la descripción debajo), panel de filtros (radio 12) y tabla con filas tipo tarjeta y cebra. Usan solo tokens, así que siguen el tema claro y oscuro.">
         <Demo title="Context-bar, panel y tabla" layout="col" code={`<ContextBar title="Administración de menús" description="…" actions={<Button icon="add">Crear menú</Button>} />
 <Panel>…filtros…</Panel>
 <table className="ds-table">…</table>`}>
           <div className="stack" style={{ width: '100%', gap: 24 }}>
-            <ContextBar title="Administración de juegos" titleAs="p" description="Crea y parametriza los juegos del portal." actions={<Button icon="add">Crear juego</Button>} />
+            <ContextBar title="Juegos" titleAs="p" description="Crea y parametriza los juegos del portal." actions={<Button icon="add">Crear juego</Button>} />
             <Panel><TextField label="Buscar" icon="search" placeholder="Buscar por nombre" /></Panel>
             <table className="ds-table">
               <thead><tr><th scope="col">Nombre</th><th scope="col">Autor</th><th scope="col">Modificado</th></tr></thead>
@@ -278,8 +278,8 @@ export function Organismos() {
             </table>
           </div>
         </Demo>
-        <A11y items={['El título de la Context-bar es un h1 por defecto; en una página que ya tiene h1 usa titleAs="h2" o "p".', 'El fondo translúcido (transparent-surface-60) mantiene contraste porque el texto usa el token title, que cambia con el tema.', 'La tabla conserva la semántica nativa: th con scope="col". Los títulos de sección dentro de la página usan la clase t-section (Bold 22/28).']} />
-        <PropsTable rows={[['title / titleAs', 'string / h1 | h2 | p', '—', 'Título de la banda.'], ['badge', 'ReactNode', '—', 'Estado junto al título.'], ['onBack', '() => void', '—', 'Muestra el botón «Volver».'], ['description', 'ReactNode', '—', 'Texto bajo la banda.'], ['actions', 'ReactNode', '—', 'Acción principal a la derecha de la descripción.'], ['Panel', 'div', '—', 'Contenedor de filtros: surface-container-lowest, borde outline-variant, radio 12, padding 24.']]} />
+        <A11y items={['El título de la Context-bar es un h1 por defecto; en una página que ya tiene h1 usa titleAs="h2" o "p".', 'La banda usa surface-variant y el texto on-background, pares que cambian con el tema claro y oscuro.', 'La tabla conserva la semántica nativa: th con scope="col". Los títulos de sección dentro de la página usan la clase t-section (Bold 22/28).']} />
+        <PropsTable rows={[['title / titleAs', 'string / h1 | h2 | p', '—', 'Título de la banda.'], ['badge', 'ReactNode', '—', 'Estado junto al título.'], ['onBack', '() => void', '—', 'Muestra el botón «Volver».'], ['description', 'ReactNode', '—', 'Texto bajo la banda (14/20).'], ['actions', 'ReactNode', '—', 'Acciones dentro de la banda, a la derecha.'], ['Panel', 'div', '—', 'Contenedor de filtros: surface-container-lowest, borde outline-variant, radio 12, padding 24.']]} />
       </Section>
 
       <Section id="header" title="Header" lead="Barra superior con título, acciones y usuario.">

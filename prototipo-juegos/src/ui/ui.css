@@ -284,7 +284,9 @@ html:has(dialog.ds-modal[open]) { overflow: hidden; }
 .ds-modal--small { width: min(400px, calc(100% - 2 * var(--space-4))); }
 .ds-modal__head { display: flex; align-items: center; justify-content: space-between; padding: var(--space-5) var(--space-5) var(--space-3); }
 .ds-modal__head h3 { margin: 0; color: var(--title); }
-.ds-modal__body { padding: 0 var(--space-5); overflow: auto; color: var(--paragraph); }
+/* Sin pie el contenido no puede quedar pegado al borde inferior: el espacio lo da el cuerpo; con pie lo da el pie */
+.ds-modal__body { padding: 0 var(--space-5) var(--space-5); overflow: auto; color: var(--paragraph); }
+.ds-modal__body:has(+ .ds-modal__foot) { padding-bottom: 0; }
 .ds-modal__foot { display: flex; justify-content: flex-end; gap: var(--space-2); padding: var(--space-5); }
 
 /* Navbar de Figma (StudIA2.0 - Navbar, nodo 2142:13641). Expandido 310px; comprimido = card de 72px dentro de 120px */
@@ -321,14 +323,12 @@ html:has(dialog.ds-modal[open]) { overflow: hidden; }
 @media (prefers-reduced-motion: reduce) { .ds-navbar { transition: none; } }
 
 /* Contenedores de página (Figma: Context-bar, filtros y tabla del listado, nodo 2162:17401) */
-.ds-contextbar { display: flex; flex-direction: column; gap: var(--space-5); }
-.ds-contextbar__band { display: flex; align-items: center; gap: var(--space-4); flex-wrap: wrap; padding: var(--space-5); border-radius: 16px;
-  background: var(--transparent-surface-60); -webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px);
-  border-bottom: 1px solid var(--outline-variant); }
-.ds-contextbar__title { flex: 1; min-width: 200px; display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap; margin: 0; color: var(--title);
+.ds-contextbar { display: flex; flex-direction: column; gap: var(--space-3); }
+.ds-contextbar__band { display: flex; align-items: center; gap: var(--space-4); flex-wrap: wrap; padding: var(--space-5); border-radius: var(--radius-md);
+  background: var(--surface-variant); color: var(--on-background); }
+.ds-contextbar__title { flex: 1; min-width: 200px; display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap; margin: 0; color: var(--on-background);
   font: 700 28px/36px var(--font-family); }
-.ds-contextbar__row { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); flex-wrap: wrap; }
-.ds-contextbar__desc { flex: 1; min-width: 240px; margin: 0; color: var(--paragraph); max-width: 70ch; }
+.ds-contextbar__desc { margin: 0; color: var(--paragraph); max-width: 90ch; }
 .ds-contextbar__actions { display: flex; align-items: center; gap: var(--space-2); margin-left: auto; }
 
 .ds-panel { padding: var(--space-5); border: 1px solid var(--outline-variant); border-radius: 12px; background: var(--surface-container-lowest); }
@@ -336,7 +336,7 @@ html:has(dialog.ds-modal[open]) { overflow: hidden; }
 /* Tabla del listado: encabezado enmarcado y filas como tarjetas de 12px con cebra */
 .ds-table { width: 100%; border-collapse: separate; border-spacing: 0 var(--space-2); }
 .ds-table th { text-align: left; padding: var(--space-3) var(--space-5); color: var(--title); font: 500 16px/24px var(--font-family); letter-spacing: .15px;
-  border-block: 1px solid var(--surface-tint-8-); }
+  background: var(--transparent-surface-60); border-block: 1px solid var(--surface-tint-8-); }
 .ds-table th:first-child { border-left: 1px solid var(--surface-tint-8-); border-radius: var(--radius-sm) 0 0 var(--radius-sm); }
 .ds-table th:last-child { border-right: 1px solid var(--surface-tint-8-); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
 .ds-table td { padding: var(--space-4) var(--space-5); color: var(--paragraph); vertical-align: middle; }

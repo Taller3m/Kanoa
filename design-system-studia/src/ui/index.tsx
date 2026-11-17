@@ -506,7 +506,7 @@ export function Navbar({ items, active, onSelect, compress = false, onToggle, br
   )
 }
 
-/* Context-bar de Figma (StudIA2.0 - Context-bar, nodo 2162:18058): banda translúcida con el título y, debajo, descripción y acción principal */
+/* Header Group de Figma (pantalla Juegos, nodo 3427:36494): banda sólida surface-variant con volver, título y acciones; la descripción va debajo */
 export function ContextBar({ title, titleAs: Title = 'h1', badge, onBack, description, actions }: {
   title: string; titleAs?: 'h1' | 'h2' | 'p'; badge?: ReactNode; onBack?: () => void; description?: ReactNode; actions?: ReactNode
 }) {
@@ -518,13 +518,9 @@ export function ContextBar({ title, titleAs: Title = 'h1', badge, onBack, descri
           <span>{title}</span>
           {badge}
         </Title>
+        {actions && <div className="ds-contextbar__actions">{actions}</div>}
       </div>
-      {(description || actions) && (
-        <div className="ds-contextbar__row">
-          {description && <p className="ds-contextbar__desc t-body-lg">{description}</p>}
-          {actions && <div className="ds-contextbar__actions">{actions}</div>}
-        </div>
-      )}
+      {description && <p className="ds-contextbar__desc t-body-md">{description}</p>}
     </div>
   )
 }
