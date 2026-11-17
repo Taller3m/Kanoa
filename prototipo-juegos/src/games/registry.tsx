@@ -18,9 +18,9 @@ export interface TipoInfo { nombre: TipoJuego; desc: string; icon: string; tone:
 
 /** Catálogo de tipos (equivale a `J_TJ`). El tono usa las familias categóricas del sistema. */
 export const TIPOS: TipoInfo[] = [
-  { nombre: 'Crucigrama', desc: 'Palabras que se cruzan en una cuadrícula, con una pista para cada palabra.', icon: 'grid_on', tone: 'blue' },
+  { nombre: 'Crucigrama', desc: 'Palabras que se cruzan en una cuadrícula, con una pista para cada palabra.', icon: 'crossword', tone: 'blue' },
   { nombre: 'Cuenta cuentos', desc: 'Historia por páginas: cada página tiene ilustración, texto y una pregunta con opciones de respuesta.', icon: 'auto_stories', tone: 'orange' },
-  { nombre: 'Memoria', desc: 'Cartas boca abajo para encontrar parejas idénticas, relacionadas o de emociones.', icon: 'view_module', tone: 'indigo' },
+  { nombre: 'Memoria', desc: 'Cartas boca abajo para encontrar parejas idénticas, relacionadas o de emociones.', icon: 'memory_cards', tone: 'indigo' },
   { nombre: 'Crece conmigo', desc: 'Cuida una planta o un animal desde que nace hasta que es adulto, manteniendo sus necesidades en equilibrio.', icon: 'potted_plant', tone: 'green' },
 ]
 export const tipoInfo = (t: TipoJuego) => TIPOS.find((x) => x.nombre === t)!

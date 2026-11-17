@@ -10,7 +10,46 @@ const cx = (...a: (string | false | null | undefined)[]) => a.filter(Boolean).jo
 
 /* ═════════════ ÁTOMOS ═════════════ */
 
+/* Iconos propios del sistema (no existen en Material Symbols): SVG con currentColor sobre una cuadrícula de 24 px */
+const HEART = 'M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'
+/* Memoria: 4 cartas en 2×2; la diagonal está volteada (relleno con un corazón recortado) y las otras dos están boca abajo (solo contorno) */
+function MemoryCardsIcon({ size, className }: { size: number; className?: string }) {
+  const uid = useId().replace(/:/g, '')
+  const pos = [0.5, 13.5]
+  const flipped = new Set(['1-0', '0-1'])
+  return (
+    <svg className={cx('ds-icon-svg', className)} width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
+      {pos.flatMap((y, r) => pos.map((x, c) => {
+        const k = `${c}-${r}`
+        if (!flipped.has(k)) return <rect key={k} x={x + 0.8} y={y + 0.8} width="8.4" height="8.4" rx="2.2" stroke="currentColor" strokeWidth="1.6" />
+        return (
+          <g key={k}>
+            <mask id={`${uid}-${k}`}>
+              <rect x={x} y={y} width="10" height="10" fill="#fff" />
+              <path d={HEART} fill="#000" transform={`translate(${x + 5 - 12 * 0.27} ${y + 5 - 12.2 * 0.27}) scale(0.27)`} />
+            </mask>
+            <rect x={x} y={y} width="10" height="10" rx="2.8" fill="currentColor" mask={`url(#${uid}-${k})`} />
+          </g>
+        )
+      }))}
+    </svg>
+  )
+}
+/* Crucigrama: cuadrícula 3×3 continua (palabras de 3 letras) con la casilla central negra */
+function CrosswordIcon({ size, className }: { size: number; className?: string }) {
+  return (
+    <svg className={cx('ds-icon-svg', className)} width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
+      <rect x="1" y="1" width="22" height="22" rx="3" stroke="currentColor" strokeWidth="1.5" />
+      <path d="M8.33 1v22M15.67 1v22M1 8.33h22M1 15.67h22" stroke="currentColor" strokeWidth="1.5" />
+      <rect x="8.33" y="8.33" width="7.34" height="7.34" fill="currentColor" />
+    </svg>
+  )
+}
+const CUSTOM_ICONS: Record<string, (p: { size: number; className?: string }) => ReactNode> = { memory_cards: MemoryCardsIcon, crossword: CrosswordIcon }
+
 export function Icon({ name, size = 24, className }: { name: string; size?: number; className?: string }) {
+  const Custom = CUSTOM_ICONS[name]
+  if (Custom) return <Custom size={size} className={className} />
   return <span className={cx('ds-icon', className)} style={{ fontSize: size }} aria-hidden="true">{name}</span>
 }
 

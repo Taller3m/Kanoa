@@ -34,6 +34,7 @@
 .ds-btn--fill:disabled, .ds-btn--flat:disabled, .ds-btn--raised:disabled { background: var(--on-surface---12); }
 .ds-btn--outline:disabled { border-color: var(--on-surface---12); }
 
+.ds-icon-svg { flex: none; display: inline-block; vertical-align: middle; }
 .ds-iconbtn { display: inline-grid; place-items: center; width: 40px; height: 40px; border: 0; padding: 0;
   border-radius: var(--radius-full); background: transparent; color: var(--on-surface-variant); cursor: pointer;
   transition: background var(--motion-fast) var(--ease); }
