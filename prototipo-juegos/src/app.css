@@ -63,7 +63,7 @@
 .stepper__step:hover { background: var(--surface-tint-8-); }
 .stepper__dot { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--outline); font: 500 12px/1 var(--font-family); }
 .stepper__step[aria-current='step'] { color: var(--on-surface); }
-.stepper__step[aria-current='step'] .stepper__dot { border-color: var(--primary); color: var(--primary); }
+.stepper__step[aria-current='step']:not(.stepper__step--done) .stepper__dot { border-color: var(--primary); color: var(--primary); } /* activo y completo: gana el relleno primario con su texto on-primary */
 .stepper__step--done .stepper__dot { background: var(--primary); border-color: var(--primary); color: var(--on-primary); }
 .form { display: flex; flex-direction: column; gap: var(--space-5); width: 100%; }
 .form h2 { margin: 0; color: var(--title); }
