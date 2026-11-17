@@ -147,7 +147,7 @@ export function Tipografia() {
 export function FormaEspacio() {
   const radii: [string, string, string, string][] = [['basic', '--radius-none', '0px', 'Bordes rectos'], ['almostRounded', '--radius-sm', '4px', 'Inputs, chips pequeños'],
     ['semiRounded', '--radius-md', '20px', 'Cards, modales, contenedores'], ['rounded', '--radius-full', '100px', 'Botones, tags, avatares']]
-  const spaces: [string, number][] = [['--space-1', 4], ['--space-2', 8], ['--space-3', 12], ['--space-4', 16], ['--space-5', 24], ['--space-6', 40]]
+  const spaces: [string, number][] = [['--space-1', 4], ['--space-2', 8], ['--space-3', 12], ['--space-4', 16], ['--space-5', 24], ['--space-6', 40], ['--space-7', 48], ['--space-8', 64]]
   return (
     <>
       <PageHead title="Forma y espacio">Radios, escala de espaciado, tamaños de componente y elevación.</PageHead>
@@ -183,8 +183,10 @@ export function FormaEspacio() {
         ]} />
       </Section>
       <Section id="elevacion" title="Elevación" lead="Par recomendado para producto: sombra de card en reposo → hover. Responde al modo oscuro porque usa variables de color.">
-        <Demo title="Niveles" code={`box-shadow: var(--elevation-1);\nbox-shadow: var(--elevation-2);\nbox-shadow: var(--shadow-card);\nbox-shadow: var(--shadow-card-hover);`}>
-          {[['--elevation-1', 'Nivel 1 · cards, raised'], ['--elevation-2', 'Nivel 2 · menús, hover'], ['--shadow-card', 'Card en reposo'], ['--shadow-card-hover', 'Card en hover']].map(([v, l]) => (
+        <Demo title="Niveles" code={`box-shadow: var(--elevation-1);\nbox-shadow: var(--elevation-2);\nbox-shadow: var(--shadow-card);\nbox-shadow: var(--shadow-card-hover);
+box-shadow: var(--shadow-web-regular);
+box-shadow: var(--shadow-web-hover);`}>
+          {[['--elevation-1', 'Nivel 1 · cards, raised'], ['--elevation-2', 'Nivel 2 · menús, hover'], ['--shadow-card', 'Card en reposo'], ['--shadow-card-hover', 'Card en hover'], ['--shadow-web-regular', 'Portal web · reposo'], ['--shadow-web-hover', 'Portal web · hover']].map(([v, l]) => (
             <div key={v} style={{ width: 170, height: 90, borderRadius: 'var(--radius-md)', background: 'var(--surface-container-lowest)', boxShadow: `var(${v})`, display: 'grid', placeItems: 'center', textAlign: 'center', padding: 8 }}>
               <span className="t-body-sm">{l}</span>
             </div>

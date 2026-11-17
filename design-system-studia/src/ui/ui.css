@@ -287,15 +287,38 @@ html:has(dialog.ds-modal[open]) { overflow: hidden; }
 .ds-modal__body { padding: 0 var(--space-5); overflow: auto; color: var(--paragraph); }
 .ds-modal__foot { display: flex; justify-content: flex-end; gap: var(--space-2); padding: var(--space-5); }
 
-.ds-navbar { --w: 280px; width: var(--w); display: flex; flex-direction: column; gap: var(--space-1); padding: var(--space-3);
-  border-radius: var(--radius-md); background: var(--surface-container-low); transition: width var(--motion-base) var(--ease); }
-.ds-navbar--compress { --w: 72px; }
+/* Navbar de Figma (StudIA2.0 - Navbar, nodo 2142:13641). Expandido 310px; comprimido = card de 72px dentro de 120px */
+.ds-navbar { --w: 310px; position: relative; width: var(--w); height: 100%; box-sizing: border-box; display: flex; flex-direction: column; transition: width var(--motion-base) var(--ease); }
+.ds-navbar__panel { flex: 1; min-height: 0; display: flex; flex-direction: column; background: var(--surface-container-lowest);
+  border-right: 1px solid var(--outline-variant); border-radius: 0 16px 16px 0; }
+.ds-navbar__head { display: flex; align-items: flex-start; gap: var(--space-2); padding: var(--space-4); border-bottom: 1px solid var(--outline-variant); }
+.ds-navbar__logo { flex: none; width: 72px; height: 72px; box-sizing: border-box; display: grid; place-items: center; border-radius: var(--radius-sm);
+  background: var(--surface-container-low); border-bottom: 1px solid var(--outline-variant); }
+.ds-navbar__name { flex: 1; min-width: 0; padding-top: var(--space-1); color: var(--title); font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ds-navbar__toggle { flex: none; display: grid; place-items: center; padding: var(--space-1); border: 0; border-radius: var(--radius-sm); cursor: pointer;
+  background: var(--surface-container-lowest); color: var(--on-surface-variant); transition: background var(--motion-fast) var(--ease); }
+.ds-navbar__toggle:hover { background: var(--surface-tint-8-); }
+.ds-navbar__body { flex: 1; min-height: 0; overflow-x: clip; overflow-y: auto; display: flex; flex-direction: column; gap: var(--space-2); padding: var(--space-4);
+  scrollbar-width: thin; scrollbar-color: color-mix(in srgb, var(--primary) 35%, transparent) transparent; }
+.ds-navbar .ds-menuitem { border-radius: var(--radius-sm); flex: none; }
+.ds-navbar__footer { display: flex; justify-content: center; padding: var(--space-2) var(--space-4); }
+.ds-navbar__user { display: flex; align-items: center; gap: 10px; padding: var(--space-3); border-top: 1px solid var(--outline-variant); border-radius: 16px 16px 0 0; }
+.ds-navbar__user .ds-avatar { background: var(--primary); color: var(--on-primary); }
+.ds-navbar__who { display: flex; flex-direction: column; gap: var(--space-1); min-width: 0; align-items: flex-start; }
+.ds-navbar__uname { color: var(--title); max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ds-navbar__umail { color: var(--paragraph); max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.ds-navbar--compress { --w: 120px; padding: var(--space-5); }
+.ds-navbar--compress .ds-navbar__panel { overflow: clip; border: 1px solid var(--outline-variant); border-radius: 12px; }
+.ds-navbar--compress .ds-navbar__head { padding: 0; border-bottom: 0; }
+.ds-navbar--compress .ds-navbar__body { padding: var(--space-4) var(--space-2); }
 .ds-navbar--compress .ds-menuitem { justify-content: center; padding: 0; }
 .ds-navbar--compress .ds-menuitem__label { display: none; }
-.ds-navbar__brand { display: flex; align-items: center; gap: var(--space-2); padding: var(--space-2) var(--space-3) var(--space-3); color: var(--title); }
-.ds-navbar--compress .ds-navbar__brand { justify-content: center; padding-inline: 0; }
-.ds-navbar__brand .ds-navbar__name { overflow: hidden; white-space: nowrap; }
-.ds-navbar--compress .ds-navbar__name { display: none; }
+.ds-navbar--compress .ds-navbar__user { height: 64px; box-sizing: border-box; justify-content: center; }
+/* Botón de abrir: flota sobre el borde de la card, bajo la cabecera */
+.ds-navbar__float { position: absolute; top: 80px; right: var(--space-2); }
+.ds-navbar__float .ds-navbar__toggle { border: 1px solid var(--outline-variant); }
+@media (prefers-reduced-motion: reduce) { .ds-navbar { transition: none; } }
 
 .ds-header { display: flex; align-items: center; gap: var(--space-4); height: 64px; padding: 0 var(--space-4);
   background: var(--surface-container-lowest); border-bottom: 1px solid var(--outline-variant); }

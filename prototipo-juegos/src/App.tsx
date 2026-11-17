@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { Button, ConfirmDialog, Icon, IconButton, Modal, Snackbar, StatusTag } from './ui'
+import { Button, ConfirmDialog, IconButton, Modal, Navbar, Snackbar, StatusTag } from './ui'
 import { estadoDe, fixGame, reqsOf, seedGames } from './games/registry'
 import { HOY, newGame } from './games/base'
 import type { Game, TipoJuego } from './games/types'
@@ -14,11 +14,14 @@ type Screen = 'lista' | 'tipo' | 'editor'
 type ToastKind = 'ok' | 'err' | 'info'
 interface Confirm { title: string; msg: string; label: string; danger?: boolean; yes: () => void }
 
-const RAIL: { label: string; icon: string; on?: boolean }[] = [
-  { label: 'Portada', icon: 'home' }, { label: 'Cifras destacadas', icon: 'bar_chart' }, { label: 'Bloques de contenido', icon: 'view_agenda' },
-  { label: 'Noticias', icon: 'newspaper' }, { label: 'Micrositios', icon: 'language' }, { label: 'Páginas informativas', icon: 'description' },
-  { label: 'Menús', icon: 'menu' }, { label: 'Juegos', icon: 'sports_esports', on: true },
-]
+// Módulos del portal (Figma: StudIA2.0 - Navbar); solo «Juegos» está dentro del alcance del prototipo.
+const MODULOS = [
+  { id: 'portada', label: 'Portada', icon: 'web_asset' }, { id: 'cifras', label: 'Cifras destacadas', icon: 'finance_mode' }, { id: 'bloques', label: 'Bloques de inicio', icon: 'home' },
+  { id: 'noticias', label: 'Noticias', icon: 'article' }, { id: 'micrositios', label: 'Micrositios', icon: 'category' }, { id: 'paginas', label: 'Páginas informativas', icon: 'info' },
+  { id: 'menus', label: 'Menús', icon: 'menu' }, { id: 'juegos', label: 'Juegos', icon: 'sports_esports' },
+].map((m) => m.id === 'juegos' ? m : { ...m, disabled: true, title: `${m.label} (fuera del alcance de este prototipo)` })
+
+const readNav = () => { try { return localStorage.getItem('nav-compress') === '1' } catch { return false } }
 
 export function App() {
   const [games, setGames] = useState<Game[]>(seedGames)
@@ -32,6 +35,7 @@ export function App() {
   const [toastMsg, setToastMsg] = useState<{ t: string; kind: ToastKind } | null>(null)
   const [confirm, setConfirm] = useState<Confirm | null>(null)
   const [preview, setPreview] = useState<Game | null>(null)
+  const [compress, setCompress] = useState(readNav)
   const [dark, setDark] = useState(() => document.documentElement.classList.contains('dark'))
   const timer = useRef<number>(0)
   const main = useRef<HTMLElement>(null)
@@ -41,6 +45,7 @@ export function App() {
     el.classList.remove('light', 'dark'); el.classList.add(dark ? 'dark' : 'light')
     try { localStorage.setItem('ds-theme', dark ? 'dark' : 'light') } catch { /* sin storage */ }
   }, [dark])
+  useEffect(() => { try { localStorage.setItem('nav-compress', compress ? '1' : '0') } catch { /* sin storage */ } }, [compress])
   useEffect(() => { main.current?.focus({ preventScroll: true }); window.scrollTo(0, 0) }, [screen])
 
   const toast = useCallback((t: string, kind: ToastKind = 'info') => {
@@ -114,18 +119,11 @@ export function App() {
 
   return (
     <div className="app">
-      <nav className="rail" aria-label="Módulos de administración">
-        <div className="rail__brand" aria-hidden="true">K</div>
-        {RAIL.map((r) => (
-          <button key={r.label} type="button" className="rail__item" disabled={!r.on} aria-current={r.on ? 'page' : undefined}
-            title={r.on ? r.label : `${r.label} (fuera del alcance de este prototipo)`} onClick={r.on ? aLista : undefined}>
-            <Icon name={r.icon} /><span className="rail__label">{r.label}</span>
-          </button>
-        ))}
-        <div style={{ marginTop: 'auto' }}>
-          <IconButton icon={dark ? 'light_mode' : 'dark_mode'} label={dark ? 'Cambiar a tema claro' : 'Cambiar a tema oscuro'} onClick={() => setDark(!dark)} />
-        </div>
-      </nav>
+      <div className="sidebar">
+        <Navbar items={MODULOS} active="juegos" compress={compress} onToggle={() => setCompress((c) => !c)}
+          onSelect={(id) => { if (id === 'juegos') aLista() }} user={{ name: 'Laura Gómez', email: 'laura.gomez@kanoalab.co' }}
+          footer={<IconButton icon={dark ? 'light_mode' : 'dark_mode'} label={dark ? 'Cambiar a tema claro' : 'Cambiar a tema oscuro'} onClick={() => setDark(!dark)} />} />
+      </div>
 
       <main className="main" ref={main} tabIndex={-1} style={{ outline: 'none' }}>
         <nav aria-label="Ruta de navegación" className="crumbs t-body-md">

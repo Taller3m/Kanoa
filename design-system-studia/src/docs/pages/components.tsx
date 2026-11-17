@@ -228,9 +228,11 @@ export function Organismos() {
   const [compress, setCompress] = useState(false)
   const [active, setActive] = useState('juegos')
   const items = [
-    { id: 'inicio', icon: 'home', label: 'Inicio' }, { id: 'noticias', icon: 'newspaper', label: 'Noticias' },
-    { id: 'juegos', icon: 'sports_esports', label: 'Juegos', badge: 3 }, { id: 'usuarios', icon: 'group', label: 'Usuarios' }, { id: 'ajustes', icon: 'settings', label: 'Ajustes' },
+    { id: 'portada', icon: 'web_asset', label: 'Portada' }, { id: 'cifras', icon: 'finance_mode', label: 'Cifras destacadas' }, { id: 'inicio', icon: 'home', label: 'Bloques de inicio' },
+    { id: 'noticias', icon: 'article', label: 'Noticias' }, { id: 'micrositios', icon: 'category', label: 'Micrositios' }, { id: 'info', icon: 'info', label: 'Páginas informativas' },
+    { id: 'menus', icon: 'menu', label: 'Menús' }, { id: 'juegos', icon: 'sports_esports', label: 'Juegos' },
   ]
+
   return (
     <>
       <PageHead title="Organismos">Secciones completas de interfaz hechas de moléculas y átomos: diálogos, navegación y cabeceras.</PageHead>
@@ -249,15 +251,14 @@ export function Organismos() {
         <PropsTable rows={[['open / onClose', 'boolean / () => void', '—', 'Visibilidad controlada.'], ['title', 'string', '—', 'Título (h2) y nombre accesible.'], ['footer', 'ReactNode', '—', 'Botones de acción.'], ['small', 'boolean', 'false', 'Ancho 400 px en vez de 560.'], ['wide', 'boolean', 'false', 'Ancho 960 px (vistas previas, contenido amplio).'], ['danger (ConfirmDialog)', 'boolean', 'false', 'Confirmación destructiva en tono error.']]} />
       </Section>
 
-      <Section id="navbar" title="Navbar" lead="Navegación lateral con dos modos: expandido (280px) y comprimido (72px, solo iconos con title).">
-        <Demo title="Expandido ↔ comprimido" code={`<Navbar items={items} active={active} onSelect={setActive} compress={compress} />`}>
-          <div className="stack" style={{ gap: 12 }}>
-            <div><Switch label="Comprimir" checked={compress} onChange={(e) => setCompress(e.target.checked)} /></div>
-            <Navbar items={items} active={active} onSelect={setActive} compress={compress} />
+      <Section id="navbar" title="Navbar" lead="Navegación lateral que se abre y se cierra: expandido (310 px) con cabecera, ítems con etiqueta y usuario; comprimido en una card de 72 px solo con iconos. El botón de la cabecera alterna entre ambos modos.">
+        <Demo title="Abrir ↔ cerrar" layout="col" code={`<Navbar items={items} active={active} onSelect={setActive} compress={compress} onToggle={() => setCompress(!compress)} user={{ name: 'Laura Gómez', email: 'laura@kanoalab.co' }} />`}>
+          <div className="frame" style={{ height: 620, overflow: 'hidden' }}>
+            <Navbar items={items} active={active} onSelect={setActive} compress={compress} onToggle={() => setCompress(!compress)} user={{ name: 'Laura Gómez', email: 'laura@kanoalab.co' }} />
           </div>
         </Demo>
-        <A11y items={['Es un nav con nombre «Principal»; el ítem activo lleva aria-current="page".', 'Al comprimir se ocultan las etiquetas y se conserva el nombre accesible con title; los contadores se omiten en ese modo.']} />
-        <PropsTable rows={[['items', '{ id, icon, label, badge? }[]', '—', 'Destinos.'], ['active / onSelect', 'string / (id) => void', '—', 'Destino activo.'], ['compress', 'boolean', 'false', 'Modo comprimido (72 px).'], ['brand', 'string', "'Kanoa Lab'", 'Nombre junto al logotipo.']]} />
+        <A11y items={['Es un nav con nombre «Principal»; el ítem activo lleva aria-current="page".', 'El botón de abrir/cerrar tiene aria-expanded y cambia su nombre («Cerrar navegación» / «Abrir navegación»); al alternar conserva el foco aunque cambie de lugar.', 'Comprimido oculta las etiquetas y conserva el nombre accesible con title; los contadores se omiten en ese modo.']} />
+        <PropsTable rows={[['items', '{ id, icon, label, badge?, disabled?, title? }[]', '—', 'Destinos.'], ['active / onSelect', 'string / (id) => void', '—', 'Destino activo.'], ['compress', 'boolean', 'false', 'Modo comprimido (card de 72 px dentro de 120 px).'], ['onToggle', '() => void', '—', 'Muestra el botón de abrir/cerrar; el estado lo controla quien lo usa.'], ['brand', 'string', "'StudIA 2.0'", 'Nombre junto al logotipo.'], ['user', '{ name, email?, tag? }', '—', 'Pie con avatar; comprimido muestra solo el avatar.'], ['footer', 'ReactNode', '—', 'Acciones extra sobre el usuario.']]} />
       </Section>
 
       <Section id="header" title="Header" lead="Barra superior con título, acciones y usuario.">

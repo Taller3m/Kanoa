@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
-    "sync:ui": "node -e \"const fs=require('fs');for(const f of ['ui/index.tsx','ui/ui.css','foundation.css','kanoa-tokens.css'])fs.copyFileSync('../design-system-studia/src/'+f,'src/'+f)\""
+    "sync:ui": "node -e \"const fs=require('fs');for(const f of ['ui/index.tsx','ui/ui.css','foundation.css','kanoa-tokens.css']){fs.mkdirSync('src/'+f.split('/').slice(0,-1).join('/'),{recursive:true});fs.copyFileSync('../design-system-studia/src/'+f,'src/'+f)}\""
   },
   "dependencies": {
     "react": "^19.3.1",

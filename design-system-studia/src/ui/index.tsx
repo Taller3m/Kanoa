@@ -3,6 +3,7 @@ import {
   type AnchorHTMLAttributes, type ButtonHTMLAttributes, type InputHTMLAttributes, type KeyboardEvent, type ReactElement, type ReactNode,
   type SelectHTMLAttributes, type TextareaHTMLAttributes,
 } from 'react'
+import logo from '../assets/kanoalab-simbolo.svg'
 import './ui.css'
 
 const cx = (...a: (string | false | null | undefined)[]) => a.filter(Boolean).join(' ')
@@ -329,11 +330,11 @@ export function Card({ title, children, media, horizontal, interactive, actions,
   )
 }
 
-export function MenuItem({ icon, children, active, disabled, small, badge, onClick }: {
-  icon?: string; children: ReactNode; active?: boolean; disabled?: boolean; small?: boolean; badge?: number; onClick?: () => void
+export function MenuItem({ icon, children, active, disabled, small, badge, tooltip, onClick }: {
+  icon?: string; children: ReactNode; active?: boolean; disabled?: boolean; small?: boolean; badge?: number; tooltip?: string; onClick?: () => void
 }) {
   return (
-    <button type="button" className={cx('ds-menuitem', small && 'ds-menuitem--small')} aria-current={active ? 'page' : undefined} disabled={disabled} onClick={onClick} title={typeof children === 'string' ? children : undefined}>
+    <button type="button" className={cx('ds-menuitem', small && 'ds-menuitem--small')} aria-current={active ? 'page' : undefined} disabled={disabled} onClick={onClick} title={tooltip ?? (typeof children === 'string' ? children : undefined)}>
       {icon && <Icon name={icon} />}
       <span className="ds-menuitem__label">{children}</span>
       {badge ? <Badge count={badge} /> : null}
@@ -441,15 +442,66 @@ export function ConfirmDialog({ open, title, message, confirmLabel = 'Confirmar'
   )
 }
 
-export function Navbar({ items, active, onSelect, compress, brand = 'Kanoa Lab' }: {
-  items: { id: string; icon: string; label: string; badge?: number }[]; active: string; onSelect: (id: string) => void; compress?: boolean; brand?: string
+/* Símbolo Kanoa (Figma LogosKanoalab/Simbolo). Colores por token para que cambie con el tema (logo/Logo-Primary y Logo-Secondary). */
+export function KanoaMark({ width = 36 }: { width?: number }) {
+  return (
+    <svg width={width} height={width * 1.1084} viewBox="0 0 36 39.9043" fill="none" aria-hidden="true" focusable="false">
+      <g fill="var(--logo-primary)">
+        <path d="M0.876725 4.73597H0V39.9034H6.76265V10.6219C6.76265 7.37074 4.12695 4.73505 0.875804 4.73505L0.876725 4.73597Z" />
+        <path d="M36 39.9043L16.7774 20.9448L11.9954 25.7268L26.3947 39.9043H36Z" />
+        <path d="M21.7047 8.38087L0.398346 29.6035L5.18031 34.3855L34.9457 4.73597H30.5262C27.2189 4.73597 24.0469 6.046 21.7038 8.37995L21.7047 8.38087Z" />
+      </g>
+      <path fill="var(--logo-secondary)" d="M13.5262 9.46826C16.1408 9.46826 18.2604 7.34872 18.2604 4.73413C18.2604 2.11954 16.1408 0 13.5262 0C10.9116 0 8.79209 2.11954 8.79209 4.73413C8.79209 7.34872 10.9116 9.46826 13.5262 9.46826Z" />
+    </svg>
+  )
+}
+
+export interface NavbarUser { name: string; email?: string; tag?: ReactNode }
+
+/* Navbar de Figma (StudIA2.0 - Navbar, nodo 2142:13641): expandido (310 px) y comprimido (card de 72 px) con botón para abrir/cerrar */
+export function Navbar({ items, active, onSelect, compress = false, onToggle, brand = 'StudIA 2.0', user, footer }: {
+  items: { id: string; icon: string; label: string; badge?: number; disabled?: boolean; title?: string }[]; active: string; onSelect: (id: string) => void
+  compress?: boolean; onToggle?: () => void; brand?: string; user?: NavbarUser; footer?: ReactNode
 }) {
+  const toggleRef = useRef<HTMLButtonElement>(null)
+  const refocus = useRef(false)
+  // El botón cambia de lugar al abrir/cerrar: se devuelve el foco al nuevo para no perder el contexto del teclado
+  useEffect(() => { if (refocus.current) { refocus.current = false; toggleRef.current?.focus() } }, [compress])
+  const toggle = onToggle && (
+    <button ref={toggleRef} type="button" className="ds-navbar__toggle" aria-expanded={!compress} aria-controls="ds-navbar-panel"
+      aria-label={compress ? 'Abrir navegación' : 'Cerrar navegación'} title={compress ? 'Abrir navegación' : 'Cerrar navegación'}
+      onClick={() => { refocus.current = true; onToggle() }}>
+      <Icon name={compress ? 'left_panel_open' : 'left_panel_close'} />
+    </button>
+  )
   return (
     <nav className={cx('ds-navbar', compress && 'ds-navbar--compress')} aria-label="Principal">
-      <div className="ds-navbar__brand"><Icon name="school" size={28} /><span className="t-title-md ds-navbar__name">{brand}</span></div>
-      {items.map((it) => (
-        <MenuItem key={it.id} icon={it.icon} badge={compress ? undefined : it.badge} active={active === it.id} onClick={() => onSelect(it.id)}>{it.label}</MenuItem>
-      ))}
+      <div className="ds-navbar__panel" id="ds-navbar-panel">
+        <div className="ds-navbar__head">
+          <span className="ds-navbar__logo"><KanoaMark /></span>
+          {!compress && <span className="t-label-lg ds-navbar__name">{brand}</span>}
+          {!compress && toggle}
+        </div>
+        <div className="ds-navbar__body">
+          {items.map((it) => (
+            <MenuItem key={it.id} icon={it.icon} badge={compress ? undefined : it.badge} active={active === it.id} disabled={it.disabled} tooltip={it.title} onClick={() => onSelect(it.id)}>{it.label}</MenuItem>
+          ))}
+        </div>
+        {footer && <div className="ds-navbar__footer">{footer}</div>}
+        {user && (
+          <div className="ds-navbar__user" title={compress ? user.name : undefined}>
+            <Avatar name={user.name} size={24} />
+            {!compress && (
+              <span className="ds-navbar__who">
+                <span className="t-body-md ds-navbar__uname">{user.name}</span>
+                {user.email && <span className="t-body-sm ds-navbar__umail">{user.email}</span>}
+                {user.tag}
+              </span>
+            )}
+          </div>
+        )}
+      </div>
+      {compress && toggle && <span className="ds-navbar__float">{toggle}</span>}
     </nav>
   )
 }
