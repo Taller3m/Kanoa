@@ -136,7 +136,7 @@ export function MemoEditor({ game, update }: EditorProps) {
 
   return (
     <div className="me">
-      <h2 className="me-h2 t-headline-sm">Configuración del tablero</h2>
+      <h2 className="me-h2 t-section">Configuración del tablero</h2>
 
       <div role="radiogroup" aria-labelledby={`${uid}-modo`} className="me-group">
         <div className="me-label t-title-sm" id={`${uid}-modo`}>Tipo de emparejamiento <Req /></div>
@@ -257,7 +257,7 @@ export function MemoEditor({ game, update }: EditorProps) {
       </section>
 
       <div className="me-group">
-        <h2 className="me-h2 t-headline-sm">Parejas del {lvLow}</h2>
+        <h2 className="me-h2 t-section">Parejas del {lvLow}</h2>
         <p className="me-help t-body-md">{paresHelp}</p>
       </div>
       <div className={cx('me-table', cada && 'me-table--cada')} role="table" aria-label={`Parejas del ${lvLow}`}>

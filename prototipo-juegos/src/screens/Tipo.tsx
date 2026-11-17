@@ -6,7 +6,7 @@ export function Tipo({ onPick }: { onPick: (t: TipoJuego) => void }) {
   return (
     <section className="screen" aria-labelledby="t-tipo">
       <div>
-        <h2 className="t-headline-sm" id="t-tipo" style={{ margin: 0, color: 'var(--title)' }}>¿Qué tipo de juego quieres crear?</h2>
+        <h2 className="t-section" id="t-tipo" style={{ margin: 0, color: 'var(--title)' }}>¿Qué tipo de juego quieres crear?</h2>
         <p className="screen__lead t-body-lg" style={{ marginTop: 'var(--space-1)' }}>Elige el tipo de juego. En el siguiente paso configuras su contenido y sus reglas.</p>
       </div>
       <div className="options">

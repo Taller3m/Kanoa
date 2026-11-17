@@ -112,7 +112,7 @@ export function CruciEditor({ game, update, toast }: EditorProps) {
     <div className="cr-editor">
       <div className="cr-head">
         <div>
-          <h2 className="t-title-md cr-h2">Tablero</h2>
+          <h2 className="t-section cr-h2">Tablero</h2>
           <p className="t-body-md cr-muted">Haz clic en una casilla para iniciar una palabra. El número de la pregunta se asigna solo.</p>
         </div>
         <div className="cr-size">
@@ -196,7 +196,7 @@ export function CruciEditor({ game, update, toast }: EditorProps) {
         </div>
       </div>
 
-      <h2 className="t-title-md cr-h2">Palabras y pistas</h2>
+      <h2 className="t-section cr-h2">Palabras y pistas</h2>
       {words.length === 0 && (
         <p className="t-body-md cr-muted cr-nowords">Aún no has agregado palabras. Necesitas mínimo {mnW} para que el crucigrama quede completo.</p>
       )}

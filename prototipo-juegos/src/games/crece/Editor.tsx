@@ -21,7 +21,7 @@ export function CreceEditor({ game, update }: EditorProps) {
   return (
     <div className="cc">
       <div>
-        <h2 className="cc-h">Ser vivo <span className="cc-req" aria-hidden="true">*</span></h2>
+        <h2 className="cc-h t-section">Ser vivo <span className="cc-req" aria-hidden="true">*</span></h2>
         <p className="cc-help">Elige la planta o el animal que el jugador va a cuidar. Sus etapas, necesidades e ilustraciones vienen definidas.</p>
       </div>
 

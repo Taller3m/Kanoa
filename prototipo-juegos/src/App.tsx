@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { Button, ConfirmDialog, IconButton, Modal, Navbar, Snackbar, StatusTag } from './ui'
+import { Button, ConfirmDialog, ContextBar, IconButton, Modal, Navbar, Snackbar, StatusTag } from './ui'
 import { estadoDe, fixGame, reqsOf, seedGames } from './games/registry'
 import { HOY, newGame } from './games/base'
 import type { Game, TipoJuego } from './games/types'
@@ -137,21 +137,18 @@ export function App() {
           ))}
         </nav>
 
-        <header className="band">
-          {back && <IconButton icon="chevron_left" label="Volver" onClick={back} />}
-          <h1 className="band__title t-headline-md">
-            <span>{title}</span>
-            {screen === 'editor' && draft && (
-              <span title="El estado se calcula automáticamente">
-                {estadoDe(draft) === 'Completado' ? <StatusTag color="blue" dot>Completado</StatusTag> : <StatusTag type="prevent" dot>Borrador</StatusTag>}
-              </span>
-            )}
-          </h1>
-          <div className="band__actions">
+        <ContextBar title={title} onBack={back}
+          badge={screen === 'editor' && draft ? (
+            <span title="El estado se calcula automáticamente">
+              {estadoDe(draft) === 'Completado' ? <StatusTag color="blue" dot>Completado</StatusTag> : <StatusTag type="prevent" dot>Borrador</StatusTag>}
+            </span>
+          ) : undefined}
+          description={screen === 'lista' ? 'Crea y parametriza los juegos del portal. Cuando un juego está completo, queda disponible para agregarlo como contenido en cualquier sección de un micrositio.' : undefined}
+          actions={<>
+            {screen === 'lista' && games.length > 0 && <Button icon="add" onClick={() => go({ screen: 'tipo' })}>Crear juego</Button>}
             {screen === 'tipo' && <Button variant="outline" onClick={aLista}>Cancelar</Button>}
             {screen === 'editor' && draft && (<><IconButton icon="visibility" label="Vista previa" onClick={() => openPreview(draft)} /><Button variant="outline" onClick={cancelar}>Cancelar</Button><Button onClick={guardar}>Guardar</Button></>)}
-          </div>
-        </header>
+          </>} />
 
         {screen === 'lista' && (
           <Lista games={games} q={q} fTipo={fTipo} fEstado={fEstado} setQ={setQ} setFTipo={setFTipo} setFEstado={setFEstado}

@@ -57,6 +57,7 @@ button, input, select, textarea { font-family: inherit; }
 .t-headline-md { font: 400 28px/36px var(--font-family); }
 .t-headline-sm { font: 400 24px/32px var(--font-family); }
 .t-title-lg { font: 400 22px/28px var(--font-family); }
+.t-section { font: 700 22px/28px var(--font-family); color: var(--title); } /* título de sección de página (Figma: title/large en Bold) */
 .t-title-md { font: 500 16px/24px var(--font-family); letter-spacing: .15px; }
 .t-title-sm { font: 500 14px/20px var(--font-family); letter-spacing: .1px; }
 .t-body-lg { font: 400 16px/24px var(--font-family); letter-spacing: .5px; }

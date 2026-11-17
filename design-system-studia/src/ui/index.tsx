@@ -1,6 +1,6 @@
 import {
   cloneElement, useEffect, useId, useRef, useState,
-  type AnchorHTMLAttributes, type ButtonHTMLAttributes, type InputHTMLAttributes, type KeyboardEvent, type ReactElement, type ReactNode,
+  type AnchorHTMLAttributes, type ButtonHTMLAttributes, type HTMLAttributes, type InputHTMLAttributes, type KeyboardEvent, type ReactElement, type ReactNode,
   type SelectHTMLAttributes, type TextareaHTMLAttributes,
 } from 'react'
 import logo from '../assets/kanoalab-simbolo.svg'
@@ -504,6 +504,34 @@ export function Navbar({ items, active, onSelect, compress = false, onToggle, br
       {compress && toggle && <span className="ds-navbar__float">{toggle}</span>}
     </nav>
   )
+}
+
+/* Context-bar de Figma (StudIA2.0 - Context-bar, nodo 2162:18058): banda translúcida con el título y, debajo, descripción y acción principal */
+export function ContextBar({ title, titleAs: Title = 'h1', badge, onBack, description, actions }: {
+  title: string; titleAs?: 'h1' | 'h2' | 'p'; badge?: ReactNode; onBack?: () => void; description?: ReactNode; actions?: ReactNode
+}) {
+  return (
+    <div className="ds-contextbar">
+      <div className="ds-contextbar__band">
+        {onBack && <IconButton icon="chevron_left" label="Volver" onClick={onBack} />}
+        <Title className="ds-contextbar__title">
+          <span>{title}</span>
+          {badge}
+        </Title>
+      </div>
+      {(description || actions) && (
+        <div className="ds-contextbar__row">
+          {description && <p className="ds-contextbar__desc t-body-lg">{description}</p>}
+          {actions && <div className="ds-contextbar__actions">{actions}</div>}
+        </div>
+      )}
+    </div>
+  )
+}
+
+/* Contenedor de filtros/búsqueda (Figma: surface-container-lowest, borde outline-variant, radio 12, padding 24) */
+export function Panel({ children, className, ...rest }: HTMLAttributes<HTMLDivElement>) {
+  return <div className={cx('ds-panel', className)} {...rest}>{children}</div>
 }
 
 export function Header({ title, user, onMenu, actions, titleAs: Title = 'h1' }: { title: string; user?: string; onMenu?: () => void; actions?: ReactNode; titleAs?: 'h1' | 'h2' | 'p' }) {

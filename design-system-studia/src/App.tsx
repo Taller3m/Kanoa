@@ -19,7 +19,7 @@ const routes: Route[] = [
     sections: [['boton', 'Botón'], ['campo-texto', 'Campo de texto'], ['area-select', 'Área y selector'], ['seleccion', 'Casilla, radio, switch'], ['etiquetas', 'Etiquetas y chips'], ['avatar-progreso', 'Avatar y progreso'], ['texto', 'Enlace, tecla, tooltip']] },
   { id: 'moleculas', label: 'Moléculas', icon: 'hub', group: 'Componentes', render: () => <Moleculas />,
     sections: [['mensajes', 'Mensaje y snackbar'], ['tabs', 'Tabs'], ['paginacion', 'Paginación y pasos'], ['tarjetas', 'Tarjeta'], ['menu', 'Menú y acordeón'], ['listas', 'Lista de ítems']] },
-  { id: 'organismos', label: 'Organismos', icon: 'dashboard', group: 'Componentes', render: () => <Organismos />, sections: [['modal', 'Modal'], ['navbar', 'Navbar'], ['header', 'Header']] },
+  { id: 'organismos', label: 'Organismos', icon: 'dashboard', group: 'Componentes', render: () => <Organismos />, sections: [['modal', 'Modal'], ['navbar', 'Navbar'], ['contenedores', 'Contenedores'], ['header', 'Header']] },
 ]
 
 const readRoute = () => {

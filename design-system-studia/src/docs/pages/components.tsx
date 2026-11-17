@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import {
-  Accordion, Avatar, Badge, Breadcrumb, Button, Card, Checkbox, Chip, ConfirmDialog, Divider, Header, Icon, IconButton, ItemList, Kbd, Link,
-  MenuItem, Message, Modal, Navbar, PasswordField, Pagination, ProgressBar, ProgressSteps, Radio, Select, Snackbar, Spinner, StatusTag,
+  Accordion, Avatar, Badge, Breadcrumb, Button, Card, Checkbox, Chip, ConfirmDialog, ContextBar, Divider, Header, Icon, IconButton, ItemList, Kbd, Link,
+  MenuItem, Message, Modal, Navbar, Panel, PasswordField, Pagination, ProgressBar, ProgressSteps, Radio, Select, Snackbar, Spinner, StatusTag,
   Switch, TabPanel, Tabs, TextArea, TextField, Tooltip,
 } from '../../ui'
 import { A11y, Demo, Note, PageHead, PropsTable, Section } from '../kit'
@@ -259,6 +259,27 @@ export function Organismos() {
         </Demo>
         <A11y items={['Es un nav con nombre «Principal»; el ítem activo lleva aria-current="page".', 'El botón de abrir/cerrar tiene aria-expanded y cambia su nombre («Cerrar navegación» / «Abrir navegación»); al alternar conserva el foco aunque cambie de lugar.', 'Comprimido oculta las etiquetas y conserva el nombre accesible con title; los contadores se omiten en ese modo.']} />
         <PropsTable rows={[['items', '{ id, icon, label, badge?, disabled?, title? }[]', '—', 'Destinos.'], ['active / onSelect', 'string / (id) => void', '—', 'Destino activo.'], ['compress', 'boolean', 'false', 'Modo comprimido (card de 72 px dentro de 120 px).'], ['onToggle', '() => void', '—', 'Muestra el botón de abrir/cerrar; el estado lo controla quien lo usa.'], ['brand', 'string', "'StudIA 2.0'", 'Nombre junto al logotipo.'], ['user', '{ name, email?, tag? }', '—', 'Pie con avatar; comprimido muestra solo el avatar.'], ['footer', 'ReactNode', '—', 'Acciones extra sobre el usuario.']]} />
+      </Section>
+
+      <Section id="contenedores" title="Contenedores de página" lead="Piezas que estructuran un listado: Context-bar con el título (Bold 28/36), panel de filtros (radio 12) y tabla con filas tipo tarjeta y cebra. Usan solo tokens, así que siguen el tema claro y oscuro.">
+        <Demo title="Context-bar, panel y tabla" layout="col" code={`<ContextBar title="Administración de menús" description="…" actions={<Button icon="add">Crear menú</Button>} />
+<Panel>…filtros…</Panel>
+<table className="ds-table">…</table>`}>
+          <div className="stack" style={{ width: '100%', gap: 24 }}>
+            <ContextBar title="Administración de juegos" titleAs="p" description="Crea y parametriza los juegos del portal." actions={<Button icon="add">Crear juego</Button>} />
+            <Panel><TextField label="Buscar" icon="search" placeholder="Buscar por nombre" /></Panel>
+            <table className="ds-table">
+              <thead><tr><th scope="col">Nombre</th><th scope="col">Autor</th><th scope="col">Modificado</th></tr></thead>
+              <tbody>
+                <tr><td>Crece Conmigo</td><td>Laura Gómez</td><td>10/08/2026</td></tr>
+                <tr><td>Memoria animales</td><td>Laura Gómez</td><td>12/08/2026</td></tr>
+                <tr><td>Crucigrama del cuerpo</td><td>Carlos Ruiz</td><td>14/08/2026</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </Demo>
+        <A11y items={['El título de la Context-bar es un h1 por defecto; en una página que ya tiene h1 usa titleAs="h2" o "p".', 'El fondo translúcido (transparent-surface-60) mantiene contraste porque el texto usa el token title, que cambia con el tema.', 'La tabla conserva la semántica nativa: th con scope="col". Los títulos de sección dentro de la página usan la clase t-section (Bold 22/28).']} />
+        <PropsTable rows={[['title / titleAs', 'string / h1 | h2 | p', '—', 'Título de la banda.'], ['badge', 'ReactNode', '—', 'Estado junto al título.'], ['onBack', '() => void', '—', 'Muestra el botón «Volver».'], ['description', 'ReactNode', '—', 'Texto bajo la banda.'], ['actions', 'ReactNode', '—', 'Acción principal a la derecha de la descripción.'], ['Panel', 'div', '—', 'Contenedor de filtros: surface-container-lowest, borde outline-variant, radio 12, padding 24.']]} />
       </Section>
 
       <Section id="header" title="Header" lead="Barra superior con título, acciones y usuario.">

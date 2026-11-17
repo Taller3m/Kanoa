@@ -1,5 +1,5 @@
 .cc { display: flex; flex-direction: column; gap: var(--space-5); color: var(--on-surface); }
-.cc-h { font-size: 1.3rem; font-weight: 700; margin: 0 0 6px; }
+.cc-h { margin: 0 0 6px; }
 .cc-h3 { font-size: 0.95rem; font-weight: 700; margin: 0; }
 .cc-req { color: var(--error); }
 .cc-help, .cc-note { font-size: 0.875rem; color: var(--on-surface-variant); margin: 0; text-wrap: pretty; }

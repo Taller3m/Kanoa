@@ -30,7 +30,7 @@ export function Asistente({ game, paso, setPaso, nombreErr, update, toast, clear
 
       {paso === 1 && (
         <div className="form">
-          <h2 className="t-headline-sm">Detalles del juego</h2>
+          <h2 className="t-section">Detalles del juego</h2>
           <TextField label="Nombre del juego" required maxLength={80} placeholder="Ej. El café colombiano" value={game.nombre}
             error={nombreErr ? (game.nombre.trim() ? 'La información ingresada en este campo debe contener al menos 3 caracteres.' : 'La información de este campo es obligatoria.') : undefined}
             counter={`${game.nombre.length}/80`}

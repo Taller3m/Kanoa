@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Button, Icon, IconButton, Select, StatusTag, TextField } from '../ui'
+import { Button, Icon, IconButton, Panel, Select, StatusTag, TextField } from '../ui'
 import { estadoDe, tipoInfo } from '../games/registry'
 import type { Game } from '../games/types'
 
@@ -50,38 +50,32 @@ export function Lista(p: ListaProps) {
     (p.fEstado === 'Todos los estados' || estadoDe(g) === p.fEstado))
 
   return (
-    <section className="screen" aria-labelledby="t-lista">
-      <div className="screen__bar">
-        <p className="screen__lead t-body-lg" id="t-lista">
-          Crea y parametriza los juegos del portal. Cuando un juego está completo, queda disponible para agregarlo como contenido en cualquier sección de un micrositio.
-        </p>
-        <Button icon="add" onClick={p.onCrear}>Crear juego</Button>
-      </div>
+    <section className="screen" aria-label="Listado de juegos">
 
       {p.games.length > 0 && (
-        <div className="filters" role="search">
+        <Panel className="filters" role="search">
           <TextField className="filters__search" label="Buscar" icon="search" placeholder="Buscar por nombre" value={p.q} onChange={(e) => p.setQ(e.target.value)} />
           <Select label="Tipo" value={p.fTipo} onChange={(e) => p.setFTipo(e.target.value)}
             options={['Todos los tipos', 'Crucigrama', 'Cuenta cuentos', 'Memoria', 'Crece conmigo'].map((v) => ({ value: v, label: v }))} />
           <Select label="Estado" value={p.fEstado} onChange={(e) => p.setFEstado(e.target.value)}
             options={['Todos los estados', 'Borrador', 'Completado'].map((v) => ({ value: v, label: v }))} />
-        </div>
+        </Panel>
       )}
 
       {p.games.length === 0 ? (
-        <div className="table-wrap">
+        <div className="ds-panel">
           <div className="empty">
             <Icon name="sports_esports" size={36} />
-            <h2 className="t-title-lg">Aún no has creado ningún juego</h2>
+            <h2 className="t-section">Aún no has creado ningún juego</h2>
             <p className="t-body-md">Usa el botón «Crear juego» para configurar un crucigrama, un cuenta cuentos o un juego de memoria. Cuando esté completo, podrás agregarlo como contenido en las secciones de los micrositios.</p>
             <Button icon="add" onClick={p.onCrear}>Crear juego</Button>
           </div>
         </div>
       ) : rows.length === 0 ? (
-        <div className="table-wrap"><div className="empty"><p className="t-body-md">No se encontraron juegos con los criterios de búsqueda seleccionados.</p></div></div>
+        <div className="ds-panel"><div className="empty"><p className="t-body-md">No se encontraron juegos con los criterios de búsqueda seleccionados.</p></div></div>
       ) : (
         <div className="table-wrap">
-          <table className="gtable">
+          <table className="ds-table">
             <thead>
               <tr><th scope="col">Título del juego</th><th scope="col">Estados</th><th scope="col">Autor</th><th scope="col">Fecha de modificación</th><th scope="col"><span className="sr-only">Acciones</span></th></tr>
             </thead>

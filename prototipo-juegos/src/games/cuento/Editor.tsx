@@ -71,7 +71,7 @@ export function CuentoEditor({ game, update, toast }: EditorProps) {
   return (
     <div className="cu">
       <div className="cu__intro">
-        <h2 className="t-title-lg cu__h">Páginas de la historia</h2>
+        <h2 className="t-section cu__h">Páginas de la historia</h2>
         <p className="t-body-md cu__muted">Cada página tiene una ilustración, un texto, una pregunta y sus opciones de respuesta. Mínimo 2 y máximo 15 páginas.</p>
       </div>
 
