@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState, type ReactNode } from 'react'
 import { Icon, IconButton, Switch } from './ui'
 import { Atomos, Moleculas, Organismos } from './docs/pages/components'
 import { FormaEspacio, Iconos, Inicio, Paleta, Tipografia } from './docs/pages/foundations'
+import logo from './assets/kanoalab-simbolo.svg'
 import './docs/docs.css'
 
 type Route = { id: string; label: string; icon: string; group: string; sections: [string, string][]; render: (go: (r: string) => void) => ReactNode }
@@ -65,8 +66,8 @@ export function App() {
       <a className="skip-link t-label-lg" href="#contenido" onClick={(e) => { e.preventDefault(); const m = document.getElementById('contenido'); m?.focus(); m?.scrollIntoView() }}>Saltar al contenido</a>
       <aside className={`docs__side ${menu ? 'docs__side--open' : ''}`} id="nav-catalogo" aria-label="Navegación del catálogo">
         <a className="docs__brand" href="#/inicio">
-          <Icon name="school" size={32} />
-          <span><span className="t-title-md">StudIA 2.0</span><small className="t-body-sm">Design System · Kanoa Lab</small></span>
+          <span className="docs__logo"><img src={logo} alt="" width={36} height={40} /></span>
+          <span><span className="t-label-lg">StudIA 2.0</span><small className="t-body-sm">Design System · Kanoa Lab</small></span>
         </a>
         {groups.map((g) => (
           <div key={g}>

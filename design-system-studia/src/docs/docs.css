@@ -1,9 +1,16 @@
 /* Chrome del catálogo (no forma parte del sistema) */
 .docs { display: grid; grid-template-columns: 272px minmax(0, 1fr); min-height: 100vh; }
+/* Navbar de Figma (NARP - Navbar, nodo 54:6384): superficie lowest, borde outline-variant, esquinas derechas 16px */
 .docs__side { position: sticky; top: 0; align-self: start; height: 100vh; overflow: auto; padding: var(--space-4);
-  background: var(--surface-variant); border-right: 1px solid var(--outline-variant); display: flex; flex-direction: column; gap: var(--space-1); }
-.docs__brand { display: flex; align-items: center; gap: var(--space-2); padding: var(--space-2) var(--space-3) var(--space-4); color: var(--title); text-decoration: none; }
-.docs__brand small { display: block; color: var(--on-surface-variant); }
+  background: var(--surface-container-lowest); border-right: 1px solid var(--outline-variant); border-radius: 0 var(--radius-lg, 16px) var(--radius-lg, 16px) 0;
+  display: flex; flex-direction: column; gap: var(--space-1);
+  scrollbar-width: thin; scrollbar-color: color-mix(in srgb, var(--primary) 35%, transparent) transparent; }
+.docs__side:hover { scrollbar-color: color-mix(in srgb, var(--primary) 60%, transparent) transparent; }
+.docs__brand { display: flex; align-items: flex-start; gap: var(--space-2); padding: 0 0 var(--space-4); margin-bottom: var(--space-2);
+  border-bottom: 1px solid var(--outline-variant); color: var(--title); text-decoration: none; }
+.docs__brand small { display: block; color: var(--paragraph); }
+.docs__logo { flex: none; width: 72px; height: 72px; display: grid; place-items: center; border-radius: var(--radius-sm);
+  background: var(--surface-container-low); border-bottom: 1px solid var(--outline-variant); }
 .docs__group { margin: var(--space-4) var(--space-3) var(--space-1); color: var(--on-surface-variant); text-transform: uppercase; }
 .docs__sub { display: flex; flex-direction: column; margin: 0 0 var(--space-2) 44px; border-left: 2px solid var(--outline-variant); }
 .docs__sub button { text-align: left; border: 0; background: transparent; cursor: pointer; padding: var(--space-2) var(--space-3); color: var(--on-surface-variant);
