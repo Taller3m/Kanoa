@@ -43,8 +43,8 @@
 .options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4); }
 .option { --tone-bg: var(--blue-soft); --tone-fg: var(--on-blue-soft); display: flex; align-items: center; gap: var(--space-4); width: 100%; min-height: 0; padding: var(--space-4);
   text-align: left; cursor: pointer; border: 1px solid var(--outline-variant); border-radius: var(--radius-md); background: var(--surface-container-lowest); color: var(--on-surface);
-  transition: background var(--motion-fast) var(--ease), border-color var(--motion-fast) var(--ease), box-shadow var(--motion-fast) var(--ease); }
-.option:hover { background: var(--surface-tint-8-); border-color: var(--tone-fg); box-shadow: var(--shadow-card); }
+  transition: background var(--motion-fast) var(--ease), border-color var(--motion-fast) var(--ease); }
+.option:hover { background: var(--surface-tint-8-); border-color: var(--tone-fg); }
 .option--blue { --tone-bg: var(--blue-soft); --tone-fg: var(--on-blue-soft); }
 .option--orange { --tone-bg: var(--orange-soft); --tone-fg: var(--on-orange-soft); }
 .option--indigo { --tone-bg: var(--indigo-soft); --tone-fg: var(--on-indigo-soft); }

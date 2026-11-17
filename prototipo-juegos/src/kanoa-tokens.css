@@ -112,6 +112,9 @@
   --logo-secondary: #043F4F;
   --logo-container: #043F4F;
   --logo-on-container: #FFFFFF;
+  --logo-tile: #E8F5F8;           /* cuadro claro del logo en el navbar, también en tema oscuro */
+  --logo-tile-primary: #117D89;
+  --logo-tile-secondary: #043F4F;
 }
 .dark {
   --primary: #7FCFDA;
@@ -131,7 +134,7 @@
   --on-error: #601410;
   --error-container: #8C1D18;
   --on-error-container: #F9DEDC;
-  --background: #082830;
+  --background: #031418;
   --on-background: #D0EBF0;
   --surface: #082830;
   --on-surface: #D0EBF0;
@@ -227,4 +230,7 @@
   --logo-secondary: #6CC3CD;
   --logo-container: #FFFFFF;
   --logo-on-container: #117D89;
+  --logo-tile: #E8F5F8;
+  --logo-tile-primary: #117D89;
+  --logo-tile-secondary: #043F4F;
 }

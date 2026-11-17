@@ -213,10 +213,10 @@
 .ds-page:disabled { color: var(--on-surface---30); cursor: not-allowed; }
 
 .ds-card { display: flex; flex-direction: column; border-radius: var(--radius-md); overflow: hidden;
-  background: var(--surface-container-lowest); box-shadow: var(--shadow-card); color: var(--on-surface);
-  transition: box-shadow var(--motion-base) var(--ease), transform var(--motion-base) var(--ease); }
+  background: var(--surface-container-lowest); border: 1px solid var(--outline-variant); color: var(--on-surface);
+  transition: border-color var(--motion-base) var(--ease), transform var(--motion-base) var(--ease); }
 .ds-card--interactive { cursor: pointer; }
-.ds-card--interactive:hover { box-shadow: var(--shadow-card-hover); transform: translateY(-2px); }
+.ds-card--interactive:hover { border-color: var(--primary); transform: translateY(-2px); }
 .ds-card--horizontal { flex-direction: row; }
 .ds-card__media { background: var(--primary-container); color: var(--on-primary-container); min-height: 120px; display: grid; place-items: center; flex: none; }
 .ds-card--horizontal .ds-card__media { width: 140px; min-height: 0; }
@@ -293,7 +293,7 @@ html:has(dialog.ds-modal[open]) { overflow: hidden; }
   border-right: 1px solid var(--outline-variant); border-radius: 0 16px 16px 0; }
 .ds-navbar__head { display: flex; align-items: flex-start; gap: var(--space-2); padding: var(--space-4); border-bottom: 1px solid var(--outline-variant); }
 .ds-navbar__logo { flex: none; width: 72px; height: 72px; box-sizing: border-box; display: grid; place-items: center; border-radius: var(--radius-sm);
-  background: var(--surface-container-low); border-bottom: 1px solid var(--outline-variant); }
+  background: var(--logo-tile); --logo-primary: var(--logo-tile-primary); --logo-secondary: var(--logo-tile-secondary); border-bottom: 1px solid var(--outline-variant); }
 .ds-navbar__name { flex: 1; min-width: 0; padding-top: var(--space-1); color: var(--title); font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .ds-navbar__toggle { flex: none; display: grid; place-items: center; padding: var(--space-1); border: 0; border-radius: var(--radius-sm); cursor: pointer;
   background: var(--surface-container-lowest); color: var(--on-surface-variant); transition: background var(--motion-fast) var(--ease); }
@@ -324,7 +324,7 @@ html:has(dialog.ds-modal[open]) { overflow: hidden; }
 .ds-contextbar { display: flex; flex-direction: column; gap: var(--space-5); }
 .ds-contextbar__band { display: flex; align-items: center; gap: var(--space-4); flex-wrap: wrap; padding: var(--space-5); border-radius: 16px;
   background: var(--transparent-surface-60); -webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px);
-  border-bottom: 1px solid var(--outline-variant); box-shadow: 0 8px 14.9px var(--shadow-on-primary-container-12); }
+  border-bottom: 1px solid var(--outline-variant); }
 .ds-contextbar__title { flex: 1; min-width: 200px; display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap; margin: 0; color: var(--title);
   font: 700 28px/36px var(--font-family); }
 .ds-contextbar__row { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); flex-wrap: wrap; }
@@ -340,6 +340,7 @@ html:has(dialog.ds-modal[open]) { overflow: hidden; }
 .ds-table th:first-child { border-left: 1px solid var(--surface-tint-8-); border-radius: var(--radius-sm) 0 0 var(--radius-sm); }
 .ds-table th:last-child { border-right: 1px solid var(--surface-tint-8-); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
 .ds-table td { padding: var(--space-4) var(--space-5); color: var(--paragraph); vertical-align: middle; }
+.ds-table td:nth-child(n+3) { font: 400 14px/20px var(--font-family); letter-spacing: .25px; } /* Figma: nombre y fecha de creación 16/24; creador y edición 14/20 */
 .ds-table td:first-child { border-radius: 12px 0 0 12px; }
 .ds-table td:last-child { border-radius: 0 12px 12px 0; }
 .ds-table tbody tr:nth-child(even) td { background: var(--transparent-on-surface-4); }

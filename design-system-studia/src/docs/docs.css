@@ -17,7 +17,7 @@
   border-bottom: 1px solid var(--outline-variant); color: var(--title); text-decoration: none; }
 .docs__brand small { display: block; color: var(--paragraph); }
 .docs__logo { flex: none; width: 72px; height: 72px; display: grid; place-items: center; border-radius: var(--radius-sm);
-  background: var(--surface-container-low); border-bottom: 1px solid var(--outline-variant); }
+  background: var(--logo-tile); --logo-primary: var(--logo-tile-primary); --logo-secondary: var(--logo-tile-secondary); border-bottom: 1px solid var(--outline-variant); }
 .docs__group { margin: var(--space-4) var(--space-3) var(--space-1); color: var(--on-surface-variant); text-transform: uppercase; }
 .docs__sub { display: flex; flex-direction: column; margin: 0 0 var(--space-2) 44px; border-left: 2px solid var(--outline-variant); }
 .docs__sub button { text-align: left; border: 0; background: transparent; cursor: pointer; padding: var(--space-2) var(--space-3); color: var(--on-surface-variant);
