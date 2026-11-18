@@ -5,6 +5,7 @@ import { EMO_CAT, EMOJI } from './catalog'
 import { MEMO_GRID, fixMemo, lvSync } from './defaults'
 import { parOk } from './rules'
 import type { MemoData, MemoItem } from './types'
+import personaje from '../../assets/personaje-logro.svg?raw'
 import './pv.css'
 
 const cx = (...a: (string | false | null | undefined)[]) => a.filter(Boolean).join(' ')
@@ -17,6 +18,7 @@ interface S {
 }
 
 const MEDAL = { Bronce: 'mep-medal--bronce', Plata: 'mep-medal--plata', Oro: 'mep-medal--oro' } as const
+const MEDAL_N = { Bronce: 3, Plata: 2, Oro: 1 } as const
 
 /** Mezcla Fisher-Yates de las cartas de las parejas completas del nivel (equivale a `deck`). */
 function mkDeck(items: MemoItem[]): Card[] {
@@ -147,7 +149,7 @@ export function MemoPreview({ game }: PreviewProps) {
                   aria-disabled={mt || up || s.lock || undefined} onClick={() => flip(i)}>
                   <span className="mep-card__in" aria-hidden="true">
                     <span className="mep-face mep-face--back" data-mark={base.dorso ? undefined : 'KL'}>{base.dorso ? <Icon name="image" size={28} /> : null}</span>
-                    <span className={cx('mep-face mep-face--front', `mep-tone--${f.tone}`)}>
+                    <span className={cx('mep-face mep-face--front', `mep-hue--${c.pid % 7}`)}>
                       {f.big && <span className="mep-face__big">{f.big}</span>}
                       {f.audio && <Icon name="music_note" size={28} />}
                       <span>{f.txt}</span>
@@ -204,7 +206,7 @@ export function MemoPreview({ game }: PreviewProps) {
           medal={!s.lost ? (
             <div className="mep-medalbox">
               <div className={cx('mep-medal', MEDAL[medalName])}>
-                <div className="mep-medal__in"><Icon name="military_tech" size={28} /><span className="t-label-md">PERSONAJE</span><span className="t-body-sm">Ilustración de María Paula</span></div>
+                <div className="mep-medal__fig" role="img" aria-label="Personaje celebrando con una medalla" dangerouslySetInnerHTML={{ __html: personaje.replaceAll('{{N}}', String(MEDAL_N[medalName])) }} />
               </div>
               <span className="mep-medal__tag t-label-md">{`MEDALLA DE ${medalName.toUpperCase()}${lvN > 1 ? ` · NIVEL ${lvAt + 1}` : ''}`}</span>
             </div>

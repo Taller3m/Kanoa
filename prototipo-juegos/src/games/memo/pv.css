@@ -27,6 +27,14 @@
 .mep-card--ok .mep-face--front { border: 2px solid var(--success); }
 .mep-face__big { font-size: 38px; line-height: 1; }
 .mep-face__ok { position: absolute; top: var(--space-1); right: var(--space-1); color: var(--success); }
+/* Color del frente por pareja: la paleta de Crear juegos (azul, morado, verde, naranja, turquesa, rojo, amarillo) */
+.mep-hue--0 { background: var(--blue-soft); color: var(--on-blue-soft); }
+.mep-hue--1 { background: var(--indigo-soft); color: var(--on-indigo-soft); }
+.mep-hue--2 { background: var(--green-soft); color: var(--on-green-soft); }
+.mep-hue--3 { background: var(--orange-soft); color: var(--on-orange-soft); }
+.mep-hue--4 { background: var(--teal-soft); color: var(--on-teal-soft); }
+.mep-hue--5 { background: var(--red-soft); color: var(--on-red-soft); }
+.mep-hue--6 { background: var(--prevent-container); color: var(--on-prevent-container); }
 .mep-tone--img { background: var(--secondary-container); color: var(--on-secondary-container); }
 .mep-tone--joy { background: var(--prevent-container); color: var(--on-prevent-container); }
 .mep-tone--trust { background: var(--green-soft); color: var(--on-green-soft); }
@@ -53,10 +61,12 @@
 
 /* Medalla (el nombre siempre va en texto) */
 .mep-medalbox { display: flex; flex-direction: column; align-items: center; gap: var(--space-3); }
-.mep-medal { width: 132px; height: 132px; border-radius: 50%; display: grid; place-items: center; box-shadow: 0 0 0 6px var(--surface-container-lowest); }
-.mep-medal--bronce { background: var(--orange-soft); }
-.mep-medal--plata { background: var(--surface-container-high); }
-.mep-medal--oro { background: var(--prevent-container); }
+.mep-medal { width: 230px; --mc1: #EDC456; --mc2: #D29E27; --mn: #7A4E00; --rb1: #D64545; --rb2: #A82F2F; }
+.mep-medal__fig { display: block; }
+.mep-medal__fig svg { display: block; width: 100%; height: auto; }
+.mep-medal--bronce { color: var(--orange-soft); --mc1: #E0A06A; --mc2: #A8602A; --mn: #5C2F0C; --rb1: #3FA57A; --rb2: #2B7A58; }
+.mep-medal--plata { color: var(--surface-container-high); --mc1: #E2E7EB; --mc2: #98A4AE; --mn: #3E4A54; --rb1: #4C86E8; --rb2: #2F5DB5; }
+.mep-medal--oro { color: var(--prevent-container); }
 .mep-medal__in { width: 104px; height: 104px; border-radius: 50%; background: var(--surface-container-lowest); border: 2px dashed var(--outline);
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; padding: var(--space-2); color: var(--primary); text-align: center; }
 .mep-medal__in .t-body-sm { font-size: 11px; line-height: 1.25; color: var(--on-surface-variant); }
@@ -75,3 +85,4 @@
 .mep-card--up .mep-face--front { visibility: visible; transition-delay: 0s; }
 .mep-face--back[data-mark]::before { content: attr(data-mark); }
 @media (prefers-reduced-motion: reduce) { .mep-face--front { transition-delay: 0s; } }
+
