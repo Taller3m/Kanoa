@@ -70,6 +70,11 @@ export function CrecePreview({ game }: PreviewProps) {
   const [s, setS] = useState<St>(() => initSt(c.ser))
   const ovBtn = useRef<HTMLDivElement>(null)
   const sceneRef = useRef<HTMLDivElement>(null)
+  /* Reacción del personaje ilustrado al cuidarlo: salto, ojos felices y el icono del cuidado flotando */
+  const [fx, setFx] = useState<{ k: IndKey; id: number } | null>(null)
+  const [feliz, setFeliz] = useState(false)
+  const felizT = useRef<number | undefined>(undefined)
+  useEffect(() => () => window.clearTimeout(felizT.current), [])
 
   const running = s.started && !s.done && !s.cr.ov && !help.open
   // Un único temporizador; se recrea solo cuando cambia si la simulación corre o la velocidad.
@@ -101,6 +106,16 @@ export function CrecePreview({ game }: PreviewProps) {
   const instr = (game.desc || '').trim() || 'Cuida a tu ser vivo: mantén sus necesidades en equilibrio para que crezca.'
   const patch = (o: Partial<St>) => setS(p => ({ ...p, ...o }))
   const reset = () => setS({ ...initSt(c.ser), started: true })
+  const duerme = night && cr.slept
+  const cuidar = (k: IndKey) => {
+    const sirvio = !cr.ov && !careCr(cr, k).bubble
+    setS(p => ({ ...p, cr: careCr(p.cr, k) }))
+    if (!sirvio || !sv.fig) return
+    setFx(f => ({ k, id: (f?.id ?? 0) + 1 }))
+    setFeliz(true)
+    window.clearTimeout(felizT.current)
+    felizT.current = window.setTimeout(() => setFeliz(false), 900)
+  }
 
   if (s.done) {
     return (
@@ -152,12 +167,20 @@ export function CrecePreview({ game }: PreviewProps) {
         <div className={'ccp-day__fill' + (night ? ' ccp-day__fill--night' : '')} style={{ width: Math.round(cr.t * 100) + '%' }} />
       </div>
 
-      <div ref={sceneRef} className={'ccp-scene' + (night ? ' ccp-scene--night' : '')}>
+      <div ref={sceneRef} className={'ccp-scene' + (night ? ' ccp-scene--night' : '') + (sv.fig ? ' ccp-scene--pet' : '')}>
         <div className="ccp-sky"><span aria-hidden="true">{night ? '🌙' : '☀️'}</span><span className="ccp-sr">{night ? 'Es de noche' : 'Es de día'}</span></div>
         <div className="ccp-bubble-slot" role="status">
           {bubble && !ov && <div className="ccp-bubble">{bubble}</div>}
         </div>
-        <div className={'ccp-being ccp-being--' + st + (bad ? ' ccp-being--bad' : '')} aria-hidden="true">{sv.g[st]}</div>
+        {sv.fig ? (
+          <div aria-hidden="true" className={'ccp-pet ccp-pet--' + st + ' ccp-pet--' + c.ser.toLowerCase() + (bad ? ' ccp-pet--bad' : '') + (duerme ? ' ccp-pet--duerme' : feliz ? ' ccp-pet--feliz' : '')}>
+            <div className="ccp-pet__fig" dangerouslySetInnerHTML={{ __html: sv.fig }} />
+            {duerme && <span className="ccp-pet__zz"><span>z</span><span>z</span><span>Z</span></span>}
+            {fx && !duerme && <span key={fx.id} className="ccp-pet__fx">{INDICADORES[fx.k][0]}</span>}
+          </div>
+        ) : (
+          <div className={'ccp-being ccp-being--' + st + (bad ? ' ccp-being--bad' : '')} aria-hidden="true">{sv.g[st]}</div>
+        )}
         <div className="ccp-stage-name">{sv.et[st] + (bad ? ' · necesita atención' : '')}</div>
         {ov && !(fin && ov === 'stage') && (
           <div className="ccp-ov">
@@ -202,7 +225,7 @@ export function CrecePreview({ game }: PreviewProps) {
           return (
             <Button key={k} variant="outline" className={dis ? 'ccp-btn--dis' : undefined} aria-disabled={dis || undefined}
               title={k === 'descanso' ? 'Solo de noche, una vez por noche' : 'Suma 15'}
-              onClick={() => setS(p => ({ ...p, cr: careCr(p.cr, k) }))}>
+              onClick={() => cuidar(k)}>
               {INDICADORES[k][0] + ' ' + INDICADORES[k][2]}
             </Button>
           )

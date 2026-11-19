@@ -4,6 +4,8 @@ import imgGato from '../../assets/crece-gato-cara.svg'
 import imgGirasol from '../../assets/crece-girasol-cara.svg'
 import imgPerro from '../../assets/crece-perro-cara.svg'
 import imgPollito from '../../assets/crece-pollito-cara.svg'
+import figGato from '../../assets/crece-gato.svg?raw'
+import figPerro from '../../assets/crece-perro.svg?raw'
 
 /** Catálogo de «Crece conmigo» (equivale a J_IND, J_SV, J_DIF y J_DUR del prototipo original). */
 export type IndKey = 'agua' | 'luz' | 'comida' | 'carino' | 'descanso'
@@ -23,6 +25,8 @@ export interface SerVivo {
   g: [string, string, string]
   /** Rostro ilustrado para la portada del paso 2; si falta, se usa el emoji de la última etapa. */
   img?: string
+  /** SVG de cuerpo completo (en línea) para el juego; sus grupos kl-* se animan desde pv.css. Si falta, se usa el emoji de cada etapa. */
+  fig?: string
   /** Variable de token del tono categórico. */
   c: string
   et: [string, string, string]
@@ -34,8 +38,8 @@ export const SERES: Record<string, SerVivo> = {
   'Café': { tipo: 'Planta', g: ['🌱', '🌿', '☕'], img: imgCafe, c: '--green-soft', et: ['Brote', 'Cafeto joven', 'Cafeto con cerezas'], cons: { agua: 25, luz: 15 }, msg: ['Me gusta crecer bajo la sombra de otros árboles.', '¡Ya tengo cerezas! De ellas sale el grano de café.'] },
   'Girasol': { tipo: 'Planta', g: ['🌱', '🌿', '🌻'], img: imgGirasol, c: '--secondary-container', et: ['Brote', 'Girasol joven', 'Girasol en flor'], cons: { agua: 20, luz: 30 }, msg: ['¿Sabías que giro buscando el sol?', '¡Florecí! Mis semillas alimentan a muchos pájaros.'] },
   'Frailejón': { tipo: 'Planta', g: ['🌱', '🪴', '🌼'], img: imgFrailejon, c: '--teal-soft', et: ['Brote', 'Frailejón joven', 'Frailejón en flor'], cons: { agua: 15, luz: 25 }, msg: ['Mis hojas peludas me protegen del frío del páramo.', '¡Florecí! Ayudo a guardar el agua del páramo.'] },
-  'Perro': { tipo: 'Animal', g: ['🐶', '🐕', '🦮'], img: imgPerro, c: '--orange-soft', et: ['Cachorro', 'Perro joven', 'Perro adulto'], cons: { comida: 25, carino: 25, descanso: 25 }, msg: ['Me encanta correr y que me acaricies.', '¡Ya soy adulto! Gracias por cuidarme.'] },
-  'Gato': { tipo: 'Animal', g: ['🐱', '🐈', '🐈‍⬛'], img: imgGato, c: '--indigo-soft', et: ['Gatito', 'Gato joven', 'Gato adulto'], cons: { comida: 25, carino: 20, descanso: 30 }, msg: ['Me encanta jugar con una bolita de lana.', '¡Ya soy un gato adulto! Gracias por cuidarme.'] },
+  'Perro': { tipo: 'Animal', g: ['🐶', '🐕', '🦮'], img: imgPerro, fig: figPerro, c: '--orange-soft', et: ['Cachorro', 'Perro joven', 'Perro adulto'], cons: { comida: 25, carino: 25, descanso: 25 }, msg: ['Me encanta correr y que me acaricies.', '¡Ya soy adulto! Gracias por cuidarme.'] },
+  'Gato': { tipo: 'Animal', g: ['🐱', '🐈', '🐈‍⬛'], img: imgGato, fig: figGato, c: '--indigo-soft', et: ['Gatito', 'Gato joven', 'Gato adulto'], cons: { comida: 25, carino: 20, descanso: 30 }, msg: ['Me encanta jugar con una bolita de lana.', '¡Ya soy un gato adulto! Gracias por cuidarme.'] },
   'Pollito': { tipo: 'Animal', g: ['🐥', '🐤', '🐔'], img: imgPollito, c: '--blue-soft', et: ['Pollito', 'Pollo joven', 'Gallina'], cons: { comida: 30, carino: 15, descanso: 30 }, msg: ['Me gusta buscar granitos en la tierra.', '¡Ya soy una gallina! Gracias por cuidarme.'] },
 }
 

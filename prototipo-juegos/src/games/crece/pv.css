@@ -19,7 +19,7 @@
 .ccp-being--1 { font-size: 92px; }
 .ccp-being--2 { font-size: 116px; }
 .ccp-being--bad { filter: grayscale(0.7) brightness(0.85); }
-.ccp-stage-name { font-size: 0.8125rem; font-weight: 700; color: var(--on-surface); background: var(--surface-container-lowest); border-radius: var(--radius-full); padding: var(--space-1) var(--space-3); }
+.ccp-stage-name { position: relative; font-size: 0.8125rem; font-weight: 700; color: var(--on-surface); background: var(--surface-container-lowest); border-radius: var(--radius-full); padding: var(--space-1) var(--space-3); }
 
 .ccp-ov { position: absolute; inset: 0; background: var(--on-surface---30); display: flex; align-items: center; justify-content: center; padding: var(--space-5); }
 .ccp-ov__card { background: var(--surface-container-lowest); color: var(--on-surface); border-radius: var(--radius-md); padding: var(--space-5); max-width: 380px; text-align: center; display: flex; flex-direction: column; gap: var(--space-3); align-items: center; }
@@ -44,6 +44,72 @@
 .ccp-btns { display: flex; gap: var(--space-3); flex-wrap: wrap; }
 .ccp-btn--dis { opacity: 0.6; border-style: dashed; }
 
+/* Personaje ilustrado (perro y gato): SVG en línea con grupos kl-* animados. Los orígenes están en unidades del viewBox de cada SVG. */
+.ccp-scene--pet { min-height: 340px; justify-content: flex-end; padding-bottom: var(--space-4); }
+.ccp-scene--pet::before { content: ''; position: absolute; left: -6%; right: -6%; bottom: 0; height: 92px; background: var(--green-soft); border-radius: 50% 50% 0 0 / 34px 34px 0 0; }
+.ccp-scene--night.ccp-scene--pet::before { background: var(--on-green-soft); }
+.ccp-pet { position: relative; width: 132px; transition: width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); }
+.ccp-pet--1 { width: 168px; }
+.ccp-pet--2 { width: 204px; }
+.ccp-pet__fig { transform-origin: 50% 100%; }
+.ccp-pet__fig svg { display: block; width: 100%; height: auto; overflow: visible; }
+.ccp-pet .kl-ojos-dormido, .ccp-pet .kl-ojos-feliz { display: none; }
+.ccp-pet .kl-ojo { transform-box: fill-box; transform-origin: center; animation: ccp-parpadeo 4.6s infinite; }
+.ccp-pet .kl-cuerpo { transform-box: fill-box; transform-origin: 50% 100%; animation: ccp-respira 3.2s ease-in-out infinite; }
+.ccp-pet .kl-cabeza { animation: ccp-cabeza 3.2s ease-in-out infinite; }
+.ccp-pet--perro .kl-cabeza { transform-origin: 160px 196px; }
+.ccp-pet--perro .kl-cola { transform-origin: 121px 212px; animation: ccp-menea 0.5s ease-in-out infinite alternate; }
+.ccp-pet--perro .kl-estela { animation: ccp-estela 0.5s ease-in-out infinite alternate; }
+.ccp-pet--gato .kl-cabeza { transform-origin: 345px 402px; }
+.ccp-pet--gato .kl-cola { transform-origin: 392px 431px; animation: ccp-ondea 2.8s ease-in-out infinite alternate; }
+@keyframes ccp-parpadeo { 0%, 92%, 100% { transform: scaleY(1); } 95%, 97% { transform: scaleY(0.1); } }
+@keyframes ccp-respira { 50% { transform: scale(1.012, 1.02); } }
+@keyframes ccp-cabeza { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-1.2px) rotate(1.2deg); } }
+@keyframes ccp-menea { from { transform: rotate(-9deg); } to { transform: rotate(10deg); } }
+@keyframes ccp-estela { from { opacity: 0.15; } to { opacity: 1; } }
+@keyframes ccp-ondea { from { transform: rotate(-4deg); } to { transform: rotate(6deg); } }
+
+/* Necesita atención: se apaga, baja la cabeza y deja de mover la cola */
+.ccp-pet--bad .ccp-pet__fig { filter: grayscale(0.55) brightness(0.92); }
+.ccp-pet--bad .kl-cola, .ccp-pet--bad .kl-estela { animation: none; }
+.ccp-pet--bad .kl-estela, .ccp-pet--bad .kl-lengua { display: none; }
+.ccp-pet--bad .kl-cabeza { animation: none; transform: translateY(3px) rotate(-3deg); }
+
+/* Al cuidarlo: salta, sonríe con los ojos y sube el icono del cuidado */
+.ccp-pet--feliz .ccp-pet__fig { animation: ccp-salto 0.85s cubic-bezier(0.3, 0.7, 0.4, 1); }
+.ccp-pet--feliz .kl-ojo { display: none; }
+.ccp-pet--feliz .kl-ojos-feliz { display: inline; }
+.ccp-pet--feliz.ccp-pet--perro .kl-cola, .ccp-pet--feliz.ccp-pet--perro .kl-estela { animation-duration: 0.22s; }
+.ccp-pet--feliz.ccp-pet--gato .kl-cola { animation-duration: 0.6s; }
+@keyframes ccp-salto {
+  0%, 100% { transform: translateY(0) scale(1); }
+  12% { transform: translateY(2px) scale(1.04, 0.95); }
+  38% { transform: translateY(-16px) scale(0.98, 1.03); }
+  60% { transform: translateY(0) scale(1.03, 0.97); }
+  78% { transform: translateY(-6px) scale(1); }
+}
+.ccp-pet__fx { position: absolute; left: 50%; top: 2%; font-size: 26px; line-height: 1; pointer-events: none; opacity: 0; animation: ccp-fx 1s ease-out forwards; }
+@keyframes ccp-fx {
+  from { opacity: 0; transform: translate(-50%, 10px) scale(0.6); }
+  25% { opacity: 1; transform: translate(-50%, -6px) scale(1.1); }
+  to { opacity: 0; transform: translate(-50%, -46px) scale(1); }
+}
+
+/* Dormido (de noche, después de «Dormir»): ojos cerrados, respiración lenta y Zzz */
+.ccp-pet--duerme .kl-ojo, .ccp-pet--duerme .kl-lengua, .ccp-pet--duerme .kl-estela { display: none; }
+.ccp-pet--duerme .kl-ojos-dormido { display: inline; }
+.ccp-pet--duerme .kl-cola { animation: none; }
+.ccp-pet--duerme .kl-cuerpo { animation-duration: 4.8s; }
+.ccp-pet--duerme .kl-cabeza { animation: ccp-cabeza-duerme 4.8s ease-in-out infinite; }
+@keyframes ccp-cabeza-duerme { 0%, 100% { transform: translateY(3px) rotate(4deg); } 50% { transform: translateY(4.4px) rotate(5deg); } }
+.ccp-pet__zz { position: absolute; right: -10%; top: -6%; display: flex; align-items: flex-end; gap: 2px; font-weight: 800; line-height: 1; color: var(--indigo-soft); pointer-events: none; }
+.ccp-pet__zz span { font-size: 14px; animation: ccp-zz 2.4s ease-in-out infinite; }
+.ccp-pet__zz span:nth-child(2) { font-size: 18px; animation-delay: 0.4s; }
+.ccp-pet__zz span:nth-child(3) { font-size: 24px; animation-delay: 0.8s; }
+@keyframes ccp-zz { 0%, 100% { opacity: 0.25; transform: translateY(3px); } 50% { opacity: 1; transform: translateY(-4px); } }
+
 @media (prefers-reduced-motion: reduce) {
-  .ccp-day__fill, .ccp-bar__fill, .ccp-being { transition: none; }
+  .ccp-day__fill, .ccp-bar__fill, .ccp-being, .ccp-pet { transition: none; }
+  .ccp-pet *, .ccp-pet__fig { animation: none !important; }
+  .ccp-pet__fx { display: none; }
 }
