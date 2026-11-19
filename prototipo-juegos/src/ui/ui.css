@@ -369,3 +369,10 @@ html:has(dialog.ds-modal[open]) { overflow: hidden; }
 .ds-snackbar--success { background: var(--success-surface-snackbar); color: var(--on-success-surface-snackbar); }
 .ds-snackbar--success .ds-btn--text { color: var(--on-success-surface-snackbar); }
 .ds-modal--wide { width: min(960px, calc(100% - 2 * var(--space-4))); }
+
+/* Lista desplegable nativa del selector: fondo y texto con contraste en ambos temas (WCAG 1.4.3) */
+.light { color-scheme: light; }
+.dark { color-scheme: dark; }
+.ds-control select option, .ds-control select optgroup { background: var(--surface-container-lowest); color: var(--on-surface); }
+.ds-control select option:checked { background: var(--primary-container); color: var(--on-primary-container); }
+.ds-control select option:disabled { color: var(--muted); }

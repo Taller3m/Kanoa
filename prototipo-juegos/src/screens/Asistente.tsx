@@ -16,6 +16,7 @@ export function Asistente({ game, paso, setPaso, nombreErr, update, toast, clear
   const Editor = EDITORES[game.tipo]
   const reqs = reqsOf(game)
   const detallesOk = game.nombre.trim().length >= 3
+  const configOk = reqs.length > 0 && reqs.every((r) => r.ok)
   return (
     <section className="screen" aria-label={`${game.id ? 'Edición' : 'Creación'} de ${game.tipo.toLowerCase()}`}>
       <nav className="stepper" aria-label="Pasos">
@@ -23,8 +24,8 @@ export function Asistente({ game, paso, setPaso, nombreErr, update, toast, clear
           <span className="stepper__dot">{detallesOk ? <Icon name="check" size={16} /> : 1}</span>Detalles
         </button>
         <span className="stepper__line" aria-hidden="true" />
-        <button type="button" className="stepper__step" aria-current={paso === 2 ? 'step' : undefined} onClick={() => setPaso(2)}>
-          <span className="stepper__dot">2</span>Configuración
+        <button type="button" className={`stepper__step ${configOk ? 'stepper__step--done' : ''}`} aria-current={paso === 2 ? 'step' : undefined} onClick={() => setPaso(2)}>
+          <span className="stepper__dot">{configOk ? <Icon name="check" size={16} /> : 2}</span>Configuración
         </button>
       </nav>
 

@@ -57,9 +57,12 @@ export function CruciPreview({ game }: PreviewProps) {
       const wrong = checked && val !== m.L
       const right = checked && val === m.L
       const num = nm.byStart[k]
+      const startH = words.some((w) => w.dir === 'H' && cruciKey(w.r, w.c) === k)
+      const startV = words.some((w) => w.dir === 'V' && cruciKey(w.r, w.c) === k)
       cells.push(
         <div key={k} className={`crp-cell${wrong ? ' crp-cell--wrong' : ''}${right ? ' crp-cell--right' : ''}`}>
-          {num && <span className="crp-cell__num" aria-hidden="true">{num}</span>}
+          {num && startH && <span className="crp-cell__num crp-cell__num--h" aria-hidden="true">{num}</span>}
+          {num && startV && <span className="crp-cell__num crp-cell__num--v" aria-hidden="true">{num}</span>}
           <input data-k={k} value={val} maxLength={2} autoComplete="off" spellCheck={false} aria-invalid={wrong}
             aria-label={`${num ? `${num}, ` : ''}fila ${r + 1}, columna ${c + 1}${right ? ', correcta' : wrong ? ', incorrecta' : ''}`}
             onKeyDown={(e) => move(e, r, c)}
