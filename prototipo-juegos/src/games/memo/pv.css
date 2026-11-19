@@ -61,17 +61,17 @@
 
 /* Medalla (el nombre siempre va en texto) */
 .mep-medalbox { display: flex; flex-direction: column; align-items: center; gap: var(--space-3); }
-.mep-medal { width: 230px; --mc1: #EDC456; --mc2: #D29E27; --mn: #7A4E00; --rb1: #D64545; --rb2: #A82F2F; }
+.mep-medal { width: 264px; --mc1: #EDC456; --mc2: #D29E27; --mn: #7A4E00; --mt: #553600; --rb1: #D64545; --rb2: #A82F2F; }
 .mep-medal__fig { display: block; }
-.mep-medal__fig svg { display: block; width: 100%; height: auto; }
-.mep-medal--bronce { color: var(--orange-soft); --mc1: #E0A06A; --mc2: #A8602A; --mn: #5C2F0C; --rb1: #3FA57A; --rb2: #2B7A58; }
-.mep-medal--plata { color: var(--surface-container-high); --mc1: #E2E7EB; --mc2: #98A4AE; --mn: #3E4A54; --rb1: #4C86E8; --rb2: #2F5DB5; }
+.mep-medal__fig svg { display: block; width: 100%; height: auto; font-family: inherit; }
+/* La copa es solo para el primer puesto */
+.mep-medal:not(.mep-medal--oro) .kl-copa { display: none; }
+.mep-medal--bronce { color: var(--orange-soft); --mc1: #E0A06A; --mc2: #A8602A; --mn: #5C2F0C; --mt: #4A2508; --rb1: #3FA57A; --rb2: #2B7A58; }
+.mep-medal--plata { color: var(--surface-container-high); --mc1: #E2E7EB; --mc2: #98A4AE; --mn: #3E4A54; --mt: #2B353D; --rb1: #4C86E8; --rb2: #2F5DB5; }
 .mep-medal--oro { color: var(--prevent-container); }
 .mep-medal__in { width: 104px; height: 104px; border-radius: 50%; background: var(--surface-container-lowest); border: 2px dashed var(--outline);
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; padding: var(--space-2); color: var(--primary); text-align: center; }
 .mep-medal__in .t-body-sm { font-size: 11px; line-height: 1.25; color: var(--on-surface-variant); }
-.mep-medal__tag { padding: var(--space-1) var(--space-3); border-radius: var(--radius-full); background: var(--surface-container-lowest);
-  border: 1px solid var(--outline-variant); color: var(--primary); }
 .mep-home { max-width: 560px; margin: var(--space-3) auto 0; }
 
 @media (prefers-reduced-motion: reduce) {

@@ -102,6 +102,10 @@ export function MemoPreview({ game }: PreviewProps) {
 
   /* Medalla: Bronce/Plata en niveles intermedios, Oro al terminar */
   const medalName = lvMid ? (lvN === 3 ? (['Bronce', 'Plata'] as const)[lvAt]! : 'Plata') : 'Oro'
+  /* El nombre de la medalla va en la cinta del personaje; con nivel el texto es más largo y baja de tamaño */
+  const cinta = `MEDALLA DE ${medalName.toUpperCase()}${lvN > 1 ? ` · NIVEL ${lvAt + 1}` : ''}`
+  const figura = personaje.replaceAll('{{N}}', String(MEDAL_N[medalName])).replace('{{T}}', cinta)
+    .replace('{{FS}}', lvN > 1 ? '10' : '13').replace('{{DY}}', lvN > 1 ? '-0.9' : '0')
   const instr = (game.desc || '').trim() || 'Voltea dos cartas a la vez y encuentra todas las parejas.'
   const mmin = L.tiempo.on ? L.tiempo.min : 0
 
@@ -206,9 +210,10 @@ export function MemoPreview({ game }: PreviewProps) {
           medal={!s.lost ? (
             <div className="mep-medalbox">
               <div className={cx('mep-medal', MEDAL[medalName])}>
-                <div className="mep-medal__fig" role="img" aria-label="Personaje celebrando con una medalla" dangerouslySetInnerHTML={{ __html: personaje.replaceAll('{{N}}', String(MEDAL_N[medalName])) }} />
+                <div className="mep-medal__fig" role="img"
+                  aria-label={`Personaje celebrando con ${medalName === 'Oro' ? 'la copa y ' : ''}la medalla de ${medalName.toLowerCase()}${lvN > 1 ? `, nivel ${lvAt + 1}` : ''}`}
+                  dangerouslySetInnerHTML={{ __html: figura }} />
               </div>
-              <span className="mep-medal__tag t-label-md">{`MEDALLA DE ${medalName.toUpperCase()}${lvN > 1 ? ` · NIVEL ${lvAt + 1}` : ''}`}</span>
             </div>
           ) : undefined}
           onNext={lvMid ? nextLv : undefined} nextLabel={`IR AL NIVEL ${lvAt + 2}`}
