@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+	<!-- Rostro del pollito de «Crece conmigo» (portada). Ilustración propia, en el estilo del perro y el gato. -->
+	<defs><radialGradient id="po-rubor"><stop offset="0" stop-color="#F87171" stop-opacity=".55"/><stop offset="1" stop-color="#F87171" stop-opacity="0"/></radialGradient></defs>
+	<path fill="#E3A64B" d="M42,24C36,13 44,7 49,15C51,5 61,7 57,18C63,13 68,20 60,26Z"/>
+	<ellipse cx="50" cy="104" rx="36" ry="22" fill="#E3A64B"/>
+	<circle cx="50" cy="54" r="34" fill="#F5C842"/>
+	<ellipse cx="50" cy="66" rx="25" ry="19" fill="#FFE8B0" opacity=".6"/>
+	<path fill="none" stroke="#C1822F" stroke-width="1.6" stroke-linecap="round" d="M30,43Q35,39 40,42M60,42Q65,39 70,43"/>
+	<circle cx="36" cy="52" r="3.4" fill="#3C210F"/><circle cx="64" cy="52" r="3.4" fill="#3C210F"/>
+	<circle cx="37.2" cy="50.8" r="1" fill="#fff"/><circle cx="65.2" cy="50.8" r="1" fill="#fff"/>
+	<circle cx="27" cy="62" r="8" fill="url(#po-rubor)"/><circle cx="73" cy="62" r="8" fill="url(#po-rubor)"/>
+	<path fill="#F97316" d="M41.5,58.5Q50,53.5 58.5,58.5Q55,69.5 50,70.5Q45,69.5 41.5,58.5Z"/>
+	<path fill="#C2410C" d="M44,63.5Q50,66 56,63.5Q53.5,69.8 50,70.5Q46.500,69.8 44,63.5Z"/>
+</svg>

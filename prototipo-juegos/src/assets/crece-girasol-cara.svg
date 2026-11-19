@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+	<!-- Rostro del girasol de «Crece conmigo» (portada). Ilustración propia, en el estilo del perro y el gato. -->
+	<defs><radialGradient id="gi-rubor"><stop offset="0" stop-color="#F87171" stop-opacity=".6"/><stop offset="1" stop-color="#F87171" stop-opacity="0"/></radialGradient><path id="gi-p" d="M50,50C41,38 41,16 50,3C59,16 59,38 50,50Z"/></defs>
+	<g fill="#E3A64B"><use href="#gi-p" transform="rotate(15.0 50 50)"/><use href="#gi-p" transform="rotate(45.0 50 50)"/><use href="#gi-p" transform="rotate(75.0 50 50)"/><use href="#gi-p" transform="rotate(105.0 50 50)"/><use href="#gi-p" transform="rotate(135.0 50 50)"/><use href="#gi-p" transform="rotate(165.0 50 50)"/><use href="#gi-p" transform="rotate(195.0 50 50)"/><use href="#gi-p" transform="rotate(225.0 50 50)"/><use href="#gi-p" transform="rotate(255.0 50 50)"/><use href="#gi-p" transform="rotate(285.0 50 50)"/><use href="#gi-p" transform="rotate(315.0 50 50)"/><use href="#gi-p" transform="rotate(345.0 50 50)"/></g>
+	<g fill="#F5C842"><use href="#gi-p" transform="rotate(0.0 50 50)"/><use href="#gi-p" transform="rotate(30.0 50 50)"/><use href="#gi-p" transform="rotate(60.0 50 50)"/><use href="#gi-p" transform="rotate(90.0 50 50)"/><use href="#gi-p" transform="rotate(120.0 50 50)"/><use href="#gi-p" transform="rotate(150.0 50 50)"/><use href="#gi-p" transform="rotate(180.0 50 50)"/><use href="#gi-p" transform="rotate(210.0 50 50)"/><use href="#gi-p" transform="rotate(240.0 50 50)"/><use href="#gi-p" transform="rotate(270.0 50 50)"/><use href="#gi-p" transform="rotate(300.0 50 50)"/><use href="#gi-p" transform="rotate(330.0 50 50)"/></g>
+	<circle cx="50" cy="50" r="25" fill="#C1822F"/>
+	<path fill="#E3A64B" opacity=".45" d="M27.5,44A23,23 0 0 1 66,31.5A27,27 0 0 0 27.5,44Z"/>
+	<circle cx="50" cy="50" r="20.5" fill="none" stroke="#9A7000" stroke-width="1.4" stroke-dasharray=".1 4.2" stroke-linecap="round"/>
+	<path fill="none" stroke="#3C210F" stroke-width="1.5" stroke-linecap="round" d="M36,41.5Q40,38.5 44,41M56,41Q60,38.5 64,41.5"/>
+	<circle cx="41" cy="48" r="3" fill="#3C210F"/><circle cx="59" cy="48" r="3" fill="#3C210F"/>
+	<circle cx="42" cy="47" r=".9" fill="#fff"/><circle cx="60" cy="47" r=".9" fill="#fff"/>
+	<circle cx="34.5" cy="56" r="6.5" fill="url(#gi-rubor)"/><circle cx="65.5" cy="56" r="6.5" fill="url(#gi-rubor)"/>
+	<path fill="none" stroke="#3C210F" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M44,56.5Q47,61 50,56.5Q53,61 56,56.5"/>
+</svg>

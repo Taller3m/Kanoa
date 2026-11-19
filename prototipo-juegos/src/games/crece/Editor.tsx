@@ -34,7 +34,7 @@ export function CreceEditor({ game, update }: EditorProps) {
               const on = c.ser === n
               return (
                 <button key={n} type="button" aria-pressed={on} className={'cc-ser' + (on ? ' cc-ser--on' : '')} onClick={() => set(cc => { cc.ser = n })}>
-                  <span className="cc-ico" style={{ background: `var(${x.c})` }} aria-hidden="true">{x.g[2]}</span>
+                  <span className="cc-ico" style={{ background: `var(${x.c})` }} aria-hidden="true">{x.img ? <img src={x.img} alt="" /> : x.g[2]}</span>
                   <span className="cc-ser__txt">
                     <span className="cc-ser__n">{n}</span>
                     <span className="cc-ser__et">{x.et.join(' › ')}</span>

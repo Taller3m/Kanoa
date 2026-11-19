@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+	<!-- Rostro del café (cereza) de «Crece conmigo» (portada). Ilustración propia, en el estilo del perro y el gato. -->
+	<defs><radialGradient id="ca-rubor"><stop offset="0" stop-color="#B3261E" stop-opacity=".5"/><stop offset="1" stop-color="#B3261E" stop-opacity="0"/></radialGradient><clipPath id="ca-c"><circle cx="48" cy="61" r="32"/></clipPath></defs>
+	<circle cx="83" cy="70" r="16" fill="#DC2626"/>
+	<path fill="#15803D" d="M49,29C36,6 14,6 4,18C16,36 38,38 49,29Z"/>
+	<path fill="none" stroke="#22C55E" stroke-width="1.4" stroke-linecap="round" d="M45,27C34,18 22,16 11,18"/>
+	<path fill="#22C55E" d="M49,29C58,6 82,2 96,13C86,32 62,38 49,29Z"/>
+	<path fill="none" stroke="#15803D" stroke-width="1.4" stroke-linecap="round" d="M53,27C64,17 76,13 89,14"/>
+	<path fill="none" stroke="#6F3314" stroke-width="3.4" stroke-linecap="round" d="M49,33V24"/>
+	<circle cx="48" cy="61" r="32" fill="#F87171"/>
+	<g clip-path="url(#ca-c)"><path fill="#DC2626" opacity=".4" d="M80,40A40,40 0 0 1 22,92L90,100Z"/></g>
+	<ellipse cx="33" cy="42" rx="8" ry="4" fill="#fff" opacity=".45" transform="rotate(-35 33 42)"/>
+	<path fill="none" stroke="#3C210F" stroke-width="1.5" stroke-linecap="round" d="M31,52.5Q35.5,49 40,52M56,52Q60.5,49 65,52.5"/>
+	<circle cx="37" cy="60" r="3.3" fill="#3C210F"/><circle cx="59" cy="60" r="3.3" fill="#3C210F"/>
+	<circle cx="38.1" cy="58.9" r="1" fill="#fff"/><circle cx="60.1" cy="58.9" r="1" fill="#fff"/>
+	<circle cx="28.5" cy="69" r="7.5" fill="url(#ca-rubor)"/><circle cx="67.5" cy="69" r="7.5" fill="url(#ca-rubor)"/>
+	<path fill="none" stroke="#3C210F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" d="M41.5,69Q44.8,74 48,69Q51.2,74 54.5,69"/>
+</svg>
