@@ -1,6 +1,6 @@
-import { useEffect, useId, useState, type ReactNode } from 'react'
+import { useEffect, useId, useRef, useState, type ChangeEvent, type ReactNode } from 'react'
 import type { EditorProps } from '../types'
-import { Button, ConfirmDialog, Icon, Select, Switch, Tabs, TextField } from '../../ui'
+import { Button, ConfirmDialog, Icon, IconButton, Select, Switch, Tabs, TextField } from '../../ui'
 import { EMO_CAT, EMOCIONES, EMOJI, repVisible } from './catalog'
 import {
   MEMO_GRID, MEMO_MAX_NIVELES, MEMO_MODOS, MEMO_PAREJAS,
@@ -26,10 +26,28 @@ function Opt({ name, checked, onChange, variant, children }: {
 
 const Req = () => <span className="me-req" aria-hidden="true">*</span>
 
+const MAX_IMG = 10 * 1024 * 1024
+const LADO_IMG = 480
+/** Lee la imagen y la reduce a un lado máximo de 480 px: en la carta se ve pequeña y así el borrador sigue liviano. */
+const leerImagen = (f: File) => new Promise<string>((res, rej) => {
+  const url = URL.createObjectURL(f)
+  const im = new Image()
+  im.onload = () => {
+    const k = Math.min(1, LADO_IMG / Math.max(im.naturalWidth, im.naturalHeight))
+    const c = document.createElement('canvas')
+    c.width = Math.max(1, Math.round(im.naturalWidth * k)); c.height = Math.max(1, Math.round(im.naturalHeight * k))
+    c.getContext('2d')?.drawImage(im, 0, 0, c.width, c.height)
+    URL.revokeObjectURL(url)
+    res(c.toDataURL('image/webp', 0.85))
+  }
+  im.onerror = () => { URL.revokeObjectURL(url); rej(new Error('imagen ilegible')) }
+  im.src = url
+})
+
 interface Confirmacion { title: string; msg: string; yes: () => void }
 
 /** Paso 2 «Configuración» del juego «Memoria». */
-export function MemoEditor({ game, update }: EditorProps) {
+export function MemoEditor({ game, update, toast }: EditorProps) {
   const uid = useId()
   const m = game.memo
   const lvI = m.lv || 0
@@ -41,6 +59,23 @@ export function MemoEditor({ game, update }: EditorProps) {
   const contNow = m.modo === 'Idénticos' ? (m.items[0]?.a.tipo || 'Imagen') : null
   const [cf, setCf] = useState<Confirmacion | null>(null)
   const ask = (title: string, msg: string, yes: () => void) => setCf({ title, msg, yes })
+
+  /* Carga de imagen de la carta A: un solo selector de archivos para toda la tabla; `imgK` es la pareja que lo abrió */
+  const imgRef = useRef<HTMLInputElement>(null)
+  const imgK = useRef(0)
+  const pickImg = (k: number) => { imgK.current = k; imgRef.current?.click() }
+  const onImg = async (e: ChangeEvent<HTMLInputElement>) => {
+    const f = e.target.files?.[0]
+    e.target.value = ''
+    if (!f) return
+    if (!['jpg', 'jpeg', 'png'].includes((f.name.split('.').pop() ?? '').toLowerCase())) { toast('Formato no admitido. Usa .jpg, .jpeg o .png.', 'err'); return }
+    if (f.size > MAX_IMG) { toast('La imagen supera los 10 MB.', 'err'); return }
+    const k = imgK.current
+    try {
+      const src = await leerImagen(f)
+      update((d) => { const o = d.memo.items[k]; if (o && o.a.tipo === 'Imagen') { o.a.v = f.name; o.a.img = src } })
+    } catch { toast('No se pudo leer la imagen. Prueba con otro archivo.', 'err') }
+  }
 
   /* Límite de errores: texto local; se confirma al salir del campo o si es un número válido */
   const [nTxt, setNTxt] = useState(String(m.intentos.n))
@@ -54,7 +89,7 @@ export function MemoEditor({ game, update }: EditorProps) {
       const mm = d.memo
       mm.modo = t
       const mp = (it: MemoItem): MemoItem => ({
-        a: { tipo: defA(t), v: it.a.tipo === defA(t) ? it.a.v : '' },
+        a: { tipo: defA(t), v: it.a.tipo === defA(t) ? it.a.v : '', ...(it.a.tipo === defA(t) && it.a.img ? { img: it.a.img } : {}) },
         b: { tipo: defB(t), v: it.b.tipo === defB(t) ? it.b.v : '' },
         msg: it.msg,
       })
@@ -125,9 +160,9 @@ export function MemoEditor({ game, update }: EditorProps) {
     : `${m.parejas * 2} cartas`
 
   const paresHelp = ({
-    'Idénticos': 'Configura la carta A de cada pareja; el sistema la duplica para formarla.',
+    'Idénticos': 'Configura la carta A de cada pareja; el sistema la duplica para formarla.' + (contNow === 'Imagen' ? ' Imágenes .jpg, .jpeg o .png de hasta 10 MB.' : ''),
     'Concepto – definición': 'Escribe el concepto en la carta A y su definición en la carta B.',
-    'Imagen – texto': 'Sube la imagen en la carta A y escribe la palabra que la nombra en la carta B.',
+    'Imagen – texto': 'Sube la imagen en la carta A (.jpg, .jpeg o .png, hasta 10 MB) y escribe la palabra que la nombra en la carta B.',
   } as Record<string, string>)[m.modo]
 
   const IP = (k: number, fn: (it: MemoItem) => void) => update((d) => { fn(d.memo.items[k]!) })
@@ -295,6 +330,7 @@ export function MemoEditor({ game, update }: EditorProps) {
       </div>
       <p className="me-help t-body-sm">Al iniciar el juego, el sistema duplica y mezcla las cartas en el tablero de forma aleatoria.</p>
 
+      <input ref={imgRef} type="file" hidden tabIndex={-1} aria-hidden="true" accept=".jpg,.jpeg,.png,image/jpeg,image/png" onChange={onImg} />
       <ConfirmDialog open={!!cf} title={cf?.title ?? ''} message={cf?.msg ?? ''}
         onCancel={() => setCf(null)} onConfirm={() => { const y = cf?.yes; setCf(null); y?.() }} />
     </div>
@@ -308,7 +344,26 @@ export function MemoEditor({ game, update }: EditorProps) {
         placeholder={m.modo === 'Concepto – definición' ? 'Ej. Bogotá' : 'Texto de la carta'}
         onChange={(e) => { const x = e.target.value; IP(k, (o) => { o.a.v = x }) }} />
     }
-    if (t === 'Imagen' || t === 'Audio') {
+    if (t === 'Imagen') {
+      if (!it.a.v) {
+        return (
+          <button type="button" className="me-file" aria-label={`AÑADIR IMAGEN, pareja ${n}`} onClick={() => pickImg(k)}>
+            <Icon name="add_photo_alternate" size={18} /><span className="me-file__t">AÑADIR IMAGEN</span>
+          </button>
+        )
+      }
+      return (
+        <div className="me-img">
+          {it.a.img
+            ? <img className="me-img__thumb" src={it.a.img} alt={`Imagen de la pareja ${n}`} />
+            : <span className="me-img__thumb me-img__thumb--none" aria-hidden="true"><Icon name="image" size={24} /></span>}
+          <span className="me-file__t me-grow t-body-md" title={it.a.v}>{it.a.v}</span>
+          <IconButton icon="upload" label={`Cambiar imagen, pareja ${n}`} onClick={() => pickImg(k)} />
+          <IconButton icon="close" label={`Quitar imagen, pareja ${n}`} className="me-danger" onClick={() => IP(k, (o) => { o.a.v = ''; o.a.img = '' })} />
+        </div>
+      )
+    }
+    if (t === 'Audio') {
       const lbl = it.a.v ? it.a.v : (t === 'Audio' ? 'AÑADIR AUDIO' : 'AÑADIR IMAGEN')
       return (
         <button type="button" className={cx('me-file', it.a.v && 'me-file--set')} aria-label={it.a.v ? `Quitar ${it.a.v}, pareja ${n}` : `${lbl}, pareja ${n}`}

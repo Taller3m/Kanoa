@@ -124,7 +124,7 @@ export function MemoPreview({ game }: PreviewProps) {
     const txt = isNom ? it.a.v : emo ? (useImg ? `Imagen · ${f.img || ''}` : f.v) : f.tipo === 'Imagen' ? `Imagen · ${f.v}` : f.tipo === 'Audio' ? 'Audio' : f.v
     const big = emo && !useImg ? (EMOJI[f.v] || '') : ''
     const tone = emo ? (useImg ? 'img' : (EMO_CAT[f.v] ?? 'none')) : f.tipo === 'Imagen' ? 'img' : 'txt'
-    return { txt, big, tone, audio: f.tipo === 'Audio' }
+    return { txt, big, tone, audio: f.tipo === 'Audio', img: f.tipo === 'Imagen' ? (f.img || '') : '' }
   }
 
   const gameBody = () => {
@@ -153,10 +153,11 @@ export function MemoPreview({ game }: PreviewProps) {
                   aria-disabled={mt || up || s.lock || undefined} onClick={() => flip(i)}>
                   <span className="mep-card__in" aria-hidden="true">
                     <span className="mep-face mep-face--back" data-mark={base.dorso ? undefined : 'KL'}>{base.dorso ? <Icon name="image" size={28} /> : null}</span>
-                    <span className={cx('mep-face mep-face--front', `mep-hue--${c.pid % 7}`)}>
+                    <span className={cx('mep-face mep-face--front', `mep-hue--${c.pid % 7}`, f.img && 'mep-face--img')}>
+                      {f.img && <img className="mep-face__img" src={f.img} alt="" />}
                       {f.big && <span className="mep-face__big">{f.big}</span>}
                       {f.audio && <Icon name="music_note" size={28} />}
-                      <span>{f.txt}</span>
+                      {!f.img && <span>{f.txt}</span>}
                       {mt && <Icon name="check_circle" size={20} className="mep-face__ok" />}
                     </span>
                   </span>

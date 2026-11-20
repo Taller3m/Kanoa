@@ -67,6 +67,13 @@
 .me-file--emo { flex: none; max-width: 170px; }
 .me-file__t { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
+/* Imagen cargada: miniatura, nombre y acciones */
+.me-img { display: flex; align-items: center; gap: var(--space-2); flex: 1; min-width: 0; }
+.me-img__thumb { flex: none; width: 56px; height: 56px; border-radius: var(--radius-sm); object-fit: cover;
+  border: 1px solid var(--outline-variant); background: var(--surface-container); }
+.me-img__thumb--none { display: grid; place-items: center; color: var(--on-surface-variant); }
+.me-danger { color: var(--error); }
+
 /* Emoji de emoción con categoría de color (tonos categóricos del sistema) */
 .me-emo { flex: none; width: 40px; height: 40px; border-radius: var(--radius-sm); display: grid; place-items: center; font-size: 22px; line-height: 1;
   background: var(--surface-container); color: var(--on-surface); }

@@ -26,6 +26,8 @@
 .mep-face--front { transform: rotateY(180deg); color: var(--on-surface); border: 1.5px solid var(--outline); background: var(--surface-container-lowest); }
 .mep-card--ok .mep-face--front { border: 2px solid var(--success); }
 .mep-face__big { font-size: 38px; line-height: 1; }
+.mep-face--img { padding: var(--space-1); }
+.mep-face__img { flex: 1; min-height: 0; width: 100%; object-fit: contain; border-radius: var(--radius-sm); }
 .mep-face__ok { position: absolute; top: var(--space-1); right: var(--space-1); color: var(--success); }
 /* Color del frente por pareja: la paleta de Crear juegos (azul, morado, verde, naranja, turquesa, rojo, amarillo) */
 .mep-hue--0 { background: var(--blue-soft); color: var(--on-blue-soft); }
