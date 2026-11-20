@@ -13,6 +13,7 @@ const opc = (n: number): SeccionDef => ({ slug: `opcion-${n}`, nombre: `Opción 
 
 export const MICROSITIOS: Micrositio[] = [
   { slug: 'bienestar-emocional', nombre: 'Bienestar emocional', desc: DESC_BE, activo: true, secciones: [
+    { slug: 'nombrar', nombre: 'Nombrar', desc: 'Ponerle nombre a lo que sentimos para entenderlo y gestionarlo.', activa: true },
     { slug: 'conocete', nombre: 'Conócete', desc: 'Contenidos para reconocer y nombrar lo que sentimos.', activa: true },
     { slug: 'gestiona-emociones', nombre: 'Gestiona tus emociones', desc: 'Actividades para expresar lo que sentimos de forma segura.', activa: true },
     { slug: 'conciencia-entorno-seguro', nombre: 'Conciencia y entorno seguro', desc: 'Herramientas para cuidar de ti y de quienes te rodean.', activa: true },
@@ -60,6 +61,7 @@ export interface Contenido {
   tipo: TipoContenido
   titulo: string // en Juego es opcional: si está vacío se muestran los nombres de los juegos
   detalle?: string // resumen para los tipos que no son Juego (p. ej. «Imágenes · 4»)
+  cuerpo?: string[] // párrafos de un contenido «Solo texto» (se muestran en el portal)
   estado: EstadoCont
   autor: string
   creado: string
@@ -88,8 +90,14 @@ const C = (id: number, sec: string, tipo: TipoContenido, titulo: string, estado:
  *  · Contenido inactivo sin juegos → etiqueta «Sin juegos» (escenarios 11 y 12).
  */
 export function seedContenidos(): Contenido[] {
-  const S = 'bienestar-emocional/conocete', E = 'bienestar-emocional/gestiona-emociones', K = 'ser-stem/ciencia-en-casa'
+  const N = 'bienestar-emocional/nombrar', S = 'bienestar-emocional/conocete', E = 'bienestar-emocional/gestiona-emociones', K = 'ser-stem/ciencia-en-casa'
   return [
+    // Ejemplo del portal: https://kanoalab.com.co/kanoa/bienestar-emocional/nombrar con el crucigrama «Las emociones básicas».
+    C(401, N, 'Solo texto', 'Lo que no se nombra se actúa', 'Publicado', { creado: '10 nov 2026', editada: '12 nov 2026', cuerpo: [
+      'Cuando no sabemos qué sentimos, la emoción decide por nosotros. Ponerle nombre es el primer paso para entenderla y elegir qué hacer con ella.',
+      'La rueda de Plutchik propone ocho emociones básicas que se combinan y cambian de intensidad. Reconocerlas nos da un vocabulario común para hablar de lo que nos pasa.',
+    ] }),
+    C(402, N, 'Juego', 'Pon nombre a lo que sientes', 'Publicado', { juego: { tipo: 'Crucigrama', ids: [8] }, creado: '12 nov 2026', editada: '12 nov 2026' }),
     C(101, S, 'Solo texto', '¿Quién soy cuando nadie me mira?', 'Publicado'),
     C(102, S, 'Imágenes', 'Mapa de fortalezas personales', 'Publicado', { detalle: 'Imágenes · 4 · plantilla Izquierda', editada: '9 sep 2026' }),
     C(103, S, 'Juego', 'Juega con tus emociones', 'Publicado', { juego: { tipo: 'Memoria', ids: [3] }, creado: '5 nov 2026', editada: '5 nov 2026' }),

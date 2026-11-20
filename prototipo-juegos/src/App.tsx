@@ -14,6 +14,8 @@ import { ContenidoJuego, type ContDraft } from './screens/ContenidoJuego'
 import { useRoute, type Route } from './router'
 import { PreviewHost, previewBlocker } from './games/PreviewHost'
 import { activosIniciales, lugaresDe, microDe, seccionDe, seedContenidos, sinJuegos, type Activos, type Contenido, type EstadoCont, type TipoContenido as TC } from './portal/data'
+import { PaginaSeccion } from './portal-web/PaginaSeccion'
+import { seccionPublica } from './portal-web/contrato'
 import './app.css'
 
 type ToastKind = 'ok' | 'err' | 'info'
@@ -56,9 +58,9 @@ export function App() {
 
   useEffect(() => {
     const el = document.documentElement
-    el.classList.remove('light', 'dark'); el.classList.add(dark ? 'dark' : 'light')
+    el.classList.remove('light', 'dark'); el.classList.add(dark && screen !== 'portal' ? 'dark' : 'light')
     try { localStorage.setItem('ds-theme', dark ? 'dark' : 'light') } catch { /* sin storage */ }
-  }, [dark])
+  }, [dark, screen])
   useEffect(() => { try { localStorage.setItem('nav-compress', compress ? '1' : '0') } catch { /* sin storage */ } }, [compress])
   useEffect(() => { main.current?.focus({ preventScroll: true }); window.scrollTo(0, 0) }, [screen])
 
@@ -229,6 +231,22 @@ export function App() {
     openPreview(ok[Math.floor(Math.random() * ok.length)]!)
   }
 
+  /** Reordena el contenido dentro de su sección (el arreglo global conserva el orden relativo de cada sección). */
+  const moverCont = (id: number, destino: number, pos: 'antes' | 'despues', viaTeclado = false) => {
+    if (id === destino) return
+    setContenidos((cs) => {
+      const item = cs.find((c) => c.id === id)
+      if (!item) return cs
+      const resto = cs.filter((c) => c.id !== id)
+      const i = resto.findIndex((c) => c.id === destino)
+      if (i < 0) return cs
+      resto.splice(pos === 'antes' ? i : i + 1, 0, item)
+      return resto
+    })
+    // Con teclado el aviso lo da la región en vivo de la tabla (posición); al soltar con el ratón se confirma con el mensaje del v8.
+    if (!viaTeclado) toast('El orden de los contenidos ha sido actualizado correctamente.', 'ok')
+  }
+
   /* ───────────── Micrositios y secciones: activar / inactivar (Figma: confirmDialog y snackbar) ───────────── */
 
   const fueraDeAlcance = () => toast('Esta acción ya existe en la administración de micrositios y está fuera del alcance de este prototipo.', 'info')
@@ -261,7 +279,7 @@ export function App() {
   const title = screen === 'lista' ? 'Juegos' : screen === 'tipo' ? 'Crear juego' : screen === 'editor' ? accion
     : screen === 'secciones' ? 'Administración de micrositios portal web' : screen === 'micrositio' ? (micro?.nombre ?? '') : screen === 'seccion' ? (sec?.sec ?? '') : screen === 'tipoCont' ? 'Crear contenido'
     : (editandoCont ? 'Editar contenido' : 'Crear contenido') + ' · Juego'
-  useEffect(() => { document.title = title + ' · Kanoa Lab' }, [title])
+  useEffect(() => { if (screen !== 'portal') document.title = title + ' · Kanoa Lab' }, [title, screen])
 
   const crumbs: Crumb[] = (() => {
     if (screen === 'lista') return [{ label: RAIZ }, { label: 'Juegos' }]
@@ -283,6 +301,21 @@ export function App() {
     : screen === 'micrositio' ? () => go({ screen: 'secciones' }) : screen === 'seccion' && sec ? () => go({ screen: 'micrositio', micro: sec.microSlug }) : screen === 'tipoCont' ? aSeccion : screen === 'contJuego' ? () => cancelarCont() : undefined
   const description = screen === 'lista' ? 'Crea y parametriza los juegos del portal. Cuando un juego está completo, queda disponible para agregarlo como contenido en cualquier sección de un micrositio.'
     : screen === 'contJuego' && sec ? `Sección ${sec.micro} › ${sec.sec}.` : undefined
+
+  // Página pública de la sección: sin la estructura de la administración (simulación del Portal WEB).
+  if (route.screen === 'portal') {
+    const pagina = seccionPublica(route.sec, contenidos, games, activos)
+    const s = seccionDe(route.sec)
+    if (pagina && s) return (
+      <>
+        <PaginaSeccion key={route.sec} pagina={pagina} onAdmin={() => go({ screen: 'seccion', sec: route.sec })}
+          onRegresarMicrositio={() => go({ screen: 'micrositio', micro: s.microSlug })} />
+        <Modal open={!!preview} wide title={`Vista previa · ${preview?.nombre.trim() || 'Juego sin nombre'}`} onClose={() => setPreview(null)}>
+          {preview && <PreviewHost key={JSON.stringify(preview)} game={preview} onClose={() => setPreview(null)} />}
+        </Modal>
+      </>
+    )
+  }
 
   return (
     <div className="app">
@@ -334,7 +367,8 @@ export function App() {
         )}
         {screen === 'seccion' && sec && (
           <Seccion seccion={sec} contenidos={contenidos.filter((c) => c.sec === sec.id)} games={games} onCrear={() => go({ screen: 'tipoCont', sec: sec.id })}
-            onEditar={editarCont} onVisualizar={visualizarCont} onEstado={cambiarEstadoCont} onEliminar={eliminarCont} onFueraDeAlcance={fueraDeAlcance} />
+            onEditar={editarCont} onVisualizar={visualizarCont} onEstado={cambiarEstadoCont} onEliminar={eliminarCont} onFueraDeAlcance={fueraDeAlcance} onMover={moverCont}
+            onVerPortal={() => go({ screen: 'portal', sec: sec.id })} />
         )}
         {screen === 'tipoCont' && <TipoContenido onPick={pickTipoCont} />}
         {screen === 'contJuego' && cont && <ContenidoJuego draft={cont} setDraft={setContDraft} games={games} publicadoEn={publicadoEn} onVer={openPreview} />}

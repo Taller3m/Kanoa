@@ -19,6 +19,8 @@ export function MicroCard({ titulo, desc, activa, accion, onAccion, onToggle }: 
       </div>
       <div className="mcard__body">
         <h3 className="mcard__title">{titulo}</h3>
+        {/* El estado no depende solo de la apariencia (WCAG 1.4.1): se escribe. */}
+        {!activa && <span className="mcard__estado">Inactivo</span>}
         <p className="mcard__desc">{desc}</p>
       </div>
       <Button block iconEnd="arrow_forward" className="mcard__btn" onClick={onAccion} disabled={!activa} aria-label={`${accion} de ${titulo}`}>{accion}</Button>

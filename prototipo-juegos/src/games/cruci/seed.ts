@@ -29,4 +29,18 @@ export const cruciSeed: Game[] = [
     id: 4, tipo: 'Crucigrama', nombre: 'Ciencia en el aula', fecha: '6 nov 2026', editada: '6 nov 2026',
     cruci: { size: 12, words: [W(41, 2, 2, 'H', 'ATOMO', 'Unidad más pequeña de la materia.')] },
   }),
+  // Juego del ejemplo en el portal: Bienestar emocional › Nombrar. Distribución validada con las reglas de construcción (HU-PW-173).
+  baseGame({
+    id: 8, tipo: 'Crucigrama', nombre: 'Las emociones básicas',
+    desc: 'Lee cada pista y escribe en el tablero el nombre de la emoción. Cuando termines, selecciona COMPROBAR.',
+    cierre: '¡Muy bien! Ponerle nombre a lo que sentimos es el primer paso para gestionarlo.',
+    fecha: '12 nov 2026', editada: '12 nov 2026',
+    cruci: { size: 10, words: [
+      W(81, 2, 1, 'H', 'TRISTEZA', 'Emoción que sentimos ante una pérdida y que nos invita a buscar apoyo.'),
+      W(82, 0, 6, 'V', 'MIEDO', 'Emoción que nos alerta ante un peligro y nos ayuda a protegernos.'),
+      W(83, 2, 3, 'V', 'IRA', 'Emoción intensa que aparece cuando algo nos parece injusto.'),
+      W(84, 4, 3, 'H', 'ASCO', 'Emoción que nos aleja de lo que puede hacernos daño, como un alimento en mal estado.'),
+      W(85, 2, 8, 'V', 'ALEGRIA', 'Emoción que sentimos cuando algo bueno nos pasa.'),
+    ] },
+  }),
 ]

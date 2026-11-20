@@ -18,6 +18,8 @@ import { microDe, seccionDe } from './portal/data'
  *   #/micrositios/bienestar-emocional/conocete/crear-contenido        elegir tipo de contenido
  *   #/micrositios/bienestar-emocional/conocete/crear-contenido/juego  nuevo contenido Juego
  *   #/micrositios/bienestar-emocional/conocete/editar-contenido/103   edición del contenido 103
+ *
+ *   #/portal/bienestar-emocional/nombrar                    página pública de la sección (simulación del Portal WEB)
  */
 export type Route =
   | { screen: 'lista' }
@@ -28,6 +30,7 @@ export type Route =
   | { screen: 'seccion'; sec: string }
   | { screen: 'tipoCont'; sec: string }
   | { screen: 'contJuego'; sec: string; id: number | null }
+  | { screen: 'portal'; sec: string }
 
 const SLUG: Record<TipoJuego, string> = {
   'Crucigrama': 'crucigrama', 'Cuenta cuentos': 'cuenta-cuentos', 'Memoria': 'memoria', 'Crece conmigo': 'crece-conmigo',
@@ -47,6 +50,7 @@ function parseMicro(parts: string[]): Route {
 export function parse(hash: string): Route {
   const parts = hash.replace(/^#\/?/, '').split('/').filter(Boolean)
   if (parts[0] === 'micrositios') return parseMicro(parts)
+  if (parts[0] === 'portal' && parts.length >= 3 && seccionDe(parts[1] + '/' + parts[2])) return { screen: 'portal', sec: parts[1] + '/' + parts[2] }
   if (parts[0] !== 'juegos' || parts.length === 1) return { screen: 'lista' }
   const seg = parts[1] ?? ''
   if (seg === 'crear-juego') return { screen: 'tipo' }
@@ -67,6 +71,7 @@ export function href(r: Route): string {
     case 'micrositio': return '#/micrositios/' + r.micro
     case 'seccion': return '#/micrositios/' + r.sec
     case 'tipoCont': return '#/micrositios/' + r.sec + '/crear-contenido'
+    case 'portal': return '#/portal/' + r.sec
     case 'contJuego': return '#/micrositios/' + r.sec + (r.id ? '/editar-contenido/' + r.id : '/crear-contenido/juego')
     case 'editor': {
       const base = '#/juegos/' + (r.id ? 'editar-' : 'crear-') + SLUG[r.tipo] + (r.id ? '/' + r.id : '')

@@ -1,0 +1,83 @@
+/* Portal WEB (página pública de una sección) — Figma «Página Web Kanoa lab». Solo tokens del sistema; siempre en tema claro (.light). */
+.pw { min-height: 100vh; display: flex; flex-direction: column; background: var(--surface-container-lowest); color: var(--on-surface); font-family: var(--font-family); }
+
+/* Franja del prototipo (no existe en el portal real) */
+.pw-proto { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); flex-wrap: wrap; padding: var(--space-2) var(--space-4);
+  background: var(--secondary-container); color: var(--on-secondary-container); font: 500 13px/18px var(--font-family); }
+.pw-proto span { display: inline-flex; align-items: center; gap: var(--space-2); }
+.pw-proto__btn { display: inline-flex; align-items: center; gap: var(--space-1); padding: var(--space-1) var(--space-3); border: 1px solid currentColor; border-radius: var(--radius-full);
+  background: transparent; color: inherit; font: inherit; cursor: pointer; }
+.pw-proto__btn:focus-visible { outline: 2px solid var(--on-secondary-container); outline-offset: 2px; }
+
+.pw-skip { position: absolute; left: var(--space-4); top: -100px; z-index: 50; padding: var(--space-2) var(--space-4); border-radius: var(--radius-full); background: var(--primary); color: var(--on-primary); }
+.pw-skip:focus { top: var(--space-4); }
+
+/* Barra de navegación (ContentNavBar 8:1400): píldora surface-container-low, 1280 máx. */
+.pw-nav-wrap { padding: var(--space-5) var(--space-3); }
+.pw-nav { max-width: 1280px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); padding: var(--space-3);
+  border-radius: var(--radius-full); background: var(--surface-container-low); filter: drop-shadow(0 4px 5px rgba(0, 0, 0, .05)); }
+.pw-nav__logo { display: inline-flex; padding-left: 14px; border-radius: var(--radius-sm); }
+.pw-nav__items { display: flex; align-items: center; gap: var(--space-5); margin: 0; padding: 0; list-style: none; flex-wrap: wrap; justify-content: center; }
+.pw-nav__item, .pw-nav__cta { display: inline-flex; align-items: center; gap: var(--space-2); height: 52px; padding: 0 var(--space-4); border-radius: var(--radius-full);
+  font: 700 14px/20px var(--font-family); letter-spacing: .1px; text-transform: uppercase; text-decoration: none; white-space: nowrap; }
+.pw-nav__item { color: var(--primary); }
+a.pw-nav__item:hover { background: var(--surface-tint-8-); }
+.pw-nav__cta { background: var(--primary); color: var(--on-primary); }
+.pw a:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+
+/* Contenido */
+.pw-main { flex: 1; width: 100%; max-width: 1280px; margin: 0 auto; padding: 0 var(--space-4); outline: none; box-sizing: border-box; }
+@media (min-width: 1312px) { .pw-main { padding: 0; } }
+/* Migas (bigBreadCrumb). Figma usa --outline (#8A8A8A, 3.5:1 sobre blanco): se usa --muted para cumplir 4.5:1. */
+.pw-crumbs { padding: var(--space-5) 0; }
+.pw-crumbs ol { display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-2); margin: 0; padding: 0; list-style: none; font: 400 16px/24px var(--font-family); letter-spacing: .5px; }
+.pw-crumbs li { display: inline-flex; align-items: center; gap: var(--space-2); color: var(--muted); }
+.pw-crumbs a { color: var(--muted); text-decoration: none; }
+.pw-crumbs a:hover { text-decoration: underline; }
+.pw-crumbs [aria-current='page'] { color: var(--primary); }
+
+.pw-bloques { display: flex; flex-direction: column; gap: var(--space-8); padding: var(--space-8) 0; }
+.pw-bloque { display: flex; flex-direction: column; gap: var(--space-5); }
+.pw-bloque__titulo { margin: 0; color: var(--title); font: 400 36px/44px var(--font-family); }
+.pw-bloque__texto { margin: 0; color: var(--paragraph); font: 400 16px/24px var(--font-family); letter-spacing: .5px; max-width: 90ch; }
+
+/* Recuadro del juego: mismo molde del bloque Tablero BI (fondo blanco, borde outline, radio 20) */
+.pw-juego { padding: var(--space-5); border: 1px solid var(--outline); border-radius: var(--radius-md); background: var(--surface-container-lowest); }
+.pw-otro { padding: var(--space-7) var(--space-5); border: 1px dashed var(--outline); border-radius: var(--radius-md); color: var(--paragraph); text-align: center; }
+
+/* Variante de error del bloque (2374:35005) */
+.pw-error { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--space-5); min-height: 438px; padding: var(--space-4);
+  border: 1px solid var(--outline-variant); border-radius: var(--radius-md); text-align: center; }
+.pw-error__ico { opacity: .2; font-size: 147px; }
+.pw-error__titulo { margin: 0; max-width: 800px; color: var(--title); font: 400 32px/40px var(--font-family); }
+
+/* Sección no disponible (PaginaError 1233:17332) */
+.pw-nodisp { display: flex; align-items: center; gap: var(--space-5); max-width: 900px; padding: var(--space-8) 0; flex-wrap: wrap; }
+.pw-nodisp__txt { flex: 1 1 320px; display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-5); }
+.pw-nodisp__titulo { margin: 0; color: var(--on-surface); font: 400 32px/40px var(--font-family); }
+.pw-nodisp__txt p { margin: 0; color: var(--paragraph); font: 400 16px/24px var(--font-family); letter-spacing: .5px; }
+.pw-btn { text-transform: uppercase; font-weight: 700; }
+.pw-ilus { position: relative; flex: none; width: 358px; height: 224px; max-width: 100%; }
+.pw-ilus > span { position: absolute; }
+.pw-ilus img { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+
+/* Pie (Footer 1129:34791) */
+.pw-footer { padding: var(--space-7) var(--space-4) var(--space-5); background: linear-gradient(127.09deg, var(--surface-container-highest) 26.31%, var(--surface-container-low) 107.93%); }
+.pw-footer__in { max-width: 1280px; margin: 0 auto; }
+.pw-footer__top { display: flex; justify-content: space-between; gap: var(--space-6); flex-wrap: wrap; padding-bottom: var(--space-4); border-bottom: 1px solid var(--outline-variant); }
+.pw-footer__marca { display: flex; flex-direction: column; justify-content: space-between; gap: var(--space-6); }
+.pw-footer__redes { display: flex; gap: var(--space-4); margin: 0; padding: 0; list-style: none; }
+.pw-footer__links { display: flex; flex-direction: column; width: 202px; margin: 0; padding: 0; list-style: none; }
+.pw-footer__links a, .pw-footer__links span { display: block; padding: var(--space-3) var(--space-4); border-radius: var(--radius-sm); color: var(--on-surface); font: 400 14px/20px var(--font-family); letter-spacing: .25px; text-decoration: none; }
+.pw-footer__links a:hover { background: var(--surface-tint-8-); }
+.pw-footer__legal { display: flex; justify-content: space-between; gap: var(--space-3) var(--space-5); flex-wrap: wrap; padding: var(--space-4) 0; color: var(--on-surface); font: 400 16px/24px var(--font-family); letter-spacing: .5px; }
+.pw-footer__politicas { display: inline-flex; gap: var(--space-7); flex-wrap: wrap; }
+
+@media (max-width: 1100px) {
+  .pw-nav { border-radius: var(--radius-md); flex-wrap: wrap; justify-content: center; }
+  .pw-nav__items { gap: var(--space-1); }
+}
+@media (max-width: 600px) {
+  .pw-bloque__titulo { font-size: 28px; line-height: 36px; }
+  .pw-error__titulo, .pw-nodisp__titulo { font-size: 24px; line-height: 32px; }
+}

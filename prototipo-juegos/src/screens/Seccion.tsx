@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState, type DragEvent, type KeyboardEvent } from 'react'
 import { Button, Icon, TextArea, TextField } from '../ui'
 import { detalleDe, sinJuegos, type Contenido, type EstadoCont, type Seccion as S } from '../portal/data'
 import type { Game } from '../games/types'
@@ -29,6 +29,10 @@ export interface SeccionProps {
   onEstado: (c: Contenido, estado: EstadoCont) => void
   onEliminar: (c: Contenido) => void
   onFueraDeAlcance: () => void
+  /** Abre la página pública de la sección (simulación del Portal WEB). */
+  onVerPortal: () => void
+  /** Mueve el contenido `id` antes o después de `destino` (orden en que se muestra en el portal). */
+  onMover: (id: number, destino: number, pos: 'antes' | 'despues', viaTeclado?: boolean) => void
 }
 
 const ESTADOS: EstadoCont[] = ['Publicado', 'Borrador', 'Inactivo']
@@ -40,6 +44,44 @@ export function Seccion(p: SeccionProps) {
   const qq = q.trim().toLowerCase()
   const rows = p.contenidos.filter((c) =>
     (!qq || tituloDe(c, p.games).toLowerCase().includes(qq)) && (fEstado === 'Todos los estados' || c.estado === fEstado))
+
+  /* ── Reordenar: arrastrando la fila o, con teclado, con ↑/↓ sobre el ícono ⠿ (alternativa a arrastrar, WCAG 2.5.7) ── */
+  const filtrando = !!qq || fEstado !== 'Todos los estados'
+  const [arrastra, setArrastra] = useState<number | null>(null)
+  const [sobre, setSobre] = useState<{ id: number; pos: 'antes' | 'despues' } | null>(null)
+  const [aviso, setAviso] = useState('')
+  const enfocar = useRef<number | null>(null)
+  const tabla = useRef<HTMLTableSectionElement>(null)
+  // Al mover una fila el navegador le quita el foco; se devuelve al ícono ⠿ de la fila movida.
+  useEffect(() => {
+    if (enfocar.current == null) return
+    tabla.current?.querySelector<HTMLButtonElement>(`[data-drag="${enfocar.current}"]`)?.focus()
+    enfocar.current = null
+  })
+  const fin = () => { setArrastra(null); setSobre(null) }
+  const onDragOver = (e: DragEvent<HTMLTableRowElement>, id: number) => {
+    if (arrastra == null || filtrando) return
+    e.preventDefault(); e.dataTransfer.dropEffect = 'move'
+    const r = e.currentTarget.getBoundingClientRect()
+    const pos = e.clientY < r.top + r.height / 2 ? 'antes' : 'despues'
+    if (sobre?.id !== id || sobre.pos !== pos) setSobre({ id, pos })
+  }
+  const onDrop = (e: DragEvent<HTMLTableRowElement>, id: number) => {
+    e.preventDefault()
+    if (arrastra != null && sobre && arrastra !== id) p.onMover(arrastra, id, sobre.pos)
+    fin()
+  }
+  const porTeclado = (e: KeyboardEvent<HTMLButtonElement>, c: Contenido, t: string) => {
+    if (e.key !== 'ArrowUp' && e.key !== 'ArrowDown') return
+    e.preventDefault()
+    if (filtrando) { setAviso('Limpia la búsqueda y el filtro para reordenar los contenidos.'); return }
+    const i = rows.findIndex((x) => x.id === c.id)
+    const j = e.key === 'ArrowUp' ? i - 1 : i + 1
+    if (j < 0 || j >= rows.length) return
+    enfocar.current = c.id
+    p.onMover(c.id, rows[j]!.id, e.key === 'ArrowUp' ? 'antes' : 'despues', true)
+    setAviso(`«${t}» quedó en la posición ${j + 1} de ${rows.length}.`)
+  }
 
   const acciones = (c: Contenido): MenuAction[] => {
     // Un contenido Juego no tiene Borrador: al guardar queda Publicado (HU) y solo se puede inactivar o volver a publicar.
@@ -69,7 +111,10 @@ export function Seccion(p: SeccionProps) {
       <div className="mpanel" role="search" aria-labelledby="t-contenidos">
         <div className="mlist__head">
           <h2 className="mlist__title" id="t-contenidos">Listado de contenidos</h2>
-          <Button icon="add" onClick={p.onCrear}>Crear contenido</Button>
+          <div className="mlist__acciones">
+            <Button variant="outline" icon="public" onClick={p.onVerPortal}>Ver en el portal</Button>
+            <Button icon="add" onClick={p.onCrear}>Crear contenido</Button>
+          </div>
         </div>
         <div className="mlist__filters">
           <label className="msearch">
@@ -99,14 +144,22 @@ export function Seccion(p: SeccionProps) {
             <thead>
               <tr><th scope="col">Título del contenido</th><th scope="col">Estados</th><th scope="col">Autor</th><th scope="col">Fecha de modificación</th><th scope="col"><span className="sr-only">Acciones</span></th></tr>
             </thead>
-            <tbody>
+            <tbody ref={tabla}>
               {rows.map((c) => {
                 const t = tituloDe(c, p.games)
+                const cls = [arrastra === c.id && 'mrow--drag', sobre?.id === c.id && arrastra !== c.id && `mrow--${sobre.pos}`].filter(Boolean).join(' ')
                 return (
-                  <tr key={c.id}>
+                  <tr key={c.id} className={cls || undefined} draggable={!filtrando}
+                    onDragStart={(e) => { setArrastra(c.id); e.dataTransfer.effectAllowed = 'move'; e.dataTransfer.setData('text/plain', String(c.id)) }}
+                    onDragOver={(e) => onDragOver(e, c.id)} onDrop={(e) => onDrop(e, c.id)} onDragEnd={fin}>
                     <td>
                       <div className="gname">
-                        <span className="drag" title="Arrastra para cambiar el orden del contenido en la sección" aria-hidden="true"><Icon name="drag_indicator" size={24} /></span>
+                        <button type="button" className={'drag' + (filtrando ? ' drag--off' : '')} data-drag={c.id}
+                          title={filtrando ? 'Limpia la búsqueda y el filtro para reordenar' : 'Arrastra para reordenar'}
+                          aria-label={`Reordenar «${t}». Usa las flechas arriba y abajo para moverlo.`} aria-disabled={filtrando || undefined}
+                          onKeyDown={(e) => porTeclado(e, c, t)}>
+                          <Icon name="drag_indicator" size={24} />
+                        </button>
                         <div><strong className="t-title-sm">{t}</strong><small>{detalleDe(c)} · {c.creado}</small></div>
                       </div>
                     </td>
@@ -126,8 +179,9 @@ export function Seccion(p: SeccionProps) {
           </table>
           <div className="table-foot t-body-sm">
             <span>Mostrando {rows.length} de {p.contenidos.length} contenidos</span>
-            <span>Arrastra un contenido para cambiar su orden en la sección (no simulado en este prototipo).</span>
+            <span>{filtrando ? 'Limpia la búsqueda y el filtro para reordenar los contenidos.' : 'Arrastra los contenidos para definir el orden en que se muestran en el Portal WEB.'}</span>
           </div>
+          <p className="sr-only" aria-live="polite">{aviso}</p>
         </div>
       )}
     </section>
