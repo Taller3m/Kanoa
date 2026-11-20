@@ -1,21 +1,21 @@
 import { useRef, useState, type KeyboardEvent } from 'react'
 import { Button, Icon } from '../../ui'
-import { CIERRE_DEFECTO, PvDone, PvHeader, PvHelp, PvStart, useHelp, type PreviewProps } from '../preview/Shell'
+import { CIERRE_DEFECTO, PvDone, PvHeader, PvHelp, useHelp, type PreviewProps } from '../preview/Shell'
 import { cruciBuildMap, cruciKey, cruciNorm, cruciNumerar } from './rules'
 import './pv.css'
 
 const INSTR_DEFECTO = 'Lee cada pista y escribe la palabra en el tablero. Cuando termines, selecciona COMPROBAR.'
-const INICIO_MSG = 'Lleva al visitante al inicio de la página donde está el juego.'
 
-/** Vista previa jugable: «así lo verá el visitante». */
-export function CruciPreview({ game }: PreviewProps) {
+/**
+ * Vista previa jugable: «así lo verá el visitante».
+ * El crucigrama no tiene pantalla INICIAR, tiempo ni límite de intentos: el tablero se muestra de inmediato (HU-PW-174).
+ */
+export function CruciPreview({ game, onClose }: PreviewProps) {
   const help = useHelp()
-  const [started, setStarted] = useState(false)
   const [done, setDone] = useState(false)
   const [letters, setLetters] = useState<Record<string, string>>({})
   const [checked, setChecked] = useState(false)
   const [msg, setMsg] = useState('')
-  const [homeMsg, setHomeMsg] = useState('')
   const boardRef = useRef<HTMLDivElement>(null)
 
   const N = game.cruci.size
@@ -24,7 +24,7 @@ export function CruciPreview({ game }: PreviewProps) {
   const nm = cruciNumerar(words)
   const instr = game.desc.trim() || INSTR_DEFECTO
 
-  const reset = () => { setStarted(false); setDone(false); setLetters({}); setChecked(false); setMsg(''); setHomeMsg('') }
+  const reset = () => { setDone(false); setLetters({}); setChecked(false); setMsg('') }
 
   const check = () => {
     const bad = Object.keys(map).filter((k) => (letters[k] || '') !== map[k].L).length
@@ -92,12 +92,8 @@ export function CruciPreview({ game }: PreviewProps) {
     <div className="pv-stage">
       <PvHeader game={game} onHelp={help.show} />
       {done ? (
-        <>
-          <PvDone title="¡Terminaste el juego!" cierre={game.cierre.trim() || CIERRE_DEFECTO} onReplay={reset} onHome={() => setHomeMsg(INICIO_MSG)} />
-          {homeMsg && <p className="t-body-md crp-home" role="status">{homeMsg}</p>}
-        </>
-      ) : !started ? (
-        <PvStart instr={instr} onStart={() => setStarted(true)} />
+        // IR AL INICIO cierra la vista previa; VOLVER A JUGAR reinicia el tablero vacío.
+        <PvDone title="¡Terminaste el juego!" cierre={game.cierre.trim() || CIERRE_DEFECTO} onReplay={reset} onHome={onClose} />
       ) : (
         <div className="crp-play">
           <div className="crp-left">

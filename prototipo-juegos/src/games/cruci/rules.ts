@@ -9,7 +9,7 @@ export const cruciMin = (size: number) => CRUCI_MINW[size] || 3
 export function cruciReqs(g: Game): Req[] {
   const n = g.cruci.words.length
   const mn = cruciMin(g.cruci.size)
-  return [{ t: `Mínimo ${mn} palabras con su pista para ${g.cruci.size}×${g.cruci.size} (${n} agregadas)`, ok: n >= mn }]
+  return [{ t: `Mínimo ${mn} palabras con pista (${Math.min(n, mn)} de ${mn})`, ok: n >= mn }]
 }
 
 /* ───────── Lógica del tablero (J_key, J_norm, J_cellsOf, J_buildMap, J_numerar, J_validar) ───────── */
@@ -56,7 +56,25 @@ export type RuleState = 'ok' | 'err' | 'pend' | 'info'
 export interface CruciRule { t: string; st: RuleState; msg: string }
 export interface CruciVal { maxLen: number; path: string[]; conflicts: Record<string, 1>; rules: CruciRule[]; can: boolean; map: CruciMap }
 
-export function cruciValidar(N: number, words: CruciWord[], cx: CruciCx & { sel: { r: number; c: number } }): CruciVal {
+const letras = (n: number) => `${n} ${n === 1 ? 'letra' : 'letras'}`
+
+/** Reglas sin casilla de inicio: 1 a 3 pendientes y AGREGAR PALABRA deshabilitado (HU-PW-173, escenario 1). */
+function sinCasilla(N: number, words: CruciWord[]): CruciVal {
+  const map = cruciBuildMap(words)
+  const used = Object.keys(map).length
+  return {
+    maxLen: 0, path: [], conflicts: {}, map, can: false,
+    rules: [
+      { t: '1. Ajuste al límite', st: 'pend', msg: 'Selecciona en el tablero la casilla donde empieza la palabra.' },
+      { t: '2. Intersección perfecta', st: 'pend', msg: 'Si la palabra cruza otra, la letra del cruce debe ser la misma.' },
+      { t: '3. Sin palabras pegadas', st: 'pend', msg: 'Dos palabras en la misma dirección no pueden quedar pegadas; debe haber una casilla vacía entre ellas.' },
+      { t: '4. Casillas negras automáticas', st: 'info', msg: `Las ${N * N - used} casillas que no uses se convertirán en negras al guardar.` },
+    ],
+  }
+}
+
+export function cruciValidar(N: number, words: CruciWord[], cx: CruciCx): CruciVal {
+  if (!cx.sel) return sinCasilla(N, words)
   const others = words.filter((w) => w.id !== cx.editId)
   const map = cruciBuildMap(others)
   const nums = cruciNumerar(words).byId
@@ -70,9 +88,10 @@ export function cruciValidar(N: number, words: CruciWord[], cx: CruciCx & { sel:
   const at = (rr: number, cc: number) => (rr < 0 || cc < 0 || rr >= N || cc >= N) ? null : map[cruciKey(rr, cc)]
   const sentido = dir === 'H' ? 'hacia la derecha.' : 'hacia abajo.'
   let r1: { st: RuleState; msg: string }, r2: { st: RuleState; msg: string }, r3: { st: RuleState; msg: string }
-  if (!len) r1 = { st: 'pend', msg: `Desde esta casilla caben hasta ${maxLen} letras ${sentido}` }
-  else if (len > maxLen) r1 = { st: 'err', msg: `La palabra no cabe: desde esta casilla solo caben ${maxLen} letras ${sentido}` }
-  else if (len < 2) r1 = { st: 'err', msg: 'La palabra debe tener mínimo 2 letras.' }
+  if (!len) r1 = { st: 'pend', msg: `Desde esta casilla caben hasta ${letras(maxLen)} ${sentido}` }
+  // Con 1 sola letra escrita o disponible, el motivo es el mínimo de 2 letras (corner case de la HU-PW-173).
+  else if (len < 2 || maxLen < 2) r1 = { st: 'err', msg: 'La palabra debe tener mínimo 2 letras.' }
+  else if (len > maxLen) r1 = { st: 'err', msg: `La palabra no cabe: desde esta casilla solo caben ${letras(maxLen)} ${sentido}` }
   else r1 = { st: 'ok', msg: `La palabra cabe en el tablero (${len} de ${maxLen} letras posibles).` }
   let cross = 0
   const bad: string[] = []
@@ -92,7 +111,13 @@ export function cruciValidar(N: number, words: CruciWord[], cx: CruciCx & { sel:
   const probs: string[] = []
   if (len && len <= maxLen) {
     if (path.some((k) => map[k] && map[k].ws.some((w) => w.dir === dir))) probs.push('se superpone con otra palabra en la misma dirección')
-    if (at(r - dr, c - dc) || at(r + dr * len, c + dc * len)) probs.push('queda pegada a otra palabra al inicio o al final')
+    const ext: number[] = []
+    others.forEach((w) => {
+      const wr = w.dir === 'V' ? 1 : 0, wc = w.dir === 'H' ? 1 : 0
+      if (path.includes(cruciKey(w.r - wr, w.c - wc)) || path.includes(cruciKey(w.r + wr * w.ans.length, w.c + wc * w.ans.length))) ext.push(nums[w.id]!)
+    })
+    // Si alarga otra palabra, ese es el motivo; no se repite como «pegada al inicio o al final».
+    if (!ext.length && (at(r - dr, c - dc) || at(r + dr * len, c + dc * len))) probs.push('queda pegada a otra palabra al inicio o al final')
     let par = false
     for (let i = 0; i < len; i++) {
       const rr = r + dr * i, cc = c + dc * i
@@ -102,11 +127,6 @@ export function cruciValidar(N: number, words: CruciWord[], cx: CruciCx & { sel:
       })
     }
     if (par) probs.push('queda pegada en paralelo a otra palabra sin una casilla vacía de por medio')
-    const ext: number[] = []
-    others.forEach((w) => {
-      const wr = w.dir === 'V' ? 1 : 0, wc = w.dir === 'H' ? 1 : 0
-      if (path.includes(cruciKey(w.r - wr, w.c - wc)) || path.includes(cruciKey(w.r + wr * w.ans.length, w.c + wc * w.ans.length))) ext.push(nums[w.id])
-    })
     if (ext.length) probs.push(`alarga la palabra ${ext.join(', ')}`)
   }
   if (!len) r3 = { st: 'pend', msg: 'Dos palabras en la misma dirección no pueden quedar pegadas; debe haber una casilla vacía entre ellas.' }
@@ -118,8 +138,8 @@ export function cruciValidar(N: number, words: CruciWord[], cx: CruciCx & { sel:
   return {
     maxLen, path, conflicts, map,
     rules: [
-      { t: 'Ajuste al límite', ...r1 }, { t: 'Intersección perfecta', ...r2 },
-      { t: 'Sin palabras pegadas', ...r3 }, { t: 'Casillas negras automáticas', ...r4 },
+      { t: '1. Ajuste al límite', ...r1 }, { t: '2. Intersección perfecta', ...r2 },
+      { t: '3. Sin palabras pegadas', ...r3 }, { t: '4. Casillas negras automáticas', ...r4 },
     ],
     can: r1.st === 'ok' && r2.st === 'ok' && r3.st === 'ok' && clueOk,
   }

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import type { TipoJuego } from './games/types'
-import { seccionDe } from './portal/data'
+import { microDe, seccionDe } from './portal/data'
 
 /**
  * Enrutador por hash. URLs según las reglas del proyecto: minúsculas, sin tildes, palabras separadas
@@ -12,17 +12,19 @@ import { seccionDe } from './portal/data'
  *   #/juegos/crear-crucigrama/configuracion nuevo · paso Configuración
  *   #/juegos/editar-memoria/3               edición del juego 3 (y /configuracion)
  *
- *   #/micrositios                                         secciones (simuladas)
- *   #/micrositios/bienestar-emocional/sentir              contenidos de la sección
- *   #/micrositios/bienestar-emocional/sentir/crear-contenido        elegir tipo de contenido
- *   #/micrositios/bienestar-emocional/sentir/crear-contenido/juego  nuevo contenido Juego
- *   #/micrositios/bienestar-emocional/sentir/editar-contenido/103   edición del contenido 103
+ *   #/micrositios                                           listado de micrositios
+ *   #/micrositios/bienestar-emocional                       micrositio y sus secciones
+ *   #/micrositios/bienestar-emocional/conocete              sección y su listado de contenidos
+ *   #/micrositios/bienestar-emocional/conocete/crear-contenido        elegir tipo de contenido
+ *   #/micrositios/bienestar-emocional/conocete/crear-contenido/juego  nuevo contenido Juego
+ *   #/micrositios/bienestar-emocional/conocete/editar-contenido/103   edición del contenido 103
  */
 export type Route =
   | { screen: 'lista' }
   | { screen: 'tipo' }
   | { screen: 'editor'; tipo: TipoJuego; id: number | null; paso: 1 | 2 }
   | { screen: 'secciones' }
+  | { screen: 'micrositio'; micro: string }
   | { screen: 'seccion'; sec: string }
   | { screen: 'tipoCont'; sec: string }
   | { screen: 'contJuego'; sec: string; id: number | null }
@@ -33,9 +35,10 @@ const SLUG: Record<TipoJuego, string> = {
 const POR_SLUG = Object.fromEntries(Object.entries(SLUG).map(([k, v]) => [v, k])) as Record<string, TipoJuego>
 
 function parseMicro(parts: string[]): Route {
-  if (parts.length < 3) return { screen: 'secciones' }
+  if (parts.length < 2 || !microDe(parts[1]!)) return { screen: 'secciones' }
+  if (parts.length < 3) return { screen: 'micrositio', micro: parts[1]! }
   const sec = parts[1] + '/' + parts[2]
-  if (!seccionDe(sec)) return { screen: 'secciones' }
+  if (!seccionDe(sec)) return { screen: 'micrositio', micro: parts[1]! }
   if (parts[3] === 'crear-contenido') return parts[4] === 'juego' ? { screen: 'contJuego', sec, id: null } : { screen: 'tipoCont', sec }
   if (parts[3] === 'editar-contenido' && Number.isFinite(Number(parts[4]))) return { screen: 'contJuego', sec, id: Number(parts[4]) }
   return { screen: 'seccion', sec }
@@ -61,6 +64,7 @@ export function href(r: Route): string {
     case 'lista': return '#/juegos'
     case 'tipo': return '#/juegos/crear-juego'
     case 'secciones': return '#/micrositios'
+    case 'micrositio': return '#/micrositios/' + r.micro
     case 'seccion': return '#/micrositios/' + r.sec
     case 'tipoCont': return '#/micrositios/' + r.sec + '/crear-contenido'
     case 'contJuego': return '#/micrositios/' + r.sec + (r.id ? '/editar-contenido/' + r.id : '/crear-contenido/juego')

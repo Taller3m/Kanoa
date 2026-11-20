@@ -11,11 +11,13 @@ export function Tipo({ onPick }: { onPick: (t: TipoJuego) => void }) {
       </div>
       <div className="options">
         {TIPOS.map((t) => (
-          <button key={t.nombre} type="button" className={'option option--' + t.tone} onClick={() => onPick(t.nombre)}>
+          // Nombre accesible = nombre del tipo; la descripción se asocia como texto complementario.
+          <button key={t.nombre} type="button" className={'option option--' + t.tone} onClick={() => onPick(t.nombre)}
+            aria-label={t.nombre} aria-describedby={`tipo-desc-${t.icon}`}>
             <span className="option__icon"><Icon name={t.icon} size={28} /></span>
             <span className="option__text">
               <strong className="t-title-md">{t.nombre}</strong>
-              <span className="desc t-body-md">{t.desc}</span>
+              <span className="desc t-body-md" id={`tipo-desc-${t.icon}`}>{t.desc}</span>
             </span>
             <Icon name="chevron_right" />
           </button>

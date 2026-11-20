@@ -76,7 +76,7 @@ export function Lista(p: ListaProps) {
                         { label: 'Editar', icon: 'edit', onClick: () => p.onEditar(g) },
                         { label: 'Visualizar', icon: 'visibility', onClick: () => p.onVisualizar(g) },
                         p.publicadoEn(g).length > 0
-                          ? { label: 'Eliminar', icon: 'delete', disabledHelp: 'No se puede eliminar: está publicado' }
+                          ? { label: 'Eliminar', icon: 'delete', disabledHelp: 'No se puede eliminar: está publicado', onClick: () => p.onEliminar(g) }
                           : { label: 'Eliminar', icon: 'delete', danger: true, onClick: () => p.onEliminar(g) },
                       ]} />
                     </td>

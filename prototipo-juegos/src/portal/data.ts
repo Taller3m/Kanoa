@@ -1,10 +1,55 @@
 import type { TipoJuego } from '../games/types'
 
 /**
- * Simulación mínima de Micrositios para la HU-PW-181 (agregar y publicar juegos como contenido de una sección).
- * Solo existen las secciones necesarias para probar el flujo; el resto de la administración de micrositios está fuera del alcance.
+ * Simulación de Micrositios según el diseño de Figma (archivo «Comunicador», sección Micrositios):
+ * listado de micrositios › micrositio con sus secciones › sección con su listado de contenidos › Crear contenido.
+ * Solo lo necesario para la HU de agregar y publicar juegos como contenido de una sección.
  */
-export interface Seccion { id: string; micro: string; sec: string; desc: string }
+export interface SeccionDef { slug: string; nombre: string; desc: string; activa: boolean }
+export interface Micrositio { slug: string; nombre: string; desc: string; activo: boolean; secciones: SeccionDef[] }
+
+const DESC_BE = 'Recursos, guías y acompañamiento para la salud mental de la comunidad académica.'
+const opc = (n: number): SeccionDef => ({ slug: `opcion-${n}`, nombre: `Opción ${n}`, desc: 'Sección sin configurar.', activa: false })
+
+export const MICROSITIOS: Micrositio[] = [
+  { slug: 'bienestar-emocional', nombre: 'Bienestar emocional', desc: DESC_BE, activo: true, secciones: [
+    { slug: 'conocete', nombre: 'Conócete', desc: 'Contenidos para reconocer y nombrar lo que sentimos.', activa: true },
+    { slug: 'gestiona-emociones', nombre: 'Gestiona tus emociones', desc: 'Actividades para expresar lo que sentimos de forma segura.', activa: true },
+    { slug: 'conciencia-entorno-seguro', nombre: 'Conciencia y entorno seguro', desc: 'Herramientas para cuidar de ti y de quienes te rodean.', activa: true },
+    { slug: 'habitos-saludables', nombre: 'Hábitos saludables', desc: DESC_BE, activa: false },
+    { slug: 'pedir-ayuda', nombre: 'Pedir ayuda', desc: DESC_BE, activa: false },
+    opc(6), opc(7),
+  ] },
+  { slug: 'ser-stem', nombre: 'Ser+STEM', desc: 'Ciencia, tecnología, ingeniería y matemáticas para aprender en familia.', activo: true, secciones: [
+    { slug: 'ciencia-en-casa', nombre: 'Ciencia en casa', desc: 'Experimentos y retos de ciencia para hacer en familia.', activa: true },
+    { slug: 'retos-matematicos', nombre: 'Retos matemáticos', desc: 'Problemas y juegos para practicar matemáticas.', activa: true },
+    opc(3), opc(4), opc(5), opc(6), opc(7),
+  ] },
+  { slug: 'observatorio-ser-stem', nombre: 'Observatorio Ser+STEM', desc: 'Datos e investigaciones sobre la educación STEM en la región.', activo: true, secciones: [1, 2, 3, 4, 5, 6, 7].map(opc) },
+  { slug: 'formacion-cursos', nombre: 'Formación y Cursos', desc: 'Oferta de cursos y rutas de formación para la comunidad.', activo: true, secciones: [1, 2, 3, 4, 5, 6, 7].map(opc) },
+  { slug: 'maestros', nombre: 'Maestros', desc: 'Recursos y acompañamiento para docentes en el aula.', activo: true, secciones: [1, 2, 3, 4, 5, 6, 7].map(opc) },
+  { slug: 'directivos', nombre: 'Directivos', desc: 'Recursos para directivos docentes y equipos de gestión.', activo: true, secciones: [1, 2, 3, 4, 5, 6, 7].map(opc) },
+  { slug: 'familias', nombre: 'Familias', desc: 'Guías para acompañar el aprendizaje desde casa.', activo: false, secciones: [1, 2, 3, 4, 5, 6, 7].map(opc) },
+]
+
+/** Sección resuelta con su micrositio. `id` = «micrositio/seccion» (se usa en la URL). */
+export interface Seccion { id: string; microSlug: string; micro: string; sec: string; desc: string }
+
+export const microDe = (slug: string) => MICROSITIOS.find((m) => m.slug === slug)
+export function seccionDe(id: string): Seccion | undefined {
+  const [m, s] = id.split('/')
+  const mi = microDe(m ?? ''), se = mi?.secciones.find((x) => x.slug === s)
+  return mi && se ? { id, microSlug: mi.slug, micro: mi.nombre, sec: se.nombre, desc: se.desc } : undefined
+}
+export const lugarDe = (s: Seccion) => `${s.micro} › ${s.sec}`
+
+/** Estado activo/inactivo de micrositios y secciones (se puede cambiar desde los switches de las tarjetas). */
+export type Activos = Record<string, boolean>
+export function activosIniciales(): Activos {
+  const a: Activos = {}
+  for (const m of MICROSITIOS) { a[m.slug] = m.activo; for (const s of m.secciones) a[`${m.slug}/${s.slug}`] = s.activa }
+  return a
+}
 
 export type EstadoCont = 'Publicado' | 'Borrador' | 'Inactivo'
 export type TipoContenido = 'Solo texto' | 'Imágenes' | 'Video' | 'Documentos descargables' | 'Tablero BI' | 'Juego'
@@ -22,20 +67,13 @@ export interface Contenido {
   juego?: { tipo: TipoJuego; ids: number[] }
 }
 
-export const SECCIONES: Seccion[] = [
-  { id: 'bienestar-emocional/sentir', micro: 'Bienestar emocional', sec: 'Sentir', desc: 'Contenidos para reconocer y nombrar lo que sentimos.' },
-  { id: 'bienestar-emocional/expresar', micro: 'Bienestar emocional', sec: 'Expresar', desc: 'Actividades para contar lo que sentimos de forma segura.' },
-  { id: 'ser-stem/ciencia-en-casa', micro: 'Ser + Stem', sec: 'Ciencia en casa', desc: 'Experimentos y retos de ciencia para hacer en familia.' },
-]
-export const seccionDe = (id: string) => SECCIONES.find((s) => s.id === id)
-export const lugarDe = (s: Seccion) => `${s.micro} › ${s.sec}`
-
-export const TIPOS_CONTENIDO: { nombre: TipoContenido; desc: string; icon: string; tone: 'blue' | 'orange' | 'indigo' | 'green' }[] = [
-  { nombre: 'Solo texto', desc: 'Título y texto enriquecido como base del contenido.', icon: 'notes', tone: 'green' },
-  { nombre: 'Imágenes', desc: 'Hasta 5 imágenes con descripción. Con más de una se muestran en carrusel.', icon: 'photo_library', tone: 'blue' },
-  { nombre: 'Video', desc: 'Un video subido o embebido desde YouTube, con descripción.', icon: 'smart_display', tone: 'orange' },
+/** Tarjetas de «¿Qué tipo de contenido quieres crear?» (Figma: SeleccionContenido) más la nueva tarjeta Juego. */
+export const TIPOS_CONTENIDO: { nombre: TipoContenido; desc: string; icon: string; tone: 'teal' | 'blue' | 'orange' | 'indigo' | 'red' | 'green' }[] = [
+  { nombre: 'Solo texto', desc: 'Título y texto enriquecido como base del contenido.', icon: 'format_size', tone: 'teal' },
+  { nombre: 'Imágenes', desc: 'Hasta 5 imágenes con descripción. Con más de una se muestran en carrusel.', icon: 'image', tone: 'blue' },
+  { nombre: 'Video', desc: 'Un video subido o embebido desde YouTube con descripción.', icon: 'play_circle', tone: 'orange' },
   { nombre: 'Documentos descargables', desc: 'Hasta 3 archivos adjuntos (PDF, DOC, DOCX, XLS, XLSX, PPTX) con descripción.', icon: 'description', tone: 'indigo' },
-  { nombre: 'Tablero BI', desc: 'Un tablero de Power BI publicado en la web, con título, descripción, fuente y fecha de actualización.', icon: 'monitoring', tone: 'blue' },
+  { nombre: 'Tablero BI', desc: 'Un tablero de Power BI publicado en la web, con título, descripción, fuente y fecha de actualización.', icon: 'bar_chart', tone: 'red' },
   { nombre: 'Juego', desc: 'Uno o varios juegos creados en el módulo Juegos: crucigrama, cuenta cuentos, memoria o Crece conmigo.', icon: 'sports_esports', tone: 'green' },
 ]
 
@@ -43,14 +81,14 @@ const C = (id: number, sec: string, tipo: TipoContenido, titulo: string, estado:
   ({ id, sec, tipo, titulo, estado, autor: 'María Castaño', creado: '15 ago 2026', editada: '12 sep 2026', ...extra })
 
 /**
- * Contenidos de ejemplo. Casos de la HU-PW-181 que permiten probar:
+ * Contenidos de ejemplo. Casos de la HU que permiten probar:
  *  · «Memorama de emociones» (3) publicado en dos secciones → «Publicado en:» con las dos (escenario 3).
  *  · «El café colombiano» (1) publicado → no se puede eliminar desde Juegos.
  *  · Contenido inactivo con «Partes de la planta» (6) en Borrador → no se puede volver a publicar (escenario 9).
  *  · Contenido inactivo sin juegos → etiqueta «Sin juegos» (escenarios 11 y 12).
  */
 export function seedContenidos(): Contenido[] {
-  const S = 'bienestar-emocional/sentir', E = 'bienestar-emocional/expresar', K = 'ser-stem/ciencia-en-casa'
+  const S = 'bienestar-emocional/conocete', E = 'bienestar-emocional/gestiona-emociones', K = 'ser-stem/ciencia-en-casa'
   return [
     C(101, S, 'Solo texto', '¿Quién soy cuando nadie me mira?', 'Publicado'),
     C(102, S, 'Imágenes', 'Mapa de fortalezas personales', 'Publicado', { detalle: 'Imágenes · 4 · plantilla Izquierda', editada: '9 sep 2026' }),

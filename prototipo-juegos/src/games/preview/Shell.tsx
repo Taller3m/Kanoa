@@ -4,7 +4,11 @@ import type { Game } from '../types'
 import './preview.css'
 
 /** Props de la vista previa de cada tipo de juego. El anfitrión crea el componente con `key` = contenido del juego, así que se reinicia solo al cambiar. */
-export interface PreviewProps { game: Game }
+export interface PreviewProps {
+  game: Game
+  /** Cierra la vista previa (IR AL INICIO en la pantalla de cierre). */
+  onClose?: () => void
+}
 
 /** Cabecera común: tipo + nombre y botón «Cómo jugar». */
 export function PvHeader({ game, onHelp }: { game: Game; onHelp?: () => void }) {

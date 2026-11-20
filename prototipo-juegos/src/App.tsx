@@ -6,13 +6,14 @@ import type { Game, TipoJuego } from './games/types'
 import { Lista } from './screens/Lista'
 import { Tipo } from './screens/Tipo'
 import { Asistente } from './screens/Asistente'
-import { Secciones } from './screens/Secciones'
+import { Micrositios } from './screens/Micrositios'
+import { Micrositio } from './screens/Micrositio'
 import { Seccion, tituloDe } from './screens/Seccion'
 import { TipoContenido } from './screens/TipoContenido'
 import { ContenidoJuego, type ContDraft } from './screens/ContenidoJuego'
 import { useRoute, type Route } from './router'
 import { PreviewHost, previewBlocker } from './games/PreviewHost'
-import { lugaresDe, seccionDe, seedContenidos, sinJuegos, type Contenido, type TipoContenido as TC } from './portal/data'
+import { activosIniciales, lugaresDe, microDe, seccionDe, seedContenidos, sinJuegos, type Activos, type Contenido, type EstadoCont, type TipoContenido as TC } from './portal/data'
 import './app.css'
 
 type ToastKind = 'ok' | 'err' | 'info'
@@ -35,6 +36,7 @@ const readNav = () => { try { return localStorage.getItem('nav-compress') === '1
 export function App() {
   const [games, setGames] = useState<Game[]>(seedGames)
   const [contenidos, setContenidos] = useState<Contenido[]>(seedContenidos)
+  const [activos, setActivos] = useState<Activos>(activosIniciales)
   const [route, go] = useRoute()
   const screen = route.screen
   const paso: 1 | 2 = route.screen === 'editor' ? route.paso : 1
@@ -127,7 +129,9 @@ export function App() {
   const eliminar = (g: Game) => {
     const lug = publicadoEn(g)
     if (lug.length) { toast(`No es posible eliminar este juego porque está en contenidos publicados: ${lug.join(', ')}. Retíralo de esos contenidos antes de continuar.`, 'err'); return }
-    setConfirm({ title: 'Eliminar juego', msg: `¿Estás seguro de que deseas eliminar el juego «${g.nombre}»? Esta acción no se puede deshacer.`, label: 'Eliminar', danger: true,
+    const inactivos = [...new Set(contenidos.filter((c) => c.estado !== 'Publicado' && c.juego?.ids.includes(g.id!)).map((c) => { const s = seccionDe(c.sec); return s ? `${s.micro} › ${s.sec}` : '' }).filter(Boolean))]
+    const aviso = inactivos.length ? ` Está en ${inactivos.length > 1 ? 'los contenidos inactivos de' : 'el contenido inactivo de'} ${inactivos.map((x) => `«${x}»`).join(', ')} y se quitará de ${inactivos.length > 1 ? 'esos contenidos' : 'ese contenido'}.` : ''
+    setConfirm({ title: 'Eliminar juego', msg: `¿Estás seguro de que deseas eliminar el juego «${g.nombre}»?${aviso} Esta acción no se puede deshacer.`, label: 'Eliminar', danger: true,
       yes: () => {
         setGames((gs) => gs.filter((x) => x.id !== g.id))
         // Se quita de los contenidos inactivos que lo tenían; si alguno queda vacío, muestra «Sin juegos».
@@ -139,6 +143,7 @@ export function App() {
   /* ───────────── Micrositios › contenidos ───────────── */
 
   const sec = 'sec' in route ? seccionDe(route.sec) : undefined
+  const micro = route.screen === 'micrositio' ? microDe(route.micro) : sec ? microDe(sec.microSlug) : undefined
   const contKey = route.screen === 'contJuego' ? route.sec + ':' + (route.id ?? 'nuevo') : ''
   useEffect(() => {
     if (route.screen !== 'contJuego') { setCont(null); return }
@@ -209,13 +214,52 @@ export function App() {
       yes: () => { setContenidos((cs) => cs.filter((x) => x.id !== c.id)); toast('El contenido ha sido eliminado correctamente.', 'ok') } })
   }
 
+  const cambiarEstadoCont = (c: Contenido, e: EstadoCont) => {
+    if (e === 'Publicado') return publicarCont(c)
+    if (e === 'Inactivo') return inactivarCont(c)
+    const t = tituloDe(c, games)
+    setConfirm({ title: 'Pasar a Borrador', msg: `¿Deseas pasar a Borrador el contenido «${t}»? Dejará de verse en el portal.`, label: 'Confirmar',
+      yes: () => { setEstadoCont(c, 'Borrador'); toast('El contenido ha pasado a Borrador correctamente.', 'ok') } })
+  }
+  const visualizarCont = (c: Contenido) => {
+    if (!c.juego) { toast(`La visualización de contenidos de tipo «${c.tipo}» está fuera del alcance de este prototipo.`, 'info'); return }
+    // Como en el portal: con varios juegos se muestra uno al azar en cada visita.
+    const ok = c.juego.ids.map((id) => games.find((g) => g.id === id)).filter((g): g is Game => !!g && estadoDe(g) === 'Completado')
+    if (!ok.length) { toast(sinJuegos(c) ? 'Este contenido no tiene juegos para visualizar.' : msgIncompleto(c.juego.ids[0]!), 'err'); return }
+    openPreview(ok[Math.floor(Math.random() * ok.length)]!)
+  }
+
+  /* ───────────── Micrositios y secciones: activar / inactivar (Figma: confirmDialog y snackbar) ───────────── */
+
+  const fueraDeAlcance = () => toast('Esta acción ya existe en la administración de micrositios y está fuera del alcance de este prototipo.', 'info')
+  const toggleActivo = (id: string, tipo: 'micrositio' | 'sección') => {
+    const activo = !!activos[id]
+    const esM = tipo === 'micrositio'
+    const El = esM ? 'El' : 'La', este = esM ? 'este' : 'esta', o = esM ? 'o' : 'a'
+    setConfirm(activo
+      ? { title: `¿Estás seguro de que deseas inactivar ${este} ${tipo}?`, label: 'Confirmar',
+          msg: esM
+            ? 'Este dejará de mostrarse en el portal público y no permitirá la gestión de sus secciones y contenidos hasta que sea activado nuevamente.'
+            : 'Esta dejará de mostrarse en el portal público y no permitirá la gestión de sus contenidos hasta que sea activada nuevamente. Sus contenidos y juegos conservan su estado.',
+          yes: () => { setActivos((a) => ({ ...a, [id]: false })); toast(`${El} ${tipo} ha sido inactivad${o} correctamente.`, 'ok') } }
+      : { title: `¿Estás seguro de que deseas activar ${este} ${tipo}?`, label: 'Confirmar',
+          msg: esM
+            ? 'Todas las secciones activas y los contenidos publicados asociados volverán a ser visibles en el Portal WEB.'
+            : 'Los contenidos publicados de la sección volverán a ser visibles en el Portal WEB.',
+          yes: () => { setActivos((a) => ({ ...a, [id]: true })); toast(`${El} ${tipo} ha sido activad${o} correctamente.`, 'ok') } })
+  }
+  const copiarUrl = (url: string) => {
+    const p = navigator.clipboard?.writeText(url)
+    if (p) p.then(() => toast('La URL pública se copió al portapapeles.', 'ok'), () => toast(url, 'info')); else toast(url, 'info')
+  }
+
   /* ───────────── Encabezado ───────────── */
 
   const enJuegos = screen === 'lista' || screen === 'tipo' || screen === 'editor'
   const accion = draft ? (draft.id ? 'Editar ' : 'Crear ') + draft.tipo.toLowerCase() : ''
   const editandoCont = route.screen === 'contJuego' && route.id != null
   const title = screen === 'lista' ? 'Juegos' : screen === 'tipo' ? 'Crear juego' : screen === 'editor' ? accion
-    : screen === 'secciones' ? 'Micrositios' : screen === 'seccion' ? (sec?.sec ?? '') : screen === 'tipoCont' ? 'Crear contenido'
+    : screen === 'secciones' ? 'Administración de micrositios portal web' : screen === 'micrositio' ? (micro?.nombre ?? '') : screen === 'seccion' ? (sec?.sec ?? '') : screen === 'tipoCont' ? 'Crear contenido'
     : (editandoCont ? 'Editar contenido' : 'Crear contenido') + ' · Juego'
   useEffect(() => { document.title = title + ' · Kanoa Lab' }, [title])
 
@@ -223,9 +267,11 @@ export function App() {
     if (screen === 'lista') return [{ label: RAIZ }, { label: 'Juegos' }]
     if (screen === 'tipo') return [{ label: RAIZ }, { label: 'Juegos', go: aLista }, { label: 'Crear juego' }]
     if (screen === 'editor') return [{ label: RAIZ }, { label: 'Juegos', go: cancelar }, { label: accion }]
+    if (screen === 'micrositio' && micro) return [{ label: RAIZ }, { label: 'Micrositios', go: () => go({ screen: 'secciones' }) }, { label: micro.nombre }]
     if (screen === 'secciones' || !sec) return [{ label: RAIZ }, { label: 'Micrositios' }]
     const enForm = screen === 'contJuego'
-    const base: Crumb[] = [{ label: RAIZ }, { label: 'Micrositios', go: enForm ? () => cancelarCont({ screen: 'secciones' }) : () => go({ screen: 'secciones' }) }, { label: sec.micro }]
+    const ir = (r: Route) => enForm ? () => cancelarCont(r) : () => go(r)
+    const base: Crumb[] = [{ label: RAIZ }, { label: 'Micrositios', go: ir({ screen: 'secciones' }) }, { label: sec.micro, go: ir({ screen: 'micrositio', micro: sec.microSlug }) }]
     if (screen === 'seccion') return [...base, { label: sec.sec }]
     const secCrumb: Crumb = { label: sec.sec, go: enForm ? () => cancelarCont({ screen: 'seccion', sec: sec.id }) : aSeccion }
     if (screen === 'tipoCont') return [...base, secCrumb, { label: 'Crear contenido' }]
@@ -234,9 +280,8 @@ export function App() {
   })()
 
   const back = screen === 'editor' ? cancelar : screen === 'tipo' ? aLista
-    : screen === 'seccion' ? () => go({ screen: 'secciones' }) : screen === 'tipoCont' ? aSeccion : screen === 'contJuego' ? () => cancelarCont() : undefined
+    : screen === 'micrositio' ? () => go({ screen: 'secciones' }) : screen === 'seccion' && sec ? () => go({ screen: 'micrositio', micro: sec.microSlug }) : screen === 'tipoCont' ? aSeccion : screen === 'contJuego' ? () => cancelarCont() : undefined
   const description = screen === 'lista' ? 'Crea y parametriza los juegos del portal. Cuando un juego está completo, queda disponible para agregarlo como contenido en cualquier sección de un micrositio.'
-    : screen === 'seccion' && sec ? `Micrositio ${sec.micro}. ${sec.desc}`
     : screen === 'contJuego' && sec ? `Sección ${sec.micro} › ${sec.sec}.` : undefined
 
   return (
@@ -279,12 +324,17 @@ export function App() {
         )}
         {screen === 'tipo' && <Tipo onPick={nuevo} />}
         {screen === 'editor' && draft && (
-          <Asistente game={draft} paso={paso} setPaso={setPaso} nombreErr={nombreErr} update={update} toast={toast} clearNombreErr={() => setNombreErr(false)} />
+          <Asistente game={draft} paso={paso} setPaso={setPaso} nombreErr={nombreErr} update={update} toast={toast} clearNombreErr={() => setNombreErr(false)}
+            onNombreBlur={() => { const n = draft.nombre.trim().length; if (n > 0 && n < 3) setNombreErr(true) }} publicadoEn={publicadoEn(draft)} />
         )}
-        {screen === 'secciones' && <Secciones contenidos={contenidos} onAbrir={(s) => go({ screen: 'seccion', sec: s })} />}
+        {screen === 'secciones' && <Micrositios activos={activos} onAbrir={(m) => go({ screen: 'micrositio', micro: m })} onToggle={(m) => toggleActivo(m, 'micrositio')} onFueraDeAlcance={fueraDeAlcance} />}
+        {screen === 'micrositio' && micro && (
+          <Micrositio micro={micro} activos={activos} onAbrir={(s) => go({ screen: 'seccion', sec: s })} onToggle={(s) => toggleActivo(s, 'sección')}
+            onCopiar={copiarUrl} onFueraDeAlcance={fueraDeAlcance} />
+        )}
         {screen === 'seccion' && sec && (
-          <Seccion contenidos={contenidos.filter((c) => c.sec === sec.id)} games={games} onCrear={() => go({ screen: 'tipoCont', sec: sec.id })}
-            onEditar={editarCont} onPublicar={publicarCont} onInactivar={inactivarCont} onEliminar={eliminarCont} />
+          <Seccion seccion={sec} contenidos={contenidos.filter((c) => c.sec === sec.id)} games={games} onCrear={() => go({ screen: 'tipoCont', sec: sec.id })}
+            onEditar={editarCont} onVisualizar={visualizarCont} onEstado={cambiarEstadoCont} onEliminar={eliminarCont} onFueraDeAlcance={fueraDeAlcance} />
         )}
         {screen === 'tipoCont' && <TipoContenido onPick={pickTipoCont} />}
         {screen === 'contJuego' && cont && <ContenidoJuego draft={cont} setDraft={setContDraft} games={games} publicadoEn={publicadoEn} onVer={openPreview} />}
@@ -295,8 +345,8 @@ export function App() {
           <Snackbar type={toastMsg.kind === 'err' ? 'error' : toastMsg.kind === 'ok' ? 'success' : undefined}>{toastMsg.t}</Snackbar>
         </div>
       )}
-      <Modal open={!!preview} wide title="Vista previa · así lo verá el visitante" onClose={() => setPreview(null)}>
-        {preview && <PreviewHost key={JSON.stringify(preview)} game={preview} />}
+      <Modal open={!!preview} wide title={`Vista previa · ${preview?.nombre.trim() || 'Juego sin nombre'}`} onClose={() => setPreview(null)}>
+        {preview && <PreviewHost key={JSON.stringify(preview)} game={preview} onClose={() => setPreview(null)} />}
       </Modal>
       {confirm && (
         <ConfirmDialog open title={confirm.title} message={confirm.msg} confirmLabel={confirm.label} danger={confirm.danger}

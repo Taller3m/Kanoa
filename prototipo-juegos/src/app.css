@@ -108,16 +108,109 @@
   .form__actions .ds-btn { width: 100%; }
 }
 
-/* ───── Micrositios (simulación) › contenidos de una sección ───── */
-.section-head { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); flex-wrap: wrap; }
-.section-head h2 { margin: 0; color: var(--title); }
-.drag { flex: none; width: 20px; color: var(--muted); font-size: 18px; line-height: 1; cursor: grab; text-align: center; }
-.tags { display: inline-flex; align-items: center; gap: var(--space-2); flex-wrap: wrap; }
-.option--nuevo { border-color: var(--primary); }
+/* ───── Micrositios (Figma «Comunicador» › Micrositios) ───── */
+/* Bloque «Información general» / «Gestionar secciones»: título 22/28 bold + panel surface-container radio 20 */
+.mblock { display: flex; flex-direction: column; gap: var(--space-4); }
+.mblock__title { margin: 0; color: var(--title); font: 700 22px/28px var(--font-family); }
+.mpanel { display: flex; flex-direction: column; gap: var(--space-4); padding: var(--space-5); border: 1px solid var(--outline-variant); border-radius: var(--radius-md); background: var(--surface-container); }
+.mpanel--quiet { opacity: .7; }
+.mpanel__actions { display: flex; justify-content: flex-end; gap: var(--space-5); }
 
-/* Formulario «Crear contenido · Juego» */
+/* Tarjeta de micrositio / sección (MicrositioCard): degradado surface-container → primary-container, sombra regular */
+.mgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: var(--space-4); }
+.mcard { display: flex; flex-direction: column; gap: var(--space-3); padding: var(--space-5); border-radius: var(--radius-md); max-width: 572px;
+  background: linear-gradient(to bottom, var(--surface-container), var(--primary-container)); box-shadow: 0 8px 18px 1px var(--on-surface---5); }
+.mcard__top { display: flex; align-items: flex-start; justify-content: space-between; }
+.mcard__icon { display: grid; place-items: center; padding: var(--space-4); border-radius: var(--radius-md); background: var(--green-soft); color: var(--on-green-soft); }
+.mcard__body { display: flex; flex-direction: column; gap: var(--space-3); margin-top: var(--space-3); flex: 1; }
+.mcard__title { margin: 0; color: var(--title); font: 700 22px/28px var(--font-family); }
+.mcard__desc { margin: 0; color: var(--paragraph); font: 400 14px/20px var(--font-family); letter-spacing: .25px; }
+.mcard__btn { margin-top: var(--space-1); }
+.mcard--off .mcard__icon, .mcard--off .mcard__body { opacity: .5; }
+.mcard--off .mcard__btn:disabled { background: var(--primary); color: var(--on-primary); opacity: .5; }
+
+/* Switch pequeño de la tarjeta (Figma: track 40×16, indicador 24) */
+.mswitch { position: relative; display: inline-flex; align-items: center; width: 40px; height: 24px; cursor: pointer; }
+.mswitch input { position: absolute; inset: 0; opacity: 0; margin: 0; cursor: pointer; }
+.mswitch__track { position: relative; width: 40px; height: 16px; border-radius: 40px; background: var(--surface-variant); }
+.mswitch__track::after { content: ''; position: absolute; top: 50%; left: 2px; width: 24px; height: 24px; border-radius: 50%; transform: translateY(-50%);
+  background: var(--surface); box-shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 1px 3px 1px rgba(0, 0, 0, .15); transition: left var(--motion-fast) var(--ease), background var(--motion-fast) var(--ease); }
+.mswitch input:checked + .mswitch__track { background: var(--primary-container); }
+.mswitch input:checked + .mswitch__track::after { left: 18px; background: var(--primary); }
+.mswitch input:focus-visible + .mswitch__track { outline: 2px solid var(--primary); outline-offset: 6px; }
+.mswitch--static { cursor: default; }
+
+/* Detalle del micrositio */
+.mfile { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3) var(--space-4); border-radius: var(--radius-sm); background: var(--primary-container); color: var(--on-background); font: 500 12px/16px var(--font-family); }
+.mdl { display: flex; flex-direction: column; gap: var(--space-4); margin: 0; }
+.mdl dt { color: var(--title); font: 500 14px/20px var(--font-family); }
+.mdl dd { margin: 0; color: var(--paragraph); font: 400 14px/20px var(--font-family); }
+.murl { display: flex; flex-direction: column; gap: var(--space-2); }
+.murl__label { color: var(--title); font: 500 14px/20px var(--font-family); }
+.murl__row { display: flex; align-items: center; gap: var(--space-2); }
+.murl__value { max-width: 360px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding: var(--space-2) var(--space-3); border: 1px solid var(--outline-variant); border-radius: var(--radius-sm); background: var(--surface); font: 400 12px/16px var(--font-family); color: var(--paragraph); }
+.mbtns { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4); }
+.mbtns__head { display: flex; align-items: center; justify-content: space-between; color: var(--title); font-size: 14px; }
+
+/* Listado de contenidos de la sección */
+.mlist__head { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); flex-wrap: wrap; }
+.mlist__title { margin: 0; color: var(--title); font: 700 28px/36px var(--font-family); }
+.mlist__filters { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); flex-wrap: wrap; }
+.msearch { flex: 1; max-width: 453px; min-width: 220px; display: flex; align-items: center; gap: var(--space-2); padding: 0 var(--space-3); height: 56px;
+  border: 1px solid var(--outline-variant); border-radius: var(--radius-sm); color: var(--on-surface-variant); }
+.msearch input { flex: 1; min-width: 0; border: 0; background: transparent; font: 400 14px/1.2 var(--font-family); letter-spacing: .5px; color: var(--on-background); outline: none; }
+.msearch:focus-within { border-color: var(--primary); box-shadow: inset 0 0 0 1px var(--primary); }
+.mfilter { display: flex; align-items: center; gap: 21px; color: var(--title); font: 400 16px/24px var(--font-family); letter-spacing: .5px; }
+.mfilter select { width: 233px; height: 56px; padding: 0 var(--space-3); border: 1px solid var(--outline-variant); border-radius: var(--radius-sm); background: transparent; color: var(--on-background); font: 400 14px/1.2 var(--font-family); }
+.mfilter select:focus-visible { outline: 2px solid var(--primary); outline-offset: 1px; }
+.mtable { border: 1px solid var(--outline-variant); border-radius: var(--radius-md); padding: var(--space-1) var(--space-2) 0; }
+.mtable .ds-table th { background: var(--transparent-surface-60); }
+.mtable .ds-table td { color: var(--title); }
+.mtable__act { text-align: right; width: 56px; }
+.mtable .mtable__act .ds-iconbtn { opacity: 0; transition: opacity var(--motion-fast) var(--ease); }
+.mtable tr:hover .mtable__act .ds-iconbtn, .mtable tr:focus-within .mtable__act .ds-iconbtn, .mtable .ds-iconbtn[aria-expanded='true'] { opacity: 1; }
+@media (hover: none) { .mtable .mtable__act .ds-iconbtn { opacity: 1; } }
+.mtable-empty { display: flex; flex-direction: column; align-items: center; gap: var(--space-3); padding: var(--space-7, 56px) var(--space-4); text-align: center;
+  border: 1px solid var(--outline-variant); border-radius: var(--radius-md); color: var(--paragraph); }
+.mtable-empty p { margin: 0; max-width: 46ch; }
+.drag { flex: none; display: inline-flex; color: var(--on-surface-variant); cursor: grab; }
+.tags { display: inline-flex; align-items: center; gap: var(--space-2); flex-wrap: wrap; }
+
+/* Etiqueta de estado con contorno (Status - Tag - Extra) */
+.otag { display: inline-flex; align-items: center; padding: 4px var(--space-4); border: 1px solid currentColor; border-radius: 38px; font: 500 12px/16px var(--font-family); letter-spacing: .5px; white-space: nowrap; }
+.otag--success { color: var(--success); }
+.otag--prevent { color: var(--prevent); }
+.otag--grey { color: var(--muted); }
+.otag--error { color: var(--error); }
+
+/* ¿Qué tipo de contenido quieres crear? (CreacionDeContenido) */
+.ctype__intro { text-align: center; }
+.ctype__q { margin: 0 0 var(--space-4); color: var(--title); font: 700 20px/28px var(--font-family); }
+.ctype__intro p { margin: 0; color: var(--paragraph); font: 400 14px/20px var(--font-family); letter-spacing: .25px; }
+.ctype { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-5); }
+.ctype__card { --tone-bg: var(--teal-soft); --tone-fg: var(--on-teal-soft); display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-3); padding: var(--space-5);
+  border: 0; border-radius: var(--radius-md); background: var(--surface-container); box-shadow: 0 8px 18px 1px var(--on-surface---5); text-align: left; cursor: pointer; font-family: var(--font-family);
+  transition: box-shadow var(--motion-fast) var(--ease), background var(--motion-fast) var(--ease); }
+.ctype__card:hover { box-shadow: var(--elevation-2); }
+.ctype__card:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+.ctype__icon { display: grid; place-items: center; width: 56px; height: 56px; margin-bottom: var(--space-3); border-radius: var(--radius-md); background: var(--tone-bg); color: var(--tone-fg); }
+.ctype__name { color: var(--title); font: 700 22px/28px var(--font-family); }
+.ctype__desc { color: var(--paragraph); font: 400 14px/20px var(--font-family); letter-spacing: .25px; }
+.ctype__card--teal { --tone-bg: var(--teal-soft); --tone-fg: var(--on-teal-soft); }
+.ctype__card--blue { --tone-bg: var(--blue-soft); --tone-fg: var(--on-blue-soft); }
+.ctype__card--orange { --tone-bg: var(--orange-soft); --tone-fg: var(--on-orange-soft); }
+.ctype__card--indigo { --tone-bg: var(--indigo-soft); --tone-fg: var(--on-indigo-soft); }
+.ctype__card--red { --tone-bg: var(--red-soft); --tone-fg: var(--on-red-soft); }
+.ctype__card--green { --tone-bg: var(--green-soft); --tone-fg: var(--on-green-soft); }
+
+@container main (max-width: 720px) {
+  .ctype, .mbtns { grid-template-columns: minmax(0, 1fr); }
+  .mfilter select { width: 100%; }
+}
+
+/* Formulario «Crear contenido · Juego» (mismo panel de los formularios de contenido del Figma) */
 .cont { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: var(--space-5); align-items: start; }
-.cont__form { display: flex; flex-direction: column; gap: var(--space-5); padding: var(--space-5); }
+.cont__form { display: flex; flex-direction: column; gap: var(--space-5); padding: var(--space-5); border-radius: var(--radius-md); background: var(--surface-container); }
 .cont__aside { position: sticky; top: var(--space-5); }
 .cont__list { margin: var(--space-2) 0 0; padding-left: var(--space-4); display: flex; flex-direction: column; gap: var(--space-2); }
 .cont__fs { border: 0; margin: 0; padding: 0; min-width: 0; display: flex; flex-direction: column; gap: var(--space-2); }
@@ -161,3 +254,6 @@
   .cpick { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @container main (max-width: 520px) { .cpick { grid-template-columns: minmax(0, 1fr); } }
+
+/* El atributo hidden debe ganarle a los display de las pantallas (p. ej. el paso 2 oculto del asistente). */
+.screen[hidden] { display: none; }

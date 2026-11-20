@@ -6,9 +6,9 @@ import { CrecePreview } from './crece/Preview'
 import { parOk } from './memo/rules'
 import { fixMemo } from './memo/defaults'
 
-export function PreviewHost({ game }: { game: Game }) {
+export function PreviewHost({ game, onClose }: { game: Game; onClose?: () => void }) {
   switch (game.tipo) {
-    case 'Crucigrama': return <CruciPreview game={game} />
+    case 'Crucigrama': return <CruciPreview game={game} onClose={onClose} />
     case 'Cuenta cuentos': return <CuentoPreview game={game} />
     case 'Memoria': return <MemoPreview game={game} />
     case 'Crece conmigo': return <CrecePreview game={game} />

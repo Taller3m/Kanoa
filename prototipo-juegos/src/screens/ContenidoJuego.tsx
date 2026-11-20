@@ -1,4 +1,5 @@
-import { Checkbox, Icon, IconButton, Message, StatusTag, TextField } from '../ui'
+import { Checkbox, Icon, IconButton, Message, TextField } from '../ui'
+import { OTag } from './Seccion'
 import { TIPOS, estadoDe } from '../games/registry'
 import { porModificacion } from '../games/base'
 import type { Game, TipoJuego } from '../games/types'
@@ -79,7 +80,7 @@ export function ContenidoJuego({ draft, setDraft, games, publicadoEn, onVer }: C
       <aside className="cont__aside">
         <Message title="Así funciona">
           <ul className="cont__list">
-            <li>Al GUARDAR, el contenido queda <StatusTag type="success">Publicado</StatusTag> en la sección.</li>
+            <li>Al GUARDAR, el contenido queda <OTag tone="success">Publicado</OTag> en la sección.</li>
             <li>Un mismo juego se puede usar en varias secciones y micrositios.</li>
             <li>Con varios juegos, en cada visita se muestra uno de ellos al azar.</li>
             <li>Al terminar el juego, el visitante ve el mensaje de cierre y los botones VOLVER A JUGAR e IR AL INICIO.</li>

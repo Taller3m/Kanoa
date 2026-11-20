@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState, type KeyboardEvent } from 'react'
 import type { EditorProps } from '../types'
 import type { CruciWord } from './types'
 import { Button, ConfirmDialog, Icon, IconButton, Select, TextArea, TextField } from '../../ui'
@@ -10,17 +10,21 @@ import './cruci.css'
 
 const SIZES = [8, 10, 12, 15]
 const RULE_ICON: Record<RuleState, string> = { ok: 'check_circle', err: 'cancel', pend: 'radio_button_unchecked', info: 'info' }
+const RULE_TXT: Record<RuleState, string> = { ok: 'Cumplida', err: 'Incumplida', pend: 'Pendiente', info: 'Información' }
 
 /** Paso 2 «Configuración» del juego «Crucigrama». */
 export function CruciEditor({ game, update, toast }: EditorProps) {
   const [cx, setCx] = useState<CruciCx>(CRUCI_CX0)
   const [toDelete, setToDelete] = useState<CruciWord | null>(null)
+  // Navegación con flechas dentro del tablero: una sola casilla es tabulable (roving tabindex).
+  const [foco, setFoco] = useState('0,0')
+  const boardRef = useRef<HTMLDivElement>(null)
 
   const N = game.cruci.size
   const words = game.cruci.words
   const sel = cx.sel
-  const val = sel ? cruciValidar(N, words, { ...cx, sel }) : null
-  const map = val ? val.map : cruciBuildMap(words)
+  const val = cruciValidar(N, words, cx)
+  const map = val.map
   const all = cruciNumerar(words)
   const starts: Record<string, number> = {}
   words.filter((w) => w.id !== cx.editId).forEach((w) => { starts[cruciKey(w.r, w.c)] = all.byId[w.id] })
@@ -38,7 +42,7 @@ export function CruciEditor({ game, update, toast }: EditorProps) {
   }
 
   const addWord = () => {
-    if (!sel || !val || !val.can) return
+    if (!sel || !val.can) return
     const w: CruciWord = { id: cx.editId || Date.now(), r: sel.r, c: sel.c, dir: cx.dir, ans: cx.ans, clue: cx.clue.trim() }
     update((d) => {
       const i = d.cruci.words.findIndex((x) => x.id === w.id)
@@ -57,25 +61,38 @@ export function CruciEditor({ game, update, toast }: EditorProps) {
     setToDelete(null)
   }
 
+  const mover = (e: KeyboardEvent<HTMLButtonElement>, r: number, c: number) => {
+    const d: Record<string, [number, number]> = { ArrowLeft: [0, -1], ArrowRight: [0, 1], ArrowUp: [-1, 0], ArrowDown: [1, 0] }
+    let rr = r, cc = c
+    if (d[e.key]) { rr = Math.min(N - 1, Math.max(0, r + d[e.key]![0])); cc = Math.min(N - 1, Math.max(0, c + d[e.key]![1])) }
+    else if (e.key === 'Home') cc = 0
+    else if (e.key === 'End') cc = N - 1
+    else return
+    e.preventDefault()
+    const k = cruciKey(rr, cc)
+    setFoco(k)
+    boardRef.current?.querySelector<HTMLButtonElement>(`[data-k="${k}"]`)?.focus()
+  }
+
   const cells = []
   for (let r = 0; r < N; r++) {
     for (let c = 0; c < N; c++) {
       const k = cruciKey(r, c)
       const m = map[k]
-      const pi = val ? val.path.indexOf(k) : -1
-      const conf = !!(val && val.conflicts[k])
+      const pi = val.path.indexOf(k)
+      const conf = !!val.conflicts[k]
       const isSel = !!sel && sel.r === r && sel.c === c
       const letter = m ? m.L : (pi >= 0 ? cx.ans[pi] : '')
       const num = starts[k]
       const cls = ['cr-cell', m && 'cr-cell--filled', pi >= 0 && 'cr-cell--path', conf && 'cr-cell--conflict', isSel && 'cr-cell--sel'].filter(Boolean).join(' ')
-      const desc = ', fila ' + (r + 1) + ', columna ' + (c + 1) + (num ? ', inicio de la pregunta ' + num : '') + (letter ? '' : ', vacía') + (conf ? ', letra en conflicto' : '')
+      // Nombre accesible «Fila F, columna C» (HU-PW-172); incluye la letra visible para cumplir WCAG 2.5.3.
+      const nombre = `Fila ${r + 1}, columna ${c + 1}` + (letter ? `, letra ${letter}` : ', vacía') + (num ? `, inicio de la palabra ${num}` : '') + (conf ? ', letra en conflicto' : '')
       cells.push(
-        <button key={k} type="button" className={cls} title={'Fila ' + (r + 1) + ', columna ' + (c + 1)} aria-pressed={isSel}
+        <button key={k} type="button" className={cls} title={`Fila ${r + 1}, columna ${c + 1}`} aria-pressed={isSel} aria-label={nombre}
+          data-k={k} tabIndex={foco === k ? 0 : -1} onFocus={() => setFoco(k)} onKeyDown={(e) => mover(e, r, c)}
           onClick={() => patch({ sel: { r, c } })}>
-          {(num || (isSel && !num)) && <span className="cr-cell__num">{num || '·'}</span>}
-          <span>{letter}</span>
-          {/* El nombre accesible se forma del contenido visible + esta descripción (WCAG 2.5.3 Etiqueta en el nombre) */}
-          <span className="sr-only">{desc}</span>
+          {(num || (isSel && !num)) && <span className="cr-cell__num" aria-hidden="true">{num || '·'}</span>}
+          <span aria-hidden="true">{letter}</span>
         </button>,
       )
     }
@@ -124,7 +141,7 @@ export function CruciEditor({ game, update, toast }: EditorProps) {
 
       <div className="cr-main">
         <div className="cr-board-wrap">
-          <div className="cr-board" role="group" aria-label={`Tablero de ${N} por ${N}`} style={{ gridTemplateColumns: `repeat(${N}, var(--cr-cell))` }} data-n={N}>
+          <div ref={boardRef} className="cr-board" role="group" aria-label={`Tablero de ${N} por ${N}. Usa las flechas para moverte y Enter para elegir la casilla de inicio.`} style={{ gridTemplateColumns: `repeat(${N}, var(--cr-cell))` }} data-n={N}>
             {cells}
           </div>
           <ul className="cr-legend t-body-sm">
@@ -136,17 +153,11 @@ export function CruciEditor({ game, update, toast }: EditorProps) {
         </div>
 
         <div className="cr-panel">
-          {!sel && (
-            <div className="cr-empty">
-              <div className="t-title-md">Agrega una palabra</div>
-              <p className="t-body-md cr-muted">1. Haz clic en la casilla donde empieza la palabra.<br />2. Elige si va hacia la derecha o hacia abajo.<br />3. Escribe la respuesta y su pista.</p>
-            </div>
-          )}
-          {sel && val && (
+          {(
             <div className="cr-form">
               <div>
-                <div className="t-title-md">{cx.editId ? `Editar palabra ${all.byId[cx.editId]}` : `Nueva palabra · pregunta ${nextNum}`}</div>
-                <div className="t-body-md cr-muted">Inicia en fila {sel.r + 1}, columna {sel.c + 1}</div>
+                <div className="t-title-md">{cx.editId ? `Editar palabra ${all.byId[cx.editId]}` : sel ? `Nueva palabra · pregunta ${nextNum}` : 'Agregar palabra'}</div>
+                <div className="t-body-md cr-muted">{sel ? `Inicia en fila ${sel.r + 1}, columna ${sel.c + 1}` : '1. Selecciona en el tablero la casilla donde empieza la palabra. 2. Elige la dirección. 3. Escribe la respuesta y su pista.'}</div>
               </div>
 
               <div role="group" aria-labelledby="cr-dir-l">
@@ -163,7 +174,7 @@ export function CruciEditor({ game, update, toast }: EditorProps) {
 
               <TextField label="Respuesta" required value={cx.ans} placeholder="Ej. SOL" autoComplete="off" spellCheck={false}
                 onChange={(e) => patch({ ans: cruciNorm(e.target.value) })}
-                help={`Solo letras, sin tildes ni espacios. Máximo ${val.maxLen} letras desde esta casilla.`} />
+                help={sel ? `Solo letras, sin tildes ni espacios. Máximo ${val.maxLen} ${val.maxLen === 1 ? 'letra' : 'letras'} desde esta casilla.` : 'Solo letras, sin tildes ni espacios.'} />
 
               <div>
                 <TextArea label="Pista o pregunta" required value={cx.clue} maxLength={150} rows={2}
@@ -179,7 +190,7 @@ export function CruciEditor({ game, update, toast }: EditorProps) {
                     <li key={ru.t} className={`cr-rule cr-rule--${ru.st}`}>
                       <Icon name={RULE_ICON[ru.st]} size={20} className="cr-rule__ico" />
                       <div>
-                        <div className="t-title-sm">{ru.t}</div>
+                        <div className="t-title-sm">{ru.t}<span className="sr-only">: {RULE_TXT[ru.st]}.</span></div>
                         <div className="t-body-sm cr-muted">{ru.msg}</div>
                       </div>
                     </li>
