@@ -8,6 +8,7 @@ import { cruciReqs } from './cruci/rules'
 import { cuentoReqs } from './cuento/rules'
 import { memoReqs } from './memo/rules'
 import { creceReqs } from './crece/rules'
+import { porModificacion } from './base'
 import { cruciSeed } from './cruci/seed'
 import { cuentoSeed } from './cuento/seed'
 import { memoSeed } from './memo/seed'
@@ -44,9 +45,7 @@ export const estadoDe = (g: Game): Estado => (reqsOf(g).every((x) => x.ok) ? 'Co
 /** Normaliza un juego al abrirlo en el editor (equivale a `J_fix`). */
 export const fixGame = (g: Game): Game => (g.tipo === 'Memoria' ? fixMemo(g) : g)
 
-/** Juegos de ejemplo en el mismo orden del prototipo original. Sin contenido publicado que los use (usos = 0). */
+/** Juegos de ejemplo ordenados por fecha de modificación. Dónde están publicados sale de los contenidos (portal/data.ts). */
 export function seedGames(): Game[] {
-  const all = [...cruciSeed, ...cuentoSeed, ...memoSeed, ...creceSeed].map((g) => ({ ...g, usos: 0 }))
-  const orden = [1, 2, 3, 6, 4, 7, 5]
-  return all.sort((a, b) => orden.indexOf(a.id ?? 99) - orden.indexOf(b.id ?? 99))
+  return porModificacion([...cruciSeed, ...cuentoSeed, ...memoSeed, ...creceSeed])
 }

@@ -38,6 +38,11 @@
   background: var(--surface-container-lowest); box-shadow: var(--elevation-2); border: 1px solid var(--outline-variant); }
 .menu .ds-menuitem { height: 44px; border-radius: var(--radius-sm); }
 .menu .ds-menuitem--danger { color: var(--error); }
+/* Opción deshabilitada con motivo (p. ej. Eliminar un juego publicado): etiqueta en gris y ayuda legible debajo. */
+.menu .menu__item--off { height: auto; min-height: 56px; padding-block: var(--space-2); align-items: flex-start; color: var(--on-surface---30); cursor: not-allowed; }
+.menu .menu__item--off:hover { background: none; }
+.menu .menu__item--off .ds-menuitem__label { white-space: normal; }
+.menu .menu__item--off small { display: block; margin-top: 2px; font-size: 12px; line-height: 16px; color: var(--on-surface-variant); }
 
 /* Selección de tipo */
 .options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4); }
@@ -102,3 +107,57 @@
   .screen__bar .ds-btn { width: 100%; }
   .form__actions .ds-btn { width: 100%; }
 }
+
+/* ───── Micrositios (simulación) › contenidos de una sección ───── */
+.section-head { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); flex-wrap: wrap; }
+.section-head h2 { margin: 0; color: var(--title); }
+.drag { flex: none; width: 20px; color: var(--muted); font-size: 18px; line-height: 1; cursor: grab; text-align: center; }
+.tags { display: inline-flex; align-items: center; gap: var(--space-2); flex-wrap: wrap; }
+.option--nuevo { border-color: var(--primary); }
+
+/* Formulario «Crear contenido · Juego» */
+.cont { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: var(--space-5); align-items: start; }
+.cont__form { display: flex; flex-direction: column; gap: var(--space-5); padding: var(--space-5); }
+.cont__aside { position: sticky; top: var(--space-5); }
+.cont__list { margin: var(--space-2) 0 0; padding-left: var(--space-4); display: flex; flex-direction: column; gap: var(--space-2); }
+.cont__fs { border: 0; margin: 0; padding: 0; min-width: 0; display: flex; flex-direction: column; gap: var(--space-2); }
+.cont__fs legend { padding: 0; margin-bottom: var(--space-2); color: var(--title); }
+.cont__help { margin: 0 0 var(--space-1); color: var(--paragraph); }
+.req { color: var(--error); }
+.cont__none { padding: var(--space-5); border: 1.5px dashed var(--outline-variant); border-radius: var(--radius-md); text-align: center; color: var(--paragraph); }
+.cont__rota { display: flex; align-items: center; gap: var(--space-2); margin: 0; padding: var(--space-2) var(--space-3); border-radius: var(--radius-sm); background: var(--secondary-container); color: var(--on-secondary-container); }
+.field-err { display: flex; align-items: center; gap: var(--space-1); margin: 0; color: var(--error); }
+
+/* Tipo de juego: 4 tarjetas que funcionan como radio */
+.cpick { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-3); }
+.cpick__opt { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3); border: 1px solid var(--outline-variant); border-radius: var(--radius-md);
+  background: var(--surface-container-lowest); cursor: pointer; transition: background var(--motion-fast) var(--ease), border-color var(--motion-fast) var(--ease); }
+.cpick__opt:hover { background: var(--surface-tint-8-); }
+.cpick__opt:has(input:checked) { border: 2px solid var(--primary); padding: calc(var(--space-3) - 1px); background: var(--secondary-container); }
+.cpick__opt:has(input:focus-visible) { outline: 2px solid var(--primary); outline-offset: 2px; }
+.cpick__opt--blue .tile { background: var(--blue-soft); color: var(--on-blue-soft); }
+.cpick__opt--orange .tile { background: var(--orange-soft); color: var(--on-orange-soft); }
+.cpick__opt--indigo .tile { background: var(--indigo-soft); color: var(--on-indigo-soft); }
+.cpick__opt--green .tile { background: var(--green-soft); color: var(--on-green-soft); }
+.cpick__txt { display: flex; flex-direction: column; min-width: 0; }
+.cpick__txt strong { color: var(--title); font-weight: 500; }
+.cpick__txt small { color: var(--muted); font-size: 12px; line-height: 16px; }
+
+/* Lista de juegos seleccionables */
+.jsel { list-style: none; margin: 0; padding: 0; border: 1px solid var(--outline-variant); border-radius: var(--radius-md); overflow: hidden; }
+.jsel--err { border-color: var(--error); }
+.jsel__row { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3) var(--space-4); border-top: 1px solid var(--outline-variant); }
+.jsel__row:first-child { border-top: 0; }
+.jsel__row--on { background: var(--surface-tint-8-); }
+.jsel__main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.jsel__main .ds-choice { font-weight: 500; color: var(--title); }
+.jsel__meta, .jsel__pub { padding-left: 32px; font-size: 12px; line-height: 16px; }
+.jsel__meta { color: var(--muted); }
+.jsel__pub { display: flex; align-items: center; gap: var(--space-1); color: var(--on-surface-variant); }
+
+@container main (max-width: 900px) {
+  .cont { grid-template-columns: minmax(0, 1fr); }
+  .cont__aside { position: static; }
+  .cpick { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@container main (max-width: 520px) { .cpick { grid-template-columns: minmax(0, 1fr); } }

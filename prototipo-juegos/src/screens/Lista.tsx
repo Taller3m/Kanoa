@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react'
-import { Button, Icon, IconButton, Panel, Select, StatusTag, TextField } from '../ui'
+import { Button, Icon, Panel, Select, StatusTag, TextField } from '../ui'
+import { ActionMenu } from './ActionMenu'
 import { estadoDe, tipoInfo } from '../games/registry'
 import type { Game } from '../games/types'
 
@@ -11,6 +11,8 @@ export interface ListaProps {
   onEditar: (g: Game) => void
   onVisualizar: (g: Game) => void
   onEliminar: (g: Game) => void
+  /** Secciones donde el juego está en un contenido publicado. */
+  publicadoEn: (g: Game) => string[]
 }
 
 export function EstadoTag({ game }: { game: Game }) {
@@ -18,31 +20,7 @@ export function EstadoTag({ game }: { game: Game }) {
   return e === 'Completado' ? <StatusTag color="blue" dot>Completado</StatusTag> : <StatusTag type="prevent" dot>Borrador</StatusTag>
 }
 
-function RowMenu({ game, anchor, onClose, onEditar, onVisualizar, onEliminar }: { game: Game; anchor: DOMRect; onClose: () => void; onEditar: () => void; onVisualizar: () => void; onEliminar: () => void }) {
-  const ref = useRef<HTMLDivElement>(null)
-  useEffect(() => {
-    ref.current?.querySelector<HTMLButtonElement>('button:not(:disabled)')?.focus()
-    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
-    document.addEventListener('keydown', onKey)
-    return () => document.removeEventListener('keydown', onKey)
-  }, [onClose])
-  const top = Math.min(anchor.bottom + 4, window.innerHeight - 140)
-  const left = Math.max(16, anchor.right - 180)
-  return (
-    <>
-      <div style={{ position: 'fixed', inset: 0, zIndex: 39 }} onClick={onClose} aria-hidden="true" />
-      <div ref={ref} className="menu" role="menu" aria-label={`Acciones de ${game.nombre}`} style={{ top, left }}>
-        <button type="button" role="menuitem" className="ds-menuitem" onClick={onEditar}><Icon name="edit" size={20} /><span className="ds-menuitem__label">Editar</span></button>
-        <button type="button" role="menuitem" className="ds-menuitem" onClick={onVisualizar}><Icon name="visibility" size={20} /><span className="ds-menuitem__label">Visualizar</span></button>
-        <button type="button" role="menuitem" className="ds-menuitem ds-menuitem--danger" onClick={onEliminar}
-          title={game.usos > 0 ? 'No se puede eliminar: está publicado' : undefined}><Icon name="delete" size={20} /><span className="ds-menuitem__label">Eliminar</span></button>
-      </div>
-    </>
-  )
-}
-
 export function Lista(p: ListaProps) {
-  const [menu, setMenu] = useState<{ game: Game; rect: DOMRect } | null>(null)
   const q = p.q.trim().toLowerCase()
   const rows = p.games.filter((g) =>
     (!q || g.nombre.toLowerCase().includes(q)) &&
@@ -67,7 +45,7 @@ export function Lista(p: ListaProps) {
           <div className="empty">
             <Icon name="sports_esports" size={36} />
             <h2 className="t-section">Aún no has creado ningún juego</h2>
-            <p className="t-body-md">Usa el botón «Crear juego» para configurar un crucigrama, un cuenta cuentos o un juego de memoria. Cuando esté completo, podrás agregarlo como contenido en las secciones de los micrositios.</p>
+            <p className="t-body-md">Usa el botón «Crear juego» para configurar un crucigrama, un cuenta cuentos, un juego de memoria o un Crece conmigo.</p>
             <Button icon="add" onClick={p.onCrear}>Crear juego</Button>
           </div>
         </div>
@@ -77,7 +55,7 @@ export function Lista(p: ListaProps) {
         <div className="table-wrap">
           <table className="ds-table">
             <thead>
-              <tr><th scope="col">Título del juego</th><th scope="col">Estados</th><th scope="col">Autor</th><th scope="col">Fecha de modificación</th><th scope="col"><span className="sr-only">Acciones</span></th></tr>
+              <tr><th scope="col">Título del juego</th><th scope="col">Estado</th><th scope="col">Autor</th><th scope="col">Fecha de modificación</th><th scope="col"><span className="sr-only">Acciones</span></th></tr>
             </thead>
             <tbody>
               {rows.map((g) => {
@@ -94,8 +72,13 @@ export function Lista(p: ListaProps) {
                     <td>{g.autor}</td>
                     <td>{g.editada}</td>
                     <td style={{ textAlign: 'right' }}>
-                      <IconButton icon="more_vert" label={`Acciones de ${g.nombre}`} aria-haspopup="menu"
-                        onClick={(e) => setMenu({ game: g, rect: e.currentTarget.getBoundingClientRect() })} />
+                      <ActionMenu label={`Acciones del juego ${g.nombre}`} actions={[
+                        { label: 'Editar', icon: 'edit', onClick: () => p.onEditar(g) },
+                        { label: 'Visualizar', icon: 'visibility', onClick: () => p.onVisualizar(g) },
+                        p.publicadoEn(g).length > 0
+                          ? { label: 'Eliminar', icon: 'delete', disabledHelp: 'No se puede eliminar: está publicado' }
+                          : { label: 'Eliminar', icon: 'delete', danger: true, onClick: () => p.onEliminar(g) },
+                      ]} />
                     </td>
                   </tr>
                 )
@@ -112,12 +95,6 @@ export function Lista(p: ListaProps) {
         </div>
       )}
 
-      {menu && (
-        <RowMenu game={menu.game} anchor={menu.rect} onClose={() => setMenu(null)}
-          onEditar={() => { const g = menu.game; setMenu(null); p.onEditar(g) }}
-          onVisualizar={() => { const g = menu.game; setMenu(null); p.onVisualizar(g) }}
-          onEliminar={() => { const g = menu.game; setMenu(null); p.onEliminar(g) }} />
-      )}
     </section>
   )
 }

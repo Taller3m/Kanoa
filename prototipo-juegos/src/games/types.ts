@@ -16,7 +16,6 @@ export interface Game {
   desc: string // «Instrucciones para el jugador»
   cierre: string // «Mensaje de cierre»
   autor: string
-  usos: number // contenidos publicados que lo usan (0 = sin usar)
   fecha: string // creación, p. ej. «28 oct 2026»
   editada: string // última modificación
   cruci: CruciData

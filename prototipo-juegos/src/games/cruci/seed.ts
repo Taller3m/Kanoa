@@ -8,7 +8,7 @@ const W = (id: number, r: number, c: number, dir: 'H' | 'V', ans: string, clue: 
 export const cruciSeed: Game[] = [
   baseGame({
     id: 1, tipo: 'Crucigrama', nombre: 'El café colombiano', desc: 'Completa el crucigrama con palabras relacionadas con el cultivo del café.',
-    fecha: '28 oct 2026', editada: '4 nov 2026', usos: 1,
+    fecha: '28 oct 2026', editada: '4 nov 2026',
     cruci: { size: 10, words: [
       W(11, 0, 0, 'H', 'CAFE', 'Bebida típica de Colombia preparada con granos tostados.'),
       W(12, 0, 1, 'V', 'AGUA', 'Recurso que la planta de café necesita todos los días.'),

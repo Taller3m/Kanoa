@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import type { TipoJuego } from './games/types'
+import { seccionDe } from './portal/data'
 
 /**
  * Enrutador por hash. URLs según las reglas del proyecto: minúsculas, sin tildes, palabras separadas
@@ -10,19 +11,39 @@ import type { TipoJuego } from './games/types'
  *   #/juegos/crear-crucigrama               nuevo · paso Detalles
  *   #/juegos/crear-crucigrama/configuracion nuevo · paso Configuración
  *   #/juegos/editar-memoria/3               edición del juego 3 (y /configuracion)
+ *
+ *   #/micrositios                                         secciones (simuladas)
+ *   #/micrositios/bienestar-emocional/sentir              contenidos de la sección
+ *   #/micrositios/bienestar-emocional/sentir/crear-contenido        elegir tipo de contenido
+ *   #/micrositios/bienestar-emocional/sentir/crear-contenido/juego  nuevo contenido Juego
+ *   #/micrositios/bienestar-emocional/sentir/editar-contenido/103   edición del contenido 103
  */
 export type Route =
   | { screen: 'lista' }
   | { screen: 'tipo' }
   | { screen: 'editor'; tipo: TipoJuego; id: number | null; paso: 1 | 2 }
+  | { screen: 'secciones' }
+  | { screen: 'seccion'; sec: string }
+  | { screen: 'tipoCont'; sec: string }
+  | { screen: 'contJuego'; sec: string; id: number | null }
 
 const SLUG: Record<TipoJuego, string> = {
   'Crucigrama': 'crucigrama', 'Cuenta cuentos': 'cuenta-cuentos', 'Memoria': 'memoria', 'Crece conmigo': 'crece-conmigo',
 }
 const POR_SLUG = Object.fromEntries(Object.entries(SLUG).map(([k, v]) => [v, k])) as Record<string, TipoJuego>
 
+function parseMicro(parts: string[]): Route {
+  if (parts.length < 3) return { screen: 'secciones' }
+  const sec = parts[1] + '/' + parts[2]
+  if (!seccionDe(sec)) return { screen: 'secciones' }
+  if (parts[3] === 'crear-contenido') return parts[4] === 'juego' ? { screen: 'contJuego', sec, id: null } : { screen: 'tipoCont', sec }
+  if (parts[3] === 'editar-contenido' && Number.isFinite(Number(parts[4]))) return { screen: 'contJuego', sec, id: Number(parts[4]) }
+  return { screen: 'seccion', sec }
+}
+
 export function parse(hash: string): Route {
   const parts = hash.replace(/^#\/?/, '').split('/').filter(Boolean)
+  if (parts[0] === 'micrositios') return parseMicro(parts)
   if (parts[0] !== 'juegos' || parts.length === 1) return { screen: 'lista' }
   const seg = parts[1] ?? ''
   if (seg === 'crear-juego') return { screen: 'tipo' }
@@ -36,10 +57,18 @@ export function parse(hash: string): Route {
 }
 
 export function href(r: Route): string {
-  if (r.screen === 'lista') return '#/juegos'
-  if (r.screen === 'tipo') return '#/juegos/crear-juego'
-  const base = '#/juegos/' + (r.id ? 'editar-' : 'crear-') + SLUG[r.tipo] + (r.id ? '/' + r.id : '')
-  return r.paso === 2 ? base + '/configuracion' : base
+  switch (r.screen) {
+    case 'lista': return '#/juegos'
+    case 'tipo': return '#/juegos/crear-juego'
+    case 'secciones': return '#/micrositios'
+    case 'seccion': return '#/micrositios/' + r.sec
+    case 'tipoCont': return '#/micrositios/' + r.sec + '/crear-contenido'
+    case 'contJuego': return '#/micrositios/' + r.sec + (r.id ? '/editar-contenido/' + r.id : '/crear-contenido/juego')
+    case 'editor': {
+      const base = '#/juegos/' + (r.id ? 'editar-' : 'crear-') + SLUG[r.tipo] + (r.id ? '/' + r.id : '')
+      return r.paso === 2 ? base + '/configuracion' : base
+    }
+  }
 }
 
 export function useRoute(): [Route, (r: Route, replace?: boolean) => void] {
