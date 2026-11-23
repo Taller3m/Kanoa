@@ -8,6 +8,8 @@ export interface PreviewProps {
   game: Game
   /** Cierra la vista previa (IR AL INICIO en la pantalla de cierre). */
   onClose?: () => void
+  /** true cuando el juego se muestra en el Portal WEB (oculta ayudas solo de administración). */
+  portal?: boolean
 }
 
 /** Cabecera común: tipo + nombre y botón «Cómo jugar». */

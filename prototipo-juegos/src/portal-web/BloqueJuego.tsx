@@ -10,7 +10,7 @@ import type { BloquePublico } from './contrato'
  *
  *  · Con varios juegos se elige uno al azar en cada visita (al montar el bloque).
  *  · El juego es el MISMO componente de la vista previa de la administración, en «modo portal»:
- *    IR AL INICIO lleva al inicio de la página (`onIrAlInicio`) en vez de cerrar una ventana.
+ *    IR AL INICIO lleva al Home del portal (`onIrAlInicio`) en vez de cerrar una ventana.
  */
 export function BloqueJuego({ bloque, onIrAlInicio }: { bloque: Extract<BloquePublico, { tipo: 'juego' }>; onIrAlInicio: () => void }) {
   const [juego] = useState(() => bloque.juegos[Math.floor(Math.random() * bloque.juegos.length)])
@@ -20,7 +20,7 @@ export function BloqueJuego({ bloque, onIrAlInicio }: { bloque: Extract<BloquePu
       {bloque.titulo && <h2 className="pw-bloque__titulo" id={tid}>{bloque.titulo}</h2>}
       {juego ? (
         <div className="pw-juego">
-          <PreviewHost game={juego} onClose={onIrAlInicio} />
+          <PreviewHost game={juego} onClose={onIrAlInicio} portal />
         </div>
       ) : (
         // Variante de error del bloque: no hay ningún juego que se pueda mostrar.

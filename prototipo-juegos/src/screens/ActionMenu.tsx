@@ -1,12 +1,12 @@
-import { useEffect, useId, useRef, useState, type KeyboardEvent } from 'react'
-import { Icon, IconButton } from '../ui'
+import { useEffect, useRef, useState, type KeyboardEvent } from 'react'
+import { Icon, IconButton, Tooltip } from '../ui'
 
 export interface MenuAction {
   label: string
   icon?: string
   onClick?: () => void
   danger?: boolean
-  /** Si viene, la opción se muestra deshabilitada (en gris) con este texto de ayuda debajo. Si además trae onClick, al seleccionarla se ejecuta (p. ej. para explicar el motivo). */
+  /** Si viene, la opción se muestra deshabilitada (en gris) con este texto de ayuda en un tooltip. Si además trae onClick, al seleccionarla se ejecuta (p. ej. para explicar el motivo). */
   disabledHelp?: string
   /** Opciones de un submenú que se abre a un lado (p. ej. «Cambiar estado» › Publicado / Inactivo). */
   submenu?: MenuAction[]
@@ -27,7 +27,6 @@ export function ActionMenu({ label, actions }: { label: string; actions: MenuAct
   const btn = useRef<HTMLButtonElement>(null)
   const ref = useRef<HTMLDivElement>(null)
   const subRef = useRef<HTMLDivElement>(null)
-  const uid = useId()
 
   useEffect(() => { if (rect) ref.current?.querySelector<HTMLButtonElement>('[role="menuitem"]')?.focus() }, [rect])
   useEffect(() => { if (sub != null) subRef.current?.querySelector<HTMLButtonElement>('[role="menuitem"]')?.focus() }, [sub])
@@ -41,7 +40,7 @@ export function ActionMenu({ label, actions }: { label: string; actions: MenuAct
   const cerrarSub = () => { const i = sub; setSub(null); if (i != null) ref.current?.querySelectorAll<HTMLButtonElement>('[role="menuitem"]')[i]?.focus() }
 
   const navegar = (e: KeyboardEvent, cont: HTMLDivElement | null, enSub: boolean) => {
-    const items = [...(cont?.querySelectorAll<HTMLButtonElement>(':scope > [role="menuitem"]') ?? [])]
+    const items = [...(cont?.querySelectorAll<HTMLButtonElement>('[role="menuitem"]') ?? [])]
     const i = items.indexOf(document.activeElement as HTMLButtonElement)
     const ir = (n: number) => { e.preventDefault(); e.stopPropagation(); items[(n + items.length) % items.length]?.focus() }
     if (e.key === 'ArrowDown') ir(i + 1)
@@ -53,11 +52,14 @@ export function ActionMenu({ label, actions }: { label: string; actions: MenuAct
     else if (e.key === 'Escape' || e.key === 'Tab') { e.preventDefault(); cerrar() }
   }
 
-  const item = (a: MenuAction, i: number, onPick: () => void, idx: string) => a.disabledHelp ? (
-    <button key={a.label} type="button" role="menuitem" className="ds-menuitem menu__item--off" aria-disabled="true" aria-describedby={`${uid}-${idx}`} onClick={onPick}>
-      {a.icon && <Icon name={a.icon} size={20} />}
-      <span className="ds-menuitem__label">{a.label}<small id={`${uid}-${idx}`}>{a.disabledHelp}</small></span>
-    </button>
+  const item = (a: MenuAction, i: number, onPick: () => void) => a.disabledHelp ? (
+    // El motivo se muestra en un tooltip (al pasar el puntero o al enfocar), no como texto debajo de la opción.
+    <Tooltip key={a.label} text={a.disabledHelp}>
+      <button type="button" role="menuitem" className="ds-menuitem menu__item--off" aria-disabled="true" onClick={onPick}>
+        {a.icon && <Icon name={a.icon} size={20} />}
+        <span className="ds-menuitem__label">{a.label}</span>
+      </button>
+    </Tooltip>
   ) : (
     <button key={a.label} type="button" role="menuitem" className={'ds-menuitem' + (a.danger ? ' ds-menuitem--danger' : '')} onClick={onPick}
       aria-haspopup={a.submenu ? 'menu' : undefined} aria-expanded={a.submenu ? sub === i : undefined}>
@@ -66,7 +68,7 @@ export function ActionMenu({ label, actions }: { label: string; actions: MenuAct
     </button>
   )
 
-  const alto = actions.reduce((h, a) => h + (a.disabledHelp ? 64 : 44), 16)
+  const alto = actions.length * 44 + 16
   const top = rect ? Math.min(rect.bottom + 4, window.innerHeight - alto) : 0
   const left = rect ? Math.max(16, rect.right - MENU_W) : 0
   const subLeft = left + MENU_W + 4 + SUB_W > window.innerWidth - 8 ? left - SUB_W - 4 : left + MENU_W + 4
@@ -80,12 +82,12 @@ export function ActionMenu({ label, actions }: { label: string; actions: MenuAct
         <>
           <div style={{ position: 'fixed', inset: 0, zIndex: 39 }} onClick={cerrar} aria-hidden="true" />
           <div ref={ref} className="menu" role="menu" aria-label={label} onKeyDown={(e) => navegar(e, ref.current, false)} style={{ top, left, width: MENU_W }}>
-            {actions.map((a, i) => item(a, i, () => elegir(a, i), String(i)))}
+            {actions.map((a, i) => item(a, i, () => elegir(a, i)))}
           </div>
           {subAcc?.submenu && (
             <div ref={subRef} className="menu" role="menu" aria-label={subAcc.label} onKeyDown={(e) => navegar(e, subRef.current, true)}
               style={{ top: top + 4 + (sub ?? 0) * 44, left: subLeft, width: SUB_W }}>
-              {subAcc.submenu.map((s, j) => item(s, j, () => { setRect(null); setSub(null); s.onClick?.() }, `${sub}-${j}`))}
+              {subAcc.submenu.map((s, j) => item(s, j, () => { setRect(null); setSub(null); s.onClick?.() }))}
             </div>
           )}
         </>

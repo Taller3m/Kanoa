@@ -10,7 +10,7 @@ interface Cr {
   ind: Partial<Record<IndKey, number>>; zero: Partial<Record<IndKey, number>>
   slept: boolean; ov: null | 'stage' | 'help'; bubble: string; bubbleLeft: number
 }
-interface St { cr: Cr; started: boolean; done: boolean; fast: boolean; son: boolean; inicioMsg: boolean }
+interface St { cr: Cr; started: boolean; done: boolean; fast: boolean; son: boolean }
 
 const LOWM: Record<IndKey, string> = { agua: 'Tengo sed', luz: 'Necesito luz', comida: 'Tengo hambre', carino: 'Quiero cariño', descanso: 'Tengo sueño' }
 const HIM: Record<IndKey, string> = { agua: '¡Demasiada agua!', luz: '¡Demasiada luz!', comida: '¡Estoy lleno!', carino: '¡Ya fue mucho cariño!', descanso: '¡Ya descansé!' }
@@ -20,7 +20,8 @@ function initCr(ser: string): Cr {
   ;(Object.keys(SERES[ser].cons) as IndKey[]).forEach(k => { ind[k] = 60 })
   return { stage: 0, day: 1, good: 0, t: 0, ind, zero: {}, slept: false, ov: null, bubble: '', bubbleLeft: 0 }
 }
-const initSt = (ser: string): St => ({ cr: initCr(ser), started: false, done: false, fast: true, son: true, inicioMsg: false })
+// El acelerador ×4 es solo de la vista previa de administración: en el Portal WEB el día dura lo configurado.
+const initSt = (ser: string, fast: boolean): St => ({ cr: initCr(ser), started: false, done: false, fast, son: true })
 
 /** Un avance de 0,5 s de simulación (función pura). */
 function tickCr(prev: Cr, ser: string, difName: string, dur: number, fast: boolean): Cr {
@@ -63,11 +64,11 @@ function estado(x: number): { t: string; cls: string; icon: string } {
 }
 
 /** Vista previa jugable: «así lo verá el visitante». */
-export function CrecePreview({ game }: PreviewProps) {
+export function CrecePreview({ game, onClose, portal }: PreviewProps) {
   const c = game.crece
   const sv = SERES[c.ser]
   const help = useHelp()
-  const [s, setS] = useState<St>(() => initSt(c.ser))
+  const [s, setS] = useState<St>(() => initSt(c.ser, !portal))
   const ovBtn = useRef<HTMLDivElement>(null)
   const sceneRef = useRef<HTMLDivElement>(null)
   /* Reacción del personaje ilustrado al cuidarlo: salto, ojos felices y el icono del cuidado flotando */
@@ -105,7 +106,8 @@ export function CrecePreview({ game }: PreviewProps) {
   const st = Math.min(cr.stage, 2)
   const instr = (game.desc || '').trim() || 'Cuida a tu ser vivo: mantén sus necesidades en equilibrio para que crezca.'
   const patch = (o: Partial<St>) => setS(p => ({ ...p, ...o }))
-  const reset = () => setS({ ...initSt(c.ser), started: true })
+  // VOLVER A JUGAR vuelve a la pantalla INICIAR (HU-PW-196, escenario 5) y conserva la elección del acelerador.
+  const reset = () => setS(p => ({ ...initSt(c.ser, p.fast), son: p.son }))
   const duerme = night && cr.slept
   const cuidar = (k: IndKey) => {
     const sirvio = !cr.ov && !careCr(cr, k).bubble
@@ -122,8 +124,7 @@ export function CrecePreview({ game }: PreviewProps) {
       <div className="pv-stage">
         <PvHeader game={game} />
         <PvDone title="¡Terminaste el juego!" cierre={game.cierre.trim() || CIERRE_DEFECTO}
-          onReplay={reset} onHome={() => patch({ inicioMsg: true })} />
-        {s.inicioMsg && <p className="ccp-note" role="status">Lleva al visitante al inicio de la página donde está el juego.</p>}
+          onReplay={reset} onHome={onClose} />
       </div>
     )
   }
@@ -160,7 +161,7 @@ export function CrecePreview({ game }: PreviewProps) {
             {s.son ? 'Sonido activado' : 'Sonido silenciado'}
           </Button>
         )}
-        <Checkbox label="Acelerar vista previa ×4 (solo administración)" checked={s.fast} onChange={e => patch({ fast: e.target.checked })} />
+        {!portal && <Checkbox label="Acelerar vista previa ×4 (solo administración)" checked={s.fast} onChange={e => patch({ fast: e.target.checked })} />}
       </div>
 
       <div className="ccp-day" role="progressbar" aria-label={night ? 'Progreso del día (noche)' : 'Progreso del día'} aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(cr.t * 100)}>

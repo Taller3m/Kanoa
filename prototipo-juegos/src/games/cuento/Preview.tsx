@@ -6,14 +6,13 @@ import './pv.css'
 const INSTR_DEFECTO = 'Lee cada página y responde la pregunta para avanzar en la historia.'
 
 /** Vista previa jugable: «así lo verá el visitante». */
-export function CuentoPreview({ game }: PreviewProps) {
+export function CuentoPreview({ game, onClose }: PreviewProps) {
   const help = useHelp()
   const [started, setStarted] = useState(false)
   const [done, setDone] = useState(false)
   const [idx, setIdx] = useState(0)
   const [pick, setPick] = useState<number | null>(null)
   const [play, setPlay] = useState(false)
-  const [nota, setNota] = useState('')
 
   // Como en el original, solo se juegan las páginas con al menos una opción escrita.
   const ps = game.cuento.paginas.filter((p) => p.opciones.some((o) => o.t.trim()))
@@ -21,7 +20,7 @@ export function CuentoPreview({ game }: PreviewProps) {
   const header = <PvHeader game={game} onHelp={help.show} />
   const helpDlg = <PvHelp open={help.open} onClose={help.hide}><p className="cup-help">{instr}</p></PvHelp>
 
-  const reset = () => { setStarted(true); setDone(false); setIdx(0); setPick(null); setPlay(false); setNota('') }
+  const reset = () => { setStarted(true); setDone(false); setIdx(0); setPick(null); setPlay(false) }
 
   if (!ps.length) {
     return <div>{header}<p className="cup-empty t-body-md" role="status">Completa al menos una página para ver la vista previa.</p>{helpDlg}</div>
@@ -31,9 +30,7 @@ export function CuentoPreview({ game }: PreviewProps) {
     return (
       <div>
         {header}
-        <PvDone title="¡Terminaste el juego!" cierre={game.cierre.trim() || CIERRE_DEFECTO} onReplay={reset}
-          onHome={() => setNota('Lleva al visitante al inicio de la página donde está el juego.')} />
-        {nota && <p className="cup-note t-body-md" role="status">{nota}</p>}
+        <PvDone title="¡Terminaste el juego!" cierre={game.cierre.trim() || CIERRE_DEFECTO} onReplay={reset} onHome={onClose} />
         {helpDlg}
       </div>
     )

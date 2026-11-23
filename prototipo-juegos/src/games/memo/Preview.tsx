@@ -29,7 +29,7 @@ function mkDeck(items: MemoItem[]): Card[] {
 }
 
 /** Vista previa jugable del juego «Memoria». */
-export function MemoPreview({ game }: PreviewProps) {
+export function MemoPreview({ game, onClose }: PreviewProps) {
   const base = useMemo<MemoData>(() => {
     const g = fixMemo(JSON.parse(JSON.stringify(game)))
     return lvSync(g.memo)
@@ -44,7 +44,6 @@ export function MemoPreview({ game }: PreviewProps) {
     }
   }
   const [s, setS] = useState<S>(() => mkState(0))
-  const [homeMsg, setHomeMsg] = useState(false)
   const help = useHelp()
   const lvAt = s.lv
   const L = lvs[lvAt]!
@@ -98,7 +97,7 @@ export function MemoPreview({ game }: PreviewProps) {
   }
 
   const nextLv = () => setS(mkState(lvAt + 1))
-  const replay = () => { if (timer.current) clearTimeout(timer.current); setHomeMsg(false); setS(mkState(0)) }
+  const replay = () => { if (timer.current) clearTimeout(timer.current); setS(mkState(0)) }
 
   /* Medalla: Bronce/Plata en niveles intermedios, Oro al terminar */
   const medalName = lvMid ? (lvN === 3 ? (['Bronce', 'Plata'] as const)[lvAt]! : 'Plata') : 'Oro'
@@ -218,9 +217,8 @@ export function MemoPreview({ game }: PreviewProps) {
             </div>
           ) : undefined}
           onNext={lvMid ? nextLv : undefined} nextLabel={`IR AL NIVEL ${lvAt + 2}`}
-          onReplay={lvMid ? undefined : replay} onHome={lvMid ? undefined : () => setHomeMsg(true)} />
+          onReplay={lvMid ? undefined : replay} onHome={lvMid ? undefined : onClose} />
       )}
-      {homeMsg && s.done && <div className="mep-home"><Message type="primary">Lleva al visitante al inicio de la página donde está el juego.</Message></div>}
 
       <PvHelp open={help.open} onClose={help.hide}><p className="t-body-md mep-p">{instr}</p></PvHelp>
     </div>

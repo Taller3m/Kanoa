@@ -344,7 +344,7 @@ export function App() {
             </span>
           ) : undefined}
           actions={<>
-            {screen === 'lista' && games.length > 0 && <Button icon="add" onClick={() => go({ screen: 'tipo' })}>Crear juego</Button>}
+            {screen === 'lista' && <Button icon="add" onClick={() => go({ screen: 'tipo' })}>Crear juego</Button>}
             {screen === 'tipo' && <Button variant="outline" onClick={aLista}>Cancelar</Button>}
             {screen === 'editor' && draft && (<><IconButton icon="visibility" label="Vista previa" onClick={() => openPreview(draft)} /><Button variant="outline" onClick={cancelar}>Cancelar</Button><Button onClick={guardar}>Guardar</Button></>)}
             {screen === 'tipoCont' && <Button variant="outline" onClick={aSeccion}>Cancelar</Button>}

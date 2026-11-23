@@ -135,7 +135,6 @@ export function CruciEditor({ game, update, toast }: EditorProps) {
         <div className="cr-size">
           <Select label="Tamaño del tablero:" value={String(N)} onChange={(e) => onSize(Number(e.target.value))}
             options={SIZES.map((n) => ({ value: String(n), label: `${n} × ${n}` }))} />
-          <span className="t-body-md cr-muted">Mínimo {mnW} palabras para este tamaño.</span>
         </div>
       </div>
 
@@ -153,11 +152,18 @@ export function CruciEditor({ game, update, toast }: EditorProps) {
         </div>
 
         <div className="cr-panel">
-          {(
+          {/* Hasta que se hace clic en una casilla del tablero solo se muestran las instrucciones; el formulario aparece al elegir la casilla de inicio. */}
+          {!sel && (
+            <div className="cr-empty">
+              <div className="t-title-md">Agrega una palabra</div>
+              <p className="t-body-md cr-muted">1. Haz clic en la casilla donde empieza la palabra.<br />2. Elige si va hacia la derecha o hacia abajo.<br />3. Escribe la respuesta y su pista.</p>
+            </div>
+          )}
+          {sel && (
             <div className="cr-form">
               <div>
-                <div className="t-title-md">{cx.editId ? `Editar palabra ${all.byId[cx.editId]}` : sel ? `Nueva palabra · pregunta ${nextNum}` : 'Agregar palabra'}</div>
-                <div className="t-body-md cr-muted">{sel ? `Inicia en fila ${sel.r + 1}, columna ${sel.c + 1}` : '1. Selecciona en el tablero la casilla donde empieza la palabra. 2. Elige la dirección. 3. Escribe la respuesta y su pista.'}</div>
+                <div className="t-title-md">{cx.editId ? `Editar palabra ${all.byId[cx.editId]}` : `Nueva palabra · pregunta ${nextNum}`}</div>
+                <div className="t-body-md cr-muted">Inicia en fila {sel.r + 1}, columna {sel.c + 1}</div>
               </div>
 
               <div role="group" aria-labelledby="cr-dir-l">
@@ -174,7 +180,7 @@ export function CruciEditor({ game, update, toast }: EditorProps) {
 
               <TextField label="Respuesta" required value={cx.ans} placeholder="Ej. SOL" autoComplete="off" spellCheck={false}
                 onChange={(e) => patch({ ans: cruciNorm(e.target.value) })}
-                help={sel ? `Solo letras, sin tildes ni espacios. Máximo ${val.maxLen} ${val.maxLen === 1 ? 'letra' : 'letras'} desde esta casilla.` : 'Solo letras, sin tildes ni espacios.'} />
+                help={`Solo letras, sin tildes ni espacios. Máximo ${val.maxLen} ${val.maxLen === 1 ? 'letra' : 'letras'} desde esta casilla.`} />
 
               <div>
                 <TextArea label="Pista o pregunta" required value={cx.clue} maxLength={150} rows={2}

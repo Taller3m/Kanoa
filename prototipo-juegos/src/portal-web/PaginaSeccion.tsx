@@ -47,8 +47,9 @@ export function PaginaSeccion({ pagina, onAdmin, onRegresarMicrositio }: {
 }) {
   const h1 = useRef<HTMLHeadingElement>(null)
   useEffect(() => { document.title = `${pagina.seccion.nombre} | ${pagina.micrositio.nombre} | KANOA LAB` }, [pagina.seccion.nombre, pagina.micrositio.nombre])
-  // IR AL INICIO del juego: lleva al visitante al inicio de la página donde está el juego.
-  const irAlInicio = () => { window.scrollTo({ top: 0, behavior: 'smooth' }); h1.current?.focus({ preventScroll: true }) }
+  // IR AL INICIO del juego: lleva al visitante al Home del portal (HU-PW-196, escenario 6).
+  // En el prototipo se abre en otra pestaña, como el resto de enlaces al sitio, para no salir de la simulación.
+  const irAlInicio = () => { window.open(`${SITIO}/inicio`, '_blank', 'noopener,noreferrer') }
 
   return (
     <div className="pw light">

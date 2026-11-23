@@ -32,17 +32,21 @@
 .empty { display: flex; flex-direction: column; align-items: center; gap: var(--space-3); padding: var(--space-6) var(--space-4); text-align: center; color: var(--paragraph); }
 .empty h2 { margin: 0; color: var(--title); }
 .empty p { margin: 0; max-width: 56ch; }
+/* Fila de la tabla con el estado vacío o sin resultados: sin cebra ni hover. */
+.ds-table tbody tr.table-empty td, .ds-table tbody tr.table-empty:hover td { background: none; border-radius: 12px; }
 
 /* Menú de acciones */
 .menu { position: fixed; z-index: 40; min-width: 180px; padding: var(--space-1); border-radius: var(--radius-sm);
   background: var(--surface-container-lowest); box-shadow: var(--elevation-2); border: 1px solid var(--outline-variant); }
 .menu .ds-menuitem { height: 44px; border-radius: var(--radius-sm); }
 .menu .ds-menuitem--danger { color: var(--error); }
-/* Opción deshabilitada con motivo (p. ej. Eliminar un juego publicado): etiqueta en gris y ayuda legible debajo. */
-.menu .menu__item--off { height: auto; min-height: 56px; padding-block: var(--space-2); align-items: flex-start; color: var(--on-surface---30); cursor: not-allowed; }
-.menu .menu__item--off:hover { background: none; }
-.menu .menu__item--off .ds-menuitem__label { white-space: normal; }
-.menu .menu__item--off small { display: block; margin-top: 2px; font-size: 12px; line-height: 16px; color: var(--on-surface-variant); }
+/* Opción deshabilitada con motivo (p. ej. Eliminar un juego publicado): etiqueta en gris y el motivo en el tooltip del sistema de diseño (hover y foco). */
+.menu > .ds-tooltip { display: flex; }
+.menu .menu__item--off { width: 100%; color: var(--on-surface---30); cursor: not-allowed; }
+/* Tooltip según el diseño: debajo de la opción, junto al cursor, fondo claro, borde gris fino y esquinas rectas. */
+.menu > .ds-tooltip > .ds-tooltip__tip { bottom: auto; top: 100%; left: var(--space-6); transform: none; padding: 2px 0 0; z-index: 41; }
+.menu > .ds-tooltip .ds-tooltip__text { padding: 2px 6px; border-radius: 0; border: 1px solid #767676; background: #FFFFFF; color: #1A1A1A;
+  font: 400 12px/16px var(--font-family); box-shadow: 1px 1px 3px rgba(0, 0, 0, .2); }
 
 /* Selección de tipo */
 .options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4); }

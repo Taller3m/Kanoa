@@ -40,25 +40,30 @@ export function Lista(p: ListaProps) {
         </Panel>
       )}
 
-      {p.games.length === 0 ? (
-        <div className="ds-panel">
-          <div className="empty">
-            <Icon name="sports_esports" size={36} />
-            <h2 className="t-section">Aún no has creado ningún juego</h2>
-            <p className="t-body-md">Usa el botón «Crear juego» para configurar un crucigrama, un cuenta cuentos, un juego de memoria o un Crece conmigo.</p>
-            <Button icon="add" onClick={p.onCrear}>Crear juego</Button>
-          </div>
-        </div>
-      ) : rows.length === 0 ? (
-        <div className="ds-panel"><div className="empty"><p className="t-body-md">No se encontraron juegos con los criterios de búsqueda seleccionados.</p></div></div>
-      ) : (
-        <div className="table-wrap">
-          <table className="ds-table">
-            <thead>
-              <tr><th scope="col">Título del juego</th><th scope="col">Estado</th><th scope="col">Autor</th><th scope="col">Fecha de modificación</th><th scope="col"><span className="sr-only">Acciones</span></th></tr>
-            </thead>
-            <tbody>
-              {rows.map((g) => {
+      {/* La tabla se muestra siempre; sin juegos (o sin resultados) el mensaje va dentro de ella. */}
+      <div className="table-wrap">
+        <table className="ds-table">
+          <thead>
+            <tr><th scope="col">Título del juego</th><th scope="col">Estado</th><th scope="col">Autor</th><th scope="col">Fecha de modificación</th><th scope="col"><span className="sr-only">Acciones</span></th></tr>
+          </thead>
+          <tbody>
+            {p.games.length === 0 ? (
+              <tr className="table-empty">
+                <td colSpan={5}>
+                  <div className="empty">
+                    <Icon name="sports_esports" size={36} />
+                    <h2 className="t-section">Aún no has creado ningún juego</h2>
+                    <p className="t-body-md">Usa el botón «Crear juego» para configurar un crucigrama, un cuenta cuentos, un juego de memoria o un Crece conmigo.</p>
+                    <Button icon="add" onClick={p.onCrear}>Crear juego</Button>
+                  </div>
+                </td>
+              </tr>
+            ) : rows.length === 0 ? (
+              <tr className="table-empty">
+                <td colSpan={5}><div className="empty"><p className="t-body-md">No se encontraron juegos con los criterios de búsqueda seleccionados.</p></div></td>
+              </tr>
+            ) : (
+              rows.map((g) => {
                 const t = tipoInfo(g.tipo)
                 return (
                   <tr key={g.id}>
@@ -82,9 +87,11 @@ export function Lista(p: ListaProps) {
                     </td>
                   </tr>
                 )
-              })}
-            </tbody>
-          </table>
+              })
+            )}
+          </tbody>
+        </table>
+        {p.games.length > 0 && (
           <div className="table-foot t-body-sm">
             <span>Mostrando {rows.length} de {p.games.length} juegos</span>
             <div className="legend">
@@ -92,8 +99,8 @@ export function Lista(p: ListaProps) {
               <span><StatusTag color="blue" dot>Completado</StatusTag> Listo para agregarse a una sección</span>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
 
     </section>
   )
