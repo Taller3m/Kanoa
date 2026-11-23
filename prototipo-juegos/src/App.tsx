@@ -325,7 +325,8 @@ export function App() {
           footer={<IconButton icon={dark ? 'light_mode' : 'dark_mode'} label={dark ? 'Cambiar a tema claro' : 'Cambiar a tema oscuro'} onClick={() => setDark(!dark)} />} />
       </div>
 
-      <main className="main" ref={main} tabIndex={-1} style={{ outline: 'none' }}>
+      {/* El listado de juegos (tabla) ocupa todo el ancho disponible; las demás pantallas mantienen el ancho máximo */}
+      <main className={screen === 'lista' ? 'main main--fluid' : 'main'} ref={main} tabIndex={-1} style={{ outline: 'none' }}>
         <nav aria-label="Ruta de navegación" className="crumbs t-body-md">
           {crumbs.map((c, i) => (
             <span key={c.label + i}>

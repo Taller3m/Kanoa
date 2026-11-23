@@ -52,23 +52,33 @@ export function ContenidoJuego({ draft, setDraft, games, publicadoEn, onVer }: C
           {disp.length === 0 ? (
             <div className="cont__none t-body-md">No hay juegos Completados de este tipo. Créalos o complétalos en el módulo Juegos.</div>
           ) : (
-            <ul className={'jsel' + (draft.err ? ' jsel--err' : '')}>
-              {disp.map((g) => {
-                const lug = publicadoEn(g)
-                const on = draft.sel.includes(g.id!)
-                return (
-                  <li key={g.id} className={'jsel__row' + (on ? ' jsel__row--on' : '')}>
-                    <div className="jsel__main">
-                      <Checkbox label={g.nombre} checked={on} onChange={() => toggle(g.id!)} />
-                      <small className="jsel__meta">Modificado el {g.editada}</small>
-                      {lug.length > 0 && <small className="jsel__pub"><Icon name="public" size={16} /> Publicado en: {lug.join(' · ')}</small>}
-                    </div>
-                    <EstadoTag game={g} />
-                    <IconButton icon="visibility" label={`Ver ${g.nombre}`} onClick={() => onVer(g)} />
-                  </li>
-                )
-              })}
-            </ul>
+            // Misma tabla del listado de Juegos: encabezado enmarcado y filas con cebra
+            <div className={'table-wrap jsel' + (draft.err ? ' jsel--err' : '')}>
+              <table className="ds-table">
+                <thead>
+                  <tr><th scope="col">Juego</th><th scope="col">Estado</th><th scope="col">Publicado en</th><th scope="col"><span className="sr-only">Ver</span></th></tr>
+                </thead>
+                <tbody>
+                  {disp.map((g) => {
+                    const lug = publicadoEn(g)
+                    const on = draft.sel.includes(g.id!)
+                    return (
+                      <tr key={g.id} className={on ? 'jsel__row--on' : undefined}>
+                        <td>
+                          <div className="jsel__main">
+                            <Checkbox label={g.nombre} checked={on} onChange={() => toggle(g.id!)} />
+                            <small className="jsel__meta">Modificado el {g.editada}</small>
+                          </div>
+                        </td>
+                        <td><EstadoTag game={g} /></td>
+                        <td>{lug.length > 0 ? lug.join(' · ') : <span className="jsel__none">Sin publicar</span>}</td>
+                        <td style={{ textAlign: 'right' }}><IconButton icon="visibility" label={`Ver ${g.nombre}`} onClick={() => onVer(g)} /></td>
+                      </tr>
+                    )
+                  })}
+                </tbody>
+              </table>
+            </div>
           )}
           {draft.err && <p className="field-err t-body-sm" role="alert"><Icon name="error" size={16} /> Debes seleccionar al menos un juego.</p>}
           {draft.sel.length > 1 && (

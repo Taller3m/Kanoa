@@ -8,6 +8,7 @@
 
 /* Contenido */
 .main { width: 100%; max-width: var(--content-max); margin-inline: auto; container-type: inline-size; container-name: main; min-width: 0; display: flex; flex-direction: column; padding: var(--space-5) var(--space-6) 96px; gap: var(--space-4); }
+.main--fluid { max-width: none; } /* pantallas de tabla: sin ancho máximo */
 .crumbs { color: var(--on-surface-variant); }
 .screen { display: flex; flex-direction: column; gap: var(--space-5); }
 .screen__lead { margin: 0; color: var(--paragraph); max-width: 70ch; }
@@ -226,7 +227,7 @@
 
 /* Formulario «Crear contenido · Juego» (mismo panel de los formularios de contenido del Figma) */
 .cont { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: var(--space-5); align-items: start; }
-.cont__form { display: flex; flex-direction: column; gap: var(--space-5); padding: var(--space-5); border-radius: var(--radius-md); background: var(--surface-container); }
+.cont__form { display: flex; flex-direction: column; gap: var(--space-5); padding: var(--space-5); border-radius: var(--radius-md); background: transparent; border: 1px solid var(--outline-variant); } /* solo borde: tarjetas y tabla se leen mejor sobre el fondo de la página */
 .cont__aside { position: sticky; top: var(--space-5); }
 .cont__list { margin: var(--space-2) 0 0; padding-left: var(--space-4); display: flex; flex-direction: column; gap: var(--space-2); }
 .cont__fs { border: 0; margin: 0; padding: 0; min-width: 0; display: flex; flex-direction: column; gap: var(--space-2); }
@@ -255,18 +256,15 @@
 .cpick__txt strong { color: var(--title); font-weight: 500; }
 .cpick__txt small { color: var(--muted); font-size: 12px; line-height: 16px; }
 
-/* Lista de juegos seleccionables */
-.jsel { list-style: none; margin: 0; padding: 0; border: 1px solid var(--outline-variant); border-radius: var(--radius-md); overflow: hidden; }
-.jsel--err { border-color: var(--error); }
-.jsel__row { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3) var(--space-4); border-top: 1px solid var(--divider); }
-.jsel__row:first-child { border-top: 0; }
-.jsel__row--on { background: var(--surface-tint-8-); }
-.jsel__main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
-.jsel__main .ds-choice { font-weight: 500; color: var(--title); }
-.jsel__meta, .jsel__pub { padding-left: 32px; font-size: 12px; line-height: 16px; }
-.jsel__meta { color: var(--paragraph); } /* muted daba 4.3:1 (claro) y 3.2:1 (oscuro) sobre el panel */
-.jsel__pub { display: flex; align-items: center; gap: var(--space-1); color: var(--paragraph); }
-.jsel__pub .ds-icon { color: var(--on-surface-variant); }
+/* Tabla de juegos seleccionables (usa .ds-table, igual que el listado de Juegos) */
+.jsel .ds-table { border-spacing: 0 var(--space-1); margin-block: calc(-1 * var(--space-1)); }
+.jsel .ds-table td { padding-block: var(--space-3); }
+.jsel--err .ds-table th { border-color: var(--error); }
+.jsel .ds-table tbody tr.jsel__row--on td { background: var(--surface-tint-11-); }
+.jsel__main { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.jsel__main .ds-choice { font: 500 16px/24px var(--font-family); color: var(--title); }
+.jsel__meta { padding-left: 32px; font-size: 12px; line-height: 16px; color: var(--paragraph); }
+.jsel__none { color: var(--muted); }
 
 @container main (max-width: 900px) {
   .cont { grid-template-columns: minmax(0, 1fr); }
