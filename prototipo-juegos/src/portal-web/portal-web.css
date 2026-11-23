@@ -64,7 +64,7 @@ a.pw-nav__item:hover { background: var(--surface-tint-8-); }
 /* Pie (Footer 1129:34791) */
 .pw-footer { padding: var(--space-7) var(--space-4) var(--space-5); background: linear-gradient(127.09deg, var(--surface-container-highest) 26.31%, var(--surface-container-low) 107.93%); }
 .pw-footer__in { max-width: 1280px; margin: 0 auto; }
-.pw-footer__top { display: flex; justify-content: space-between; gap: var(--space-6); flex-wrap: wrap; padding-bottom: var(--space-4); border-bottom: 1px solid var(--outline-variant); }
+.pw-footer__top { display: flex; justify-content: space-between; gap: var(--space-6); flex-wrap: wrap; padding-bottom: var(--space-4); border-bottom: 1px solid var(--divider); }
 .pw-footer__marca { display: flex; flex-direction: column; justify-content: space-between; gap: var(--space-6); }
 .pw-footer__redes { display: flex; gap: var(--space-4); margin: 0; padding: 0; list-style: none; }
 .pw-footer__links { display: flex; flex-direction: column; width: 202px; margin: 0; padding: 0; list-style: none; }

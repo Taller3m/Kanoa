@@ -1,4 +1,10 @@
 /* Fundamentos StudIA 2.0 — fuente: Tokens/DESIGN 1.md (§4 tipografía, §5 elevación, §6 forma, §7 espaciado) */
+
+/* Divisores (líneas que separan secciones, pestañas, filas): --outline-variant en oscuro es igual a
+   --surface-container-low (#0F3D47) y en claro casi no contrasta, así que se usa el tono de texto
+   secundario al 40 %. Se declara también en .dark/.light para que se recalcule con el tema activo. */
+:root, .dark, .light { --divider: color-mix(in srgb, var(--on-surface-variant) 40%, transparent); }
+
 :root {
   /* Forma (EfectStyles/border-radius) */
   --radius-none: 0px;

@@ -26,7 +26,7 @@
 .tile--indigo { background: var(--indigo-soft); color: var(--on-indigo-soft); }
 .tile--green { background: var(--green-soft); color: var(--on-green-soft); }
 .tile--lg { width: 52px; height: 52px; border-radius: var(--radius-md); }
-.table-foot { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); flex-wrap: wrap; padding: var(--space-3) var(--space-4); color: var(--muted); border-top: 1px solid var(--outline-variant); }
+.table-foot { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); flex-wrap: wrap; padding: var(--space-3) var(--space-4); color: var(--muted); border-top: 1px solid var(--divider); }
 .legend { display: flex; gap: var(--space-5); flex-wrap: wrap; color: var(--on-surface-variant); }
 .legend span { display: inline-flex; align-items: center; gap: var(--space-2); }
 .empty { display: flex; flex-direction: column; align-items: center; gap: var(--space-3); padding: var(--space-6) var(--space-4); text-align: center; color: var(--paragraph); }
@@ -91,7 +91,7 @@
   /* En móvil la navegación pasa a barra inferior: sin cabecera, usuario ni botón de abrir/cerrar */
   .sidebar { position: fixed; z-index: 30; inset: auto 0 0 0; height: auto; }
   .sidebar .ds-navbar, .sidebar .ds-navbar--compress { --w: 100%; height: auto; padding: 0; }
-  .sidebar .ds-navbar__panel, .sidebar .ds-navbar--compress .ds-navbar__panel { flex-direction: row; align-items: center; border: 0; border-top: 1px solid var(--outline-variant); border-radius: 0; overflow-x: auto; }
+  .sidebar .ds-navbar__panel, .sidebar .ds-navbar--compress .ds-navbar__panel { flex-direction: row; align-items: center; border: 0; border-top: 1px solid var(--divider); border-radius: 0; overflow-x: auto; }
   .sidebar .ds-navbar__head, .sidebar .ds-navbar__user, .sidebar .ds-navbar__float { display: none; }
   .sidebar .ds-navbar__body, .sidebar .ds-navbar--compress .ds-navbar__body { flex-direction: row; padding: var(--space-1) var(--space-2); overflow-y: clip; }
   .sidebar .ds-menuitem { flex: none; width: 56px; justify-content: center; padding: 0; }
@@ -258,7 +258,7 @@
 /* Lista de juegos seleccionables */
 .jsel { list-style: none; margin: 0; padding: 0; border: 1px solid var(--outline-variant); border-radius: var(--radius-md); overflow: hidden; }
 .jsel--err { border-color: var(--error); }
-.jsel__row { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3) var(--space-4); border-top: 1px solid var(--outline-variant); }
+.jsel__row { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3) var(--space-4); border-top: 1px solid var(--divider); }
 .jsel__row:first-child { border-top: 0; }
 .jsel__row--on { background: var(--surface-tint-8-); }
 .jsel__main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
