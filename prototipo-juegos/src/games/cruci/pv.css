@@ -24,15 +24,23 @@
 .crp-board[data-n="12"] .crp-cell input { font-size: 14px; }
 .crp-board[data-n="15"] .crp-cell input { font-size: 12px; }
 .crp-cell input:focus-visible { outline: 2px solid var(--primary); outline-offset: -2px; }
-.crp-cell--wrong input { outline: 1.5px dashed var(--error); outline-offset: -3px; }
+.crp-cell--wrong { box-shadow: inset 0 0 0 2px var(--error); }
+.crp-cell--wrong .crp-cell__st { color: var(--on-error-container); }
 .crp-cell--wrong input:focus-visible { outline: 2px solid var(--primary); outline-offset: -2px; }
 /* Número fuera del cuadro, sin tapar la palabra: a la izquierda en horizontales y arriba en verticales, centrado en cada caso */
 .crp-cell__num { position: absolute; z-index: 1; pointer-events: none; font: 700 10px/11px var(--font-family); color: var(--crp-num); }
 .crp-cell__num--h { right: 100%; top: 50%; transform: translateY(-50%); padding-right: 2px; }
 .crp-cell__num--v { bottom: 100%; left: 50%; transform: translateX(-50%); }
 .crp-cell__st { position: absolute; right: 1px; bottom: 1px; pointer-events: none; color: var(--on-surface); }
-.crp-check { display: flex; flex-direction: column; align-items: flex-end; gap: var(--space-2); text-align: right; }
-.crp-check span { color: var(--on-surface-variant); }
+.crp-right > .ds-divider { margin: 0; }
+.crp-check { display: flex; flex-direction: column; align-items: flex-end; gap: var(--space-3); }
+.crp-check .ds-message { align-self: stretch; text-align: left; }
+/* Pantalla final: sello con check (mismo estilo que la medalla de Memoria) */
+.crp-done__fig { width: 160px; --ck1: #3DAABC; --ck2: #2E8B9A; }
+.crp-done__fig svg { display: block; width: 100%; height: auto; overflow: visible; }
+.crp-done__fig .kl-ck-sello { transform-origin: 120px 104px; animation: crp-pop .5s cubic-bezier(.34, 1.56, .64, 1) both; }
+@keyframes crp-pop { from { transform: scale(.4) rotate(-12deg); opacity: 0; } to { transform: none; opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .crp-done__fig .kl-ck-sello { animation: none; } }
 .crp-right { display: flex; flex-direction: column; gap: var(--space-4); min-width: 0; }
 .crp-lt { margin: 0 0 var(--space-2); color: var(--primary); }
 .crp-clues { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-2); color: var(--on-surface); }

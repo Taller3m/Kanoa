@@ -1,14 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="10 14 220 226">
-	<!-- Ilustración «juego completado»: mismo lenguaje que personaje-logro.svg (círculo con borde blanco, figura que sale por arriba, sombras planas) -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="44 30 152 166">
+	<!-- Ilustración «juego completado»: mismo lenguaje que personaje-logro.svg (sombras planas); solo el sello con el check y su sombra -->
 	<defs>
-		<clipPath id="kl-ck-sale"><rect x="0" y="0" width="240" height="138"/><circle cx="120" cy="138" r="95"/></clipPath>
 		<clipPath id="kl-ck-sello"><circle cx="120" cy="104" r="56"/><circle cx="176.00" cy="104.00" r="11.5"/><circle cx="171.74" cy="125.43" r="11.5"/><circle cx="159.60" cy="143.60" r="11.5"/><circle cx="141.43" cy="155.74" r="11.5"/><circle cx="120.00" cy="160.00" r="11.5"/><circle cx="98.57" cy="155.74" r="11.5"/><circle cx="80.40" cy="143.60" r="11.5"/><circle cx="68.26" cy="125.43" r="11.5"/><circle cx="64.00" cy="104.00" r="11.5"/><circle cx="68.26" cy="82.57" r="11.5"/><circle cx="80.40" cy="64.40" r="11.5"/><circle cx="98.57" cy="52.26" r="11.5"/><circle cx="120.00" cy="48.00" r="11.5"/><circle cx="141.43" cy="52.26" r="11.5"/><circle cx="159.60" cy="64.40" r="11.5"/><circle cx="171.74" cy="82.57" r="11.5"/></clipPath>
 	</defs>
-	<circle cx="120" cy="138" r="100" fill="var(--surface-container-lowest, #fff)"/>
-	<circle cx="120" cy="138" r="95" style="fill:var(--ck1,#3DAABC);" fill-opacity="0.3"/>
-	<g clip-path="url(#kl-ck-sale)">
 		<!-- sombra en el piso -->
-		<ellipse cx="120" cy="196" rx="54" ry="8" style="fill:#082830;opacity:0.14;"/>
+		<ellipse cx="120" cy="186" rx="54" ry="8" style="fill:#082830;opacity:0.14;"/>
 		<g class="kl-ck-sello">
 			<!-- sello festoneado -->
 			<g style="fill:var(--ck1,#3DAABC);"><circle cx="120" cy="104" r="56"/><circle cx="176.00" cy="104.00" r="11.5"/><circle cx="171.74" cy="125.43" r="11.5"/><circle cx="159.60" cy="143.60" r="11.5"/><circle cx="141.43" cy="155.74" r="11.5"/><circle cx="120.00" cy="160.00" r="11.5"/><circle cx="98.57" cy="155.74" r="11.5"/><circle cx="80.40" cy="143.60" r="11.5"/><circle cx="68.26" cy="125.43" r="11.5"/><circle cx="64.00" cy="104.00" r="11.5"/><circle cx="68.26" cy="82.57" r="11.5"/><circle cx="80.40" cy="64.40" r="11.5"/><circle cx="98.57" cy="52.26" r="11.5"/><circle cx="120.00" cy="48.00" r="11.5"/><circle cx="141.43" cy="52.26" r="11.5"/><circle cx="159.60" cy="64.40" r="11.5"/><circle cx="171.74" cy="82.57" r="11.5"/></g>
@@ -27,13 +23,4 @@
 			<path style="fill:none;stroke:#082830;stroke-opacity:0.22;stroke-width:15;stroke-linecap:round;stroke-linejoin:round;" d="M96,108L114,126L147,90"/>
 			<path class="kl-ck-marca" style="fill:none;stroke:#FFFFFF;stroke-width:15;stroke-linecap:round;stroke-linejoin:round;" d="M96,103L114,121L147,85"/>
 		</g>
-	</g>
-	<!-- destellos y confeti -->
-	<g class="kl-ck-brillos">
-		<path style="fill:#EDC456;opacity:1;" d="M48,47Q48,58 59,58Q48,58 48,69Q48,58 37,58Q48,58 48,47Z"/><path style="fill:#EDC456;opacity:1;" d="M194,38Q194,46 202,46Q194,46 194,54Q194,46 186,46Q194,46 194,38Z"/><path style="fill:#EDC456;opacity:0.85;" d="M204,98Q204,104 210,104Q204,104 204,110Q204,104 198,104Q204,104 204,98Z"/><path style="fill:#EDC456;opacity:0.85;" d="M34,106.5Q34,112 39.5,112Q34,112 34,117.5Q34,112 28.5,112Q34,112 34,106.5Z"/>
-		<circle cx="70" cy="30" r="3.4" style="fill:#E3A64B;"/>
-		<circle cx="176" cy="22" r="2.6" style="fill:var(--ck1,#3DAABC);"/>
-		<rect x="204" y="70" width="9" height="4.5" rx="2.25" transform="rotate(-35 208.5 72.25)" style="fill:#831313;opacity:0.75;"/>
-		<rect x="22" y="80" width="9" height="4.5" rx="2.25" transform="rotate(30 26.5 82.25)" style="fill:var(--ck2,#2E8B9A);"/>
-	</g>
 </svg>

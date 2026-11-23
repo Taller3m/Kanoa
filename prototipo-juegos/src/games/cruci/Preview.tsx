@@ -1,5 +1,6 @@
 import { useRef, useState, type KeyboardEvent } from 'react'
-import { Button, Icon } from '../../ui'
+import { Button, Divider, Icon, Message } from '../../ui'
+import completado from '../../assets/juego-completado.svg?raw'
 import { CIERRE_DEFECTO, PvDone, PvHeader, PvHelp, useHelp, type PreviewProps } from '../preview/Shell'
 import { cruciBuildMap, cruciKey, cruciNorm, cruciNumerar } from './rules'
 import './pv.css'
@@ -15,7 +16,8 @@ export function CruciPreview({ game, onClose }: PreviewProps) {
   const [done, setDone] = useState(false)
   const [letters, setLetters] = useState<Record<string, string>>({})
   const [checked, setChecked] = useState(false)
-  const [msg, setMsg] = useState('')
+  /** Resultado de COMPROBAR: letras incorrectas y casillas vacías (null = sin comprobar). */
+  const [fallos, setFallos] = useState<{ malas: number; vacias: number } | null>(null)
   const boardRef = useRef<HTMLDivElement>(null)
 
   const N = game.cruci.size
@@ -24,12 +26,13 @@ export function CruciPreview({ game, onClose }: PreviewProps) {
   const nm = cruciNumerar(words)
   const instr = game.desc.trim() || INSTR_DEFECTO
 
-  const reset = () => { setDone(false); setLetters({}); setChecked(false); setMsg('') }
+  const reset = () => { setDone(false); setLetters({}); setChecked(false); setFallos(null) }
 
   const check = () => {
-    const bad = Object.keys(map).filter((k) => (letters[k] || '') !== map[k].L).length
-    if (!bad) setDone(true)
-    else { setChecked(true); setMsg(`${bad}${bad > 1 ? ' casillas por corregir.' : ' casilla por corregir.'}`) }
+    const bad = Object.keys(map).filter((k) => (letters[k] || '') !== map[k].L)
+    if (!bad.length) { setDone(true); return }
+    const vacias = bad.filter((k) => !letters[k]).length
+    setChecked(true); setFallos({ malas: bad.length - vacias, vacias })
   }
 
   const move = (e: KeyboardEvent<HTMLInputElement>, r: number, c: number) => {
@@ -68,7 +71,7 @@ export function CruciPreview({ game, onClose }: PreviewProps) {
             onKeyDown={(e) => move(e, r, c)}
             onChange={(e) => {
               const x = cruciNorm(e.target.value).slice(-1)
-              setLetters((s) => ({ ...s, [k]: x })); setChecked(false); setMsg('')
+              setLetters((s) => ({ ...s, [k]: x })); setChecked(false); setFallos(null)
             }} />
           {right && <Icon name="check" size={10} className="crp-cell__st" />}
           {wrong && <Icon name="close" size={10} className="crp-cell__st" />}
@@ -93,7 +96,8 @@ export function CruciPreview({ game, onClose }: PreviewProps) {
       <PvHeader game={game} onHelp={help.show} />
       {done ? (
         // IR AL INICIO cierra la vista previa; VOLVER A JUGAR reinicia el tablero vacío.
-        <PvDone title="¡Terminaste el juego!" cierre={game.cierre.trim() || CIERRE_DEFECTO} onReplay={reset} onHome={onClose} />
+        <PvDone title="¡Terminaste el juego!" cierre={game.cierre.trim() || CIERRE_DEFECTO} onReplay={reset} onHome={onClose}
+          medal={<div className="crp-done__fig" role="img" aria-label="Sello con un check: crucigrama completado" dangerouslySetInnerHTML={{ __html: completado }} />} />
       ) : (
         <div className="crp-play">
           <div className="crp-left">
@@ -105,9 +109,10 @@ export function CruciPreview({ game, onClose }: PreviewProps) {
           <div className="crp-right">
             {list('H')}
             {list('V')}
+            <Divider />
             <div className="crp-check">
               <Button onClick={check}>COMPROBAR</Button>
-              <span className="t-body-md" role="status">{msg}</span>
+              {fallos && <Message type="error" title={tituloFallos(fallos.malas + fallos.vacias)}>{detalleFallos(fallos)}</Message>}
             </div>
           </div>
         </div>
@@ -115,4 +120,15 @@ export function CruciPreview({ game, onClose }: PreviewProps) {
       <PvHelp open={help.open} onClose={help.hide}>{instr}</PvHelp>
     </div>
   )
+}
+
+const tituloFallos = (n: number) => (n === 1 ? 'Hay 1 casilla por corregir' : `Hay ${n} casillas por corregir`)
+
+/** Explica qué está mal y cómo se ve en el tablero (letras incorrectas y casillas vacías). */
+function detalleFallos({ malas, vacias }: { malas: number; vacias: number }) {
+  const partes = [
+    malas > 0 && (malas === 1 ? '1 letra incorrecta' : `${malas} letras incorrectas`),
+    vacias > 0 && (vacias === 1 ? '1 casilla vacía' : `${vacias} casillas vacías`),
+  ].filter(Boolean)
+  return `Tienes ${partes.join(' y ')}. Corrígelas y vuelve a COMPROBAR.`
 }
