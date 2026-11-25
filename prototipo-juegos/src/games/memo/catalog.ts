@@ -1,13 +1,12 @@
-/** Catálogo de emociones (contenido): emoji y categoría de color de cada una. */
-export const EMOJI: Record<string, string> = {
-  Serenidad: '😌', Alegría: '😄', Éxtasis: '🤩', Aceptación: '🙂', Confianza: '🤗', Admiración: '😍',
-  Aprensión: '😟', Miedo: '😨', Terror: '😱', Distracción: '😶', Sorpresa: '😮', Asombro: '😲',
-  Melancolía: '😔', Tristeza: '😢', Luto: '😭', Aburrimiento: '😒', Aversión: '🤢', Odio: '🤮',
-  Molestia: '😤', Ira: '😠', Rabia: '😡', Interés: '🤔', Anticipación: '👀', Vigilancia: '🧐',
-}
-export const EMOCIONES = Object.keys(EMOJI)
+/** Catálogo de emociones (contenido): cada una tiene su cara ilustrada (caras.ts) y una categoría de color. */
+export const EMOCIONES = [
+  'Serenidad', 'Alegría', 'Éxtasis', 'Aceptación', 'Confianza', 'Admiración',
+  'Aprensión', 'Miedo', 'Terror', 'Distracción', 'Sorpresa', 'Asombro',
+  'Melancolía', 'Tristeza', 'Luto', 'Aburrimiento', 'Aversión', 'Odio',
+  'Molestia', 'Ira', 'Rabia', 'Interés', 'Anticipación', 'Vigilancia',
+]
 
-/** Categoría de color (memo.css la mapea a tonos del sistema: me-emo--<cat>). */
+/** Categoría de color (emo.css la mapea a tonos de Kanoa: kl-emo--<cat>). */
 const grupos: [string, string[]][] = [
   ['joy', ['Serenidad', 'Alegría', 'Éxtasis']],
   ['trust', ['Aceptación', 'Confianza', 'Admiración']],

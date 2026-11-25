@@ -1,7 +1,8 @@
 import { useEffect, useId, useRef, useState, type ChangeEvent, type ReactNode } from 'react'
 import type { EditorProps } from '../types'
 import { Button, ConfirmDialog, Icon, IconButton, Select, Switch, Tabs, TextField } from '../../ui'
-import { EMO_CAT, EMOCIONES, EMOJI, repVisible } from './catalog'
+import { EMOCIONES, repVisible } from './catalog'
+import { CaraSvg, emoTone } from './Cara'
 import {
   MEMO_GRID, MEMO_MAX_NIVELES, MEMO_MODOS, MEMO_PAREJAS,
   blankItem, blankItemTipo, defA, defB, lvLoad, lvSync, memoNiveles, syncRep,
@@ -379,7 +380,7 @@ export function MemoEditor({ game, update, toast }: EditorProps) {
             options={EMOCIONES.map((e) => ({ value: e, label: e }))}
             onChange={(e) => { const x = e.target.value; IP(k, (o) => { o.a.v = x }) }} />
           {rep === 'Emoji' && !!it.a.v && (
-            <span className={cx('me-emo', `me-emo--${EMO_CAT[it.a.v] ?? 'none'}`)} role="img" aria-label={it.a.v} title={it.a.v}>{EMOJI[it.a.v] || ''}</span>
+            <span className={cx('me-emo', emoTone(it.a.v))} role="img" aria-label={it.a.v} title={it.a.v}><CaraSvg emo={it.a.v} /></span>
           )}
           {rep === 'Imagen' && (
             <button type="button" className={cx('me-file me-file--emo', it.a.img && 'me-file--set')}

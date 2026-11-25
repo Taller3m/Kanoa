@@ -25,7 +25,6 @@
 .mep-face--back { background: var(--primary); color: var(--on-primary); border: 2px solid var(--primary-container); font-size: 18px; }
 .mep-face--front { transform: rotateY(180deg); color: var(--on-surface); border: 1.5px solid var(--outline); background: var(--surface-container-lowest); }
 .mep-card--ok .mep-face--front { border: 2px solid var(--success); }
-.mep-face__big { font-size: 38px; line-height: 1; }
 .mep-face--img { padding: var(--space-1); }
 .mep-face__img { flex: 1; min-height: 0; width: 100%; object-fit: contain; border-radius: var(--radius-sm); }
 .mep-face__ok { position: absolute; top: var(--space-1); right: var(--space-1); color: var(--success); }
@@ -38,14 +37,12 @@
 .mep-hue--5 { background: var(--red-soft); color: var(--on-red-soft); }
 .mep-hue--6 { background: var(--prevent-container); color: var(--on-prevent-container); }
 .mep-tone--img { background: var(--secondary-container); color: var(--on-secondary-container); }
-.mep-tone--joy { background: var(--prevent-container); color: var(--on-prevent-container); }
-.mep-tone--trust { background: var(--green-soft); color: var(--on-green-soft); }
-.mep-tone--fear { background: var(--teal-soft); color: var(--on-teal-soft); }
-.mep-tone--surprise { background: var(--primary-container); color: var(--on-primary-container); }
-.mep-tone--sad { background: var(--blue-soft); color: var(--on-blue-soft); }
-.mep-tone--disgust { background: var(--indigo-soft); color: var(--on-indigo-soft); }
-.mep-tone--anger { background: var(--red-soft); color: var(--on-red-soft); }
-.mep-tone--antic { background: var(--orange-soft); color: var(--on-orange-soft); }
+/* Carta de emoción: la carta es el cuerpo de la cara (color de su categoría, emo.css) y el nombre va en el pecho */
+.mep-face--emo { container-type: inline-size; justify-content: flex-start; gap: 0; padding: 0; overflow: hidden; border-color: color-mix(in srgb, var(--emo-ink) 22%, transparent); }
+.mep-face--front.kl-emo { background: var(--emo-bg); color: var(--emo-ink); }
+.mep-emo__cara { display: block; width: 100%; aspect-ratio: 1; flex: none; }
+.mep-emo__nombre { flex: 1; display: flex; align-items: center; justify-content: center; width: 100%; padding: 0 var(--space-1) var(--space-2);
+  font: 800 clamp(13px, 12.5cqi, 18px)/1.1 var(--font-family); letter-spacing: .2px; color: var(--emo-ink); }
 
 /* Mensaje al encontrar pareja */
 .mep-pause { position: absolute; inset: calc(var(--space-1) * -1); display: grid; place-items: center; padding: var(--space-4);

@@ -1,0 +1,20 @@
+/* Caras de emociones — el color de cada categoría sale de los tokens de Kanoa.
+   --emo-bg es el cuerpo (la carta) y --emo-ink el trazo de ojos, boca y nombre. Todos son tonos claros en ambos temas. */
+.kl-emo { --emo-bg: var(--surface-container); --emo-ink: var(--on-surface); background: var(--emo-bg); color: var(--emo-ink); }
+.kl-emo--joy { --emo-bg: var(--secondary-fixed-dim); --emo-ink: var(--on-secondary-fixed); }
+.kl-emo--trust { --emo-bg: var(--green-soft); --emo-ink: var(--on-green-soft); }
+.kl-emo--fear { --emo-bg: var(--teal-soft); --emo-ink: var(--on-teal-soft); }
+.kl-emo--surprise { --emo-bg: var(--primary-fixed-dim); --emo-ink: var(--on-primary-fixed); }
+.kl-emo--sad { --emo-bg: var(--blue-soft); --emo-ink: var(--on-blue-soft); }
+.kl-emo--disgust { --emo-bg: var(--indigo-soft); --emo-ink: var(--on-indigo-soft); }
+.kl-emo--anger { --emo-bg: var(--red-soft); --emo-ink: var(--on-red-soft); }
+.kl-emo--antic { --emo-bg: var(--orange-soft); --emo-ink: var(--on-orange-soft); }
+
+.kl-emo svg .k { fill: currentColor; }
+.kl-emo svg .w { fill: #FFFFFF; }
+.kl-emo svg .h { fill: var(--red); }
+.kl-emo svg .b { fill: var(--red); opacity: .75; }
+.kl-emo svg .s, .kl-emo svg .s2, .kl-emo svg .s3, .kl-emo svg .sr { fill: none; stroke: currentColor; stroke-width: 7; stroke-linecap: round; stroke-linejoin: round; }
+.kl-emo svg .s2 { stroke-width: 5; }
+.kl-emo svg .s3 { stroke-width: 9; }
+.kl-emo svg .sr { stroke: var(--red); stroke-width: 5; }
