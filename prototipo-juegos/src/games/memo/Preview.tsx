@@ -20,6 +20,21 @@ interface S {
 const MEDAL = { Bronce: 'mep-medal--bronce', Plata: 'mep-medal--plata', Oro: 'mep-medal--oro' } as const
 const MEDAL_N = { Bronce: 3, Plata: 2, Oro: 1 } as const
 
+/** Dorso por defecto: el símbolo de Kanoa (la K con su punto) dentro de un círculo, con los colores del logo. */
+function DorsoK() {
+  return (
+    <svg className="mep-dorso" viewBox="-16 -14.05 68 68" aria-hidden="true" focusable="false">
+      <circle cx="18" cy="19.95" r="34" fill="var(--logo-tile)" />
+      <g fill="var(--logo-tile-primary)">
+        <path d="M0.876725 4.73597H0V39.9034H6.76265V10.6219C6.76265 7.37074 4.12695 4.73505 0.875804 4.73505L0.876725 4.73597Z" />
+        <path d="M36 39.9043L16.7774 20.9448L11.9954 25.7268L26.3947 39.9043H36Z" />
+        <path d="M21.7047 8.38087L0.398346 29.6035L5.18031 34.3855L34.9457 4.73597H30.5262C27.2189 4.73597 24.0469 6.046 21.7038 8.37995L21.7047 8.38087Z" />
+      </g>
+      <circle cx="13.53" cy="4.73" r="4.73" fill="var(--logo-tile-secondary)" />
+    </svg>
+  )
+}
+
 /** Mezcla Fisher-Yates de las cartas de las parejas completas del nivel (equivale a `deck`). */
 function mkDeck(items: MemoItem[]): Card[] {
   const d: Card[] = []
@@ -150,7 +165,7 @@ export function MemoPreview({ game, onClose }: PreviewProps) {
                 <button key={i} type="button" className={cx('mep-card', up && 'mep-card--up', mt && 'mep-card--ok')} aria-label={name}
                   aria-disabled={mt || up || s.lock || undefined} onClick={() => flip(i)}>
                   <span className="mep-card__in" aria-hidden="true">
-                    <span className="mep-face mep-face--back" data-mark={base.dorso ? undefined : 'KL'}>{base.dorso ? <Icon name="image" size={28} /> : null}</span>
+                    <span className="mep-face mep-face--back">{base.dorso ? <Icon name="image" size={28} /> : <DorsoK />}</span>
                     <span className={cx('mep-face mep-face--front', f.cara ? cx('mep-face--emo', emoTone(f.cara)) : `mep-hue--${c.pid % 7}`, f.img && 'mep-face--img')}>
                       {f.img && <img className="mep-face__img" src={f.img} alt="" />}
                                             {f.audio && <Icon name="music_note" size={28} />}

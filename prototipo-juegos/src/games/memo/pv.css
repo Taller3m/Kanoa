@@ -89,6 +89,6 @@
    Al voltear de vuelta, la cara frontal sigue visible lo que dura el giro. */
 .mep-face--front { visibility: hidden; transition: visibility 0s .35s; }
 .mep-card--up .mep-face--front { visibility: visible; transition-delay: 0s; }
-.mep-face--back[data-mark]::before { content: attr(data-mark); }
+.mep-dorso { display: block; width: 58%; height: auto; }
 @media (prefers-reduced-motion: reduce) { .mep-face--front { transition-delay: 0s; } }
 
