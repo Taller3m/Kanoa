@@ -1,6 +1,6 @@
 /* Vista previa de Memoria — solo tokens */
 .mep-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
-.mep-play { display: flex; flex-direction: column; gap: var(--space-4); }
+.mep-play { display: flex; flex-direction: column; gap: var(--space-4); container: mep / inline-size; }
 .mep-stats { display: flex; flex-wrap: wrap; gap: var(--space-4); align-items: center; justify-content: space-between; color: var(--paragraph); }
 .mep-timer { display: inline-flex; align-items: center; gap: var(--space-1); padding: var(--space-1) var(--space-4); border-radius: var(--radius-full);
   background: var(--secondary-container); color: var(--on-secondary-container); font: 700 16px/24px var(--font-family); font-variant-numeric: tabular-nums; }
@@ -9,8 +9,16 @@
 .mep-bar > div { height: 100%; background: var(--primary); transition: width 1s linear; }
 .mep-bar--warn > div { background: var(--error); }
 
-.mep-wrap { position: relative; width: 100%; max-width: calc(var(--cols) * 130px); }
-.mep-grid { display: grid; grid-template-columns: repeat(var(--cols), minmax(0, 1fr)); gap: var(--space-3); }
+/* Tablero centrado: --k columnas (las del nivel, --c1) y menos cuando el espacio no alcanza; las cartas sobrantes forman más filas */
+.mep-wrap { --k: var(--c1); position: relative; width: 100%; max-width: calc(var(--k) * 130px + (var(--k) - 1) * var(--space-3)); margin-inline: auto; }
+.mep-grid { display: grid; grid-template-columns: repeat(var(--k), minmax(0, 1fr)); gap: var(--space-3); }
+@container mep (max-width: 899px) { .mep-wrap { --k: var(--c2); } }
+@container mep (max-width: 619px) { .mep-wrap { --k: var(--c3); } }
+@container mep (max-width: 399px) { .mep-wrap { --k: var(--c4); } }
+/* El modal de vista previa toma el ancho del tablero: angosto con pocas parejas, amplio con muchas */
+.ds-modal--wide:has(.pv-stage[data-memo-cols="4"]) { width: min(640px, calc(100% - 2 * var(--space-4))); }
+.ds-modal--wide:has(.pv-stage[data-memo-cols="6"]) { width: min(900px, calc(100% - 2 * var(--space-4))); }
+.ds-modal--wide:has(.pv-stage[data-memo-cols="8"]) { width: min(1120px, calc(100% - 2 * var(--space-4))); }
 
 /* Carta con giro 3D */
 .mep-card { all: unset; box-sizing: border-box; aspect-ratio: 3 / 4; perspective: 700px; cursor: pointer; border-radius: var(--radius-md); }

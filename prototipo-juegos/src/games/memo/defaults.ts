@@ -18,7 +18,8 @@ export const MEMO_MODOS: [string, string][] = [
 ]
 /** Opciones de número de parejas y su tablero sugerido [filas, columnas]. */
 export const MEMO_PAREJAS = [4, 6, 8, 12]
-export const MEMO_GRID: Record<number, [number, number]> = { 4: [2, 4], 6: [3, 4], 8: [4, 4], 12: [4, 6] }
+/** Tablero [filas, columnas] por número de parejas: apaisado para aprovechar el ancho del modal (en pantallas angostas bajan las columnas). */
+export const MEMO_GRID: Record<number, [number, number]> = { 4: [2, 4], 6: [2, 6], 8: [2, 8], 12: [3, 8] }
 export const MEMO_MAX_NIVELES = 3
 
 export const defA = (m: string): string =>

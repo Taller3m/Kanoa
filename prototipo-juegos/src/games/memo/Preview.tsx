@@ -138,7 +138,7 @@ export function MemoPreview({ game, onClose }: PreviewProps) {
           )}
         </div>
         {tl != null && <div className={cx('mep-bar', warn && 'mep-bar--warn')} aria-hidden="true"><div style={{ width: `${tot ? Math.round(tl / tot * 100) : 0}%` }} /></div>}
-        <div className="mep-wrap" style={{ ['--cols' as string]: cols }}>
+        <div className="mep-wrap" style={{ ['--c1' as string]: cols, ['--c2' as string]: Math.min(cols, 6), ['--c3' as string]: Math.min(cols, 4), ['--c4' as string]: Math.min(cols, 3) }}>
           <div className="mep-grid" role="group" aria-label="Tablero de cartas" inert={s.pairPause}>
             {s.deck.map((c, i) => {
               const mt = s.matched.includes(c.pid)
@@ -195,7 +195,7 @@ export function MemoPreview({ game, onClose }: PreviewProps) {
     : lvMid ? `En el nivel ${lvAt + 2} tendrás ${lvs[lvAt + 1]!.parejas} parejas por encontrar.` : ((game.cierre || '').trim() || CIERRE_DEFECTO)
 
   return (
-    <div className="pv-stage">
+    <div className="pv-stage" data-memo-cols={cols}>
       <PvHeader game={game} onHelp={help.show} />
       <div className="mep-sr" role="status" aria-live="polite">{s.say}</div>
 
