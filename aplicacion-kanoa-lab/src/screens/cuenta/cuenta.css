@@ -1,0 +1,27 @@
+/* Estilos propios del grupo «Kit, grupo y perfil» (prefijo cu-). Solo tokens del sistema. */
+
+/* Círculo de aviso (F03): tono «prevenir» del sistema */
+
+/* Opciones de avatar (F04): círculo de color con borde primario cuando está elegido */
+.cu-avatars { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-4); justify-items: center; }
+.cu-avatar-opt { border: 0; padding: 0; cursor: pointer; box-shadow: inset 0 0 0 0 var(--primary); transition: box-shadow var(--motion-fast) var(--ease); }
+.cu-avatar-opt[aria-checked='true'] { box-shadow: inset 0 0 0 3px var(--primary); }
+.cu-avatar-opt:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+
+/* Conversación con el Kit (F02) */
+.cu-chat { display: flex; flex-direction: column; gap: 10px; }
+.cu-chat__form { flex: 1; display: flex; align-items: center; gap: var(--space-2); min-width: 0; }
+.cu-chat__form .ds-field { flex: 1; min-width: 0; }
+.cu-chat__form .ds-control { border-radius: var(--radius-full); }
+.cu-chat__send { flex: none; width: 52px; height: 52px; display: grid; place-items: center; border: 0; border-radius: var(--radius-full); cursor: pointer;
+  background: var(--primary); color: var(--on-primary); }
+.cu-chat__send:disabled { cursor: default; background: var(--surface-container-high); color: var(--on-surface-variant); }
+.cu-typing { color: var(--muted); font-style: italic; }
+
+/* Mi grupo (G01): la fila propia lleva el avatar en primario */
+.cu-li-me .ds-avatar { background: var(--primary); color: var(--on-primary); }
+
+/* Filas de la lista del perfil (H01) */
+.cu-li-icon { color: var(--on-surface-variant); flex: none; }
+.cu-li-link { cursor: pointer; }
+.cu-li-link:hover { background: var(--surface-tint-5-); }

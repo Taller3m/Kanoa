@@ -1,0 +1,52 @@
+/* Estilos propios del grupo «Inicio y áreas» (prefijo ina-). Solo tokens del sistema. */
+
+/* Deslizar para actualizar (B03): círculo con el ícono de sincronizar que gira */
+.ina-ptr-wrap { display: flex; justify-content: center; margin: -8px 0 -4px; position: relative; z-index: 1; }
+.ina-ptr { width: 40px; height: 40px; border-radius: var(--radius-full); display: grid; place-items: center;
+  background: var(--surface-container-lowest); color: var(--primary); box-shadow: var(--elevation-2); }
+.ina-ptr .ds-icon, .ina-ptr > * { animation: ina-spin 1s linear infinite; }
+@keyframes ina-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .ina-ptr .ds-icon, .ina-ptr > * { animation: none; } }
+
+/* Botón accesible para actualizar: oculto hasta que recibe el foco del teclado */
+.ina-skip { position: absolute; z-index: 6; top: var(--space-2); left: 50%; transform: translateX(-50%); }
+.ina-skip:not(:focus-within) { clip-path: inset(50%); width: 1px; height: 1px; overflow: hidden; white-space: nowrap; }
+
+/* Encabezado del área: etiqueta «Sin internet» sobre el color del área (C04) */
+.ina-offtag { display: inline-flex; align-items: center; gap: var(--space-1); height: 28px; padding: 0 10px; border-radius: var(--radius-full);
+  background: color-mix(in srgb, var(--surface-container-lowest) 60%, transparent); color: inherit; font: 500 12px/16px var(--font-family); letter-spacing: .5px; }
+.ina-areahead-info { padding: 0 var(--space-1); }
+
+/* Chips de periodo en una fila con scroll horizontal */
+.ina-chips { display: flex; gap: var(--space-2); overflow-x: auto; scrollbar-width: none; flex: none; }
+.ina-chips::-webkit-scrollbar { display: none; }
+
+/* Accesos a Portada y Material */
+.ina-access { flex-direction: row; align-items: center; gap: var(--space-3); padding: var(--space-3); }
+.ina-access > .m-col { gap: 0; min-width: 0; }
+
+/* Tarjeta de clase */
+.ina-clase { gap: var(--space-3); padding: 14px var(--space-2) 14px 14px; }
+.ina-clase__row { display: flex; align-items: flex-start; gap: 14px; }
+.ina-clase__info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; padding: 0; border: 0; background: none; text-align: left; color: inherit; font: inherit; }
+button.ina-clase__info { cursor: pointer; border-radius: var(--radius-sm); }
+button.ina-clase__info:hover .t-title-md { text-decoration: underline; }
+.ina-clase__cap { padding-top: 2px; }
+.ina-clase__actions { padding-left: 54px; padding-right: 6px; }
+.ina-clase--cerrada { flex-direction: row; align-items: center; gap: 14px; padding: var(--space-3) 14px; }
+.ina-dl-done .m-dl { background: var(--success-surface); }
+
+/* Hoja «Sin espacio» (C05): círculo en tono de advertencia */
+.ina-falta { margin: 0; color: var(--prevent); }
+
+/* Portada (C02) */
+.ina-cover { position: relative; }
+.ina-cover .m-media { height: 130px; }
+.ina-cover__save { position: absolute; top: var(--space-2); right: var(--space-2); }
+.ina-cover__save .ds-iconbtn { background: var(--surface-container-lowest); box-shadow: var(--elevation-2); }
+.ina-video { height: 150px; cursor: pointer; }
+
+/* Estado de tu información (B05) */
+.ina-estado-li { align-items: flex-start; }
+.ina-estado-li > :is(.ds-icon, .ds-icon-svg) { color: var(--on-surface-variant); flex: none; }
+.ina-estado-val { white-space: nowrap; color: var(--title); }
