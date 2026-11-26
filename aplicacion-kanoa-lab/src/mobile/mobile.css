@@ -1,0 +1,203 @@
+/* Patrones móviles de la app del estudiante — solo tokens del sistema de diseño Kanoa (kanoa-tokens.css + foundation.css).
+   Los componentes del sistema (botones, campos, etiquetas, avisos, chips, barras de avance…) vienen de src/ui;
+   aquí solo va lo que el sistema aún no tiene: marco de teléfono, encabezados de color, barra inferior, hojas y diálogos dentro del marco. */
+
+/* ── Marco ───────────────────────────────────────────── */
+.m-stage { min-height: 100dvh; display: flex; justify-content: center; align-items: center; gap: var(--space-6); padding: var(--space-5);
+  background: var(--surface-container-low); }
+.m-phone { position: relative; width: 390px; height: 844px; flex: none; overflow: hidden; display: flex; flex-direction: column;
+  background: var(--surface); color: var(--paragraph); border-radius: 36px; box-shadow: 0 0 0 10px var(--inverse-surface), var(--elevation-2); isolation: isolate; }
+/* En un teléfono real la app ocupa toda la pantalla y el panel del prototipo se abre desde un botón flotante. */
+@media (max-width: 760px) {
+  .m-stage { padding: 0; display: block; }
+  .m-phone { width: 100%; height: 100dvh; border-radius: 0; box-shadow: none; }
+}
+
+/* ── Pantalla y área con scroll ──────────────────────── */
+.m-screen { position: relative; flex: 1; min-height: 0; display: flex; flex-direction: column; background: var(--surface); }
+.m-screen--white { background: var(--surface-container-lowest); }
+.m-scroll { flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 20px; padding: 0 var(--space-4) 104px; scrollbar-width: none; }
+.m-scroll::-webkit-scrollbar { display: none; }
+.m-scroll--overlap { margin-top: -44px; position: relative; } /* tarjeta que se monta sobre el encabezado de color */
+.m-scroll--pager { padding-bottom: 100px; }
+.m-scroll--nonav { padding-bottom: var(--space-5); }
+.m-center { justify-content: center; }
+.m-row { display: flex; align-items: center; gap: var(--space-2); }
+.m-col { display: flex; flex-direction: column; gap: var(--space-1); }
+.m-grow { flex: 1; min-width: 0; }
+.m-grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-3); }
+.m-title { margin: 0; color: var(--title); }
+.m-text { margin: 0; color: var(--paragraph); }
+.m-muted { margin: 0; color: var(--muted); }
+
+/* ── Encabezados ─────────────────────────────────────── */
+.m-hero { flex: none; display: flex; flex-direction: column; gap: var(--space-4); padding: 36px 20px 60px; border-radius: 0 0 var(--radius-md) var(--radius-md);
+  background: var(--primary); color: var(--on-primary); }
+.m-hero--compact { padding: 36px 20px var(--space-5); gap: var(--space-3); }
+.m-hero h1, .m-hero h2, .m-hero .m-title { color: var(--on-primary); margin: 0; }
+.m-hero p { color: var(--primary-container); margin: 0; }
+.m-hero .ds-avatar { background: var(--inverse-primary); color: var(--on-primary-container); }
+
+/* Encabezado del área en su color (Portalweb): fondo -soft y texto on-*-soft */
+.m-areahead { flex: none; display: flex; flex-direction: column; gap: 14px; padding: 32px var(--space-4) 20px; border-radius: 0 0 var(--radius-md) var(--radius-md);
+  background: var(--tone-bg); color: var(--tone-fg); }
+.m-areahead :is(h1, h2, p) { color: inherit; margin: 0; }
+.m-areahead .ds-iconbtn { color: inherit; width: 44px; height: 44px; }
+
+/* Barra superior simple */
+.m-appbar { flex: none; display: flex; align-items: center; gap: var(--space-1); padding: 30px var(--space-2) var(--space-2) var(--space-1); background: inherit; }
+.m-appbar .ds-iconbtn { width: 44px; height: 44px; color: var(--on-surface-variant); }
+.m-appbar__title { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.m-appbar__title :is(h1, p) { margin: 0; }
+.m-appbar__title h1 { color: var(--title); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.m-appbar__title p { color: var(--muted); }
+
+/* Tonos de área (color Portalweb) */
+.m-tone-green { --tone-bg: var(--green-soft); --tone-fg: var(--on-green-soft); }
+.m-tone-blue { --tone-bg: var(--blue-soft); --tone-fg: var(--on-blue-soft); }
+.m-tone-indigo { --tone-bg: var(--indigo-soft); --tone-fg: var(--on-indigo-soft); }
+.m-tone-orange { --tone-bg: var(--orange-soft); --tone-fg: var(--on-orange-soft); }
+.m-tone-red { --tone-bg: var(--red-soft); --tone-fg: var(--on-red-soft); }
+.m-tone-teal { --tone-bg: var(--teal-soft); --tone-fg: var(--on-teal-soft); }
+.m-tone-primary { --tone-bg: var(--primary-container); --tone-fg: var(--primary); }
+.m-tone-secondary { --tone-bg: var(--secondary-container); --tone-fg: var(--on-secondary-container); }
+.m-tone-grey { --tone-bg: var(--surface-container); --tone-fg: var(--on-surface-variant); }
+.m-tone-prevent { --tone-bg: var(--prevent-container); --tone-fg: var(--prevent); }
+.m-tone-success { --tone-bg: var(--success-surface); --tone-fg: var(--success-surface-snackbar); }
+.m-tone-error { --tone-bg: var(--error-container); --tone-fg: var(--error); }
+
+/* ── Chip de estado de conexión ──────────────────────── */
+.m-statuschip { display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 var(--space-3); border: 0; border-radius: var(--radius-full); cursor: pointer;
+  font: 500 12px/16px var(--font-family); letter-spacing: .5px; white-space: nowrap; }
+.m-statuschip--on-primary { background: color-mix(in srgb, var(--on-primary) 16%, transparent); color: var(--on-primary); }
+.m-statuschip--surface { background: var(--surface-container); color: var(--on-surface-variant); }
+.m-statuschip .ds-spinner { --s: 16px; border-color: currentColor; border-right-color: transparent; }
+
+/* ── Barra inferior (5 destinos) ─────────────────────── */
+.m-bottomnav { position: absolute; z-index: 5; left: 0; right: 0; bottom: 0; height: 80px; display: flex; padding: var(--space-3) var(--space-2) var(--space-4);
+  background: var(--surface-container-lowest); box-shadow: 0 -1px 0 var(--outline-variant); }
+.m-bottomnav button { flex: 1; display: flex; flex-direction: column; align-items: center; gap: var(--space-1); border: 0; padding: 0; background: none; cursor: pointer;
+  color: var(--on-surface-variant); font: 400 12px/16px var(--font-family); letter-spacing: .5px; }
+.m-bottomnav__pill { width: 56px; height: 32px; display: grid; place-items: center; border-radius: var(--radius-full); transition: background var(--motion-fast) var(--ease); }
+.m-bottomnav button[aria-current='page'] { color: var(--primary); font-weight: 500; }
+.m-bottomnav button[aria-current='page'] .m-bottomnav__pill { background: var(--primary-container); }
+.m-bottomnav button:hover:not([aria-current='page']) .m-bottomnav__pill { background: var(--surface-tint-8-); }
+
+/* Barra de páginas dentro de la clase (reemplaza a la barra inferior) */
+.m-pagerbar { position: absolute; z-index: 5; left: 0; right: 0; bottom: 0; display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3) var(--space-4) 20px;
+  background: var(--surface-container-lowest); box-shadow: 0 -1px 0 var(--outline-variant); }
+.m-segments { display: flex; gap: var(--space-1); padding: 0 var(--space-4) var(--space-2); }
+.m-segments span { flex: 1; height: 4px; border-radius: var(--radius-full); background: var(--surface-container-highest); }
+.m-segments span[data-on='true'] { background: var(--primary); }
+
+/* ── Tarjetas, mosaicos, listas ──────────────────────── */
+.m-card { display: flex; flex-direction: column; gap: var(--space-3); padding: var(--space-4); border-radius: var(--radius-md); border: 0; text-align: left;
+  background: var(--surface-container-lowest); box-shadow: var(--shadow-card); color: inherit; font: inherit; }
+button.m-card, a.m-card { cursor: pointer; text-decoration: none; transition: box-shadow var(--motion-fast) var(--ease); }
+button.m-card:hover, a.m-card:hover { box-shadow: var(--shadow-card-hover); }
+.m-card--flat { box-shadow: none; background: var(--surface-container-low); }
+
+.m-tile { flex: none; display: grid; place-items: center; width: var(--s, 40px); height: var(--s, 40px); border-radius: 12px; background: var(--tone-bg); color: var(--tone-fg);
+  font: 500 16px/24px var(--font-family); }
+
+/* Bloque de área: color Portalweb + nombre, sin ícono */
+.m-areatile { display: flex; flex-direction: column; gap: 6px; min-height: 132px; padding: var(--space-4); border: 0; border-radius: var(--radius-md); text-align: left; cursor: pointer;
+  background: var(--tone-bg); color: var(--tone-fg); font: inherit; }
+.m-areatile > * { color: inherit; margin: 0; }
+.m-areatile .m-grow { flex: 1; }
+
+/* Barra de avance del sistema sobre color: el riel se aclara y el relleno toma el color del texto */
+.m-progress-on-color .ds-progress { background: color-mix(in srgb, var(--surface-container-lowest) 60%, transparent); }
+.m-progress-on-color .ds-progress > span { background: currentColor; }
+.m-progress-on-primary .ds-progress { background: color-mix(in srgb, var(--on-primary) 24%, transparent); }
+.m-progress-on-primary .ds-progress > span { background: var(--on-primary); }
+
+.m-list { display: flex; flex-direction: column; }
+.m-li { display: flex; align-items: center; gap: 14px; min-height: 64px; padding: 10px 0; border: 0; background: none; text-align: left; color: inherit; font: inherit; width: 100%; }
+button.m-li { cursor: pointer; }
+.m-li + .m-li { border-top: 1px solid var(--divider); }
+
+/* Estado de una clase: completada, en curso o cerrada */
+.m-classbadge { flex: none; width: 40px; height: 40px; border-radius: var(--radius-full); display: grid; place-items: center; font: 500 16px/24px var(--font-family); }
+.m-classbadge--completada { background: var(--success-surface); color: var(--success-surface-snackbar); }
+.m-classbadge--abierta { background: var(--primary); color: var(--on-primary); }
+.m-classbadge--cerrada { background: var(--surface-container); color: var(--on-surface-variant); }
+
+/* Texto de estado pequeño con ícono */
+.m-caption { display: inline-flex; align-items: center; gap: var(--space-1); font: 500 12px/16px var(--font-family); letter-spacing: .5px; color: var(--muted); }
+.m-caption--primary { color: var(--primary); }
+.m-caption--success { color: var(--success); }
+.m-caption--prevent { color: var(--prevent); }
+.m-caption--error { color: var(--error); }
+
+/* Control circular de descarga */
+.m-dl { position: relative; flex: none; width: 44px; height: 44px; display: grid; place-items: center; border-radius: var(--radius-full); border: 1px solid var(--outline-variant);
+  background: transparent; color: var(--on-surface-variant); cursor: pointer; padding: 0; }
+.m-dl:hover:not(:disabled) { background: var(--surface-tint-8-); }
+.m-dl:disabled { cursor: default; }
+.m-dl--done { border-color: transparent; color: var(--success); }
+.m-dl--active, .m-dl--paused, .m-dl--queued { border-color: transparent; color: var(--primary); }
+.m-dl--paused { color: var(--prevent); }
+.m-dl--offline { color: var(--on-surface---30); }
+.m-dl svg.m-dl__ring { position: absolute; inset: 0; transform: rotate(-90deg); }
+.m-dl__ring circle { fill: none; stroke-width: 3; }
+.m-dl__ring .m-dl__track { stroke: var(--surface-container-high); }
+.m-dl__ring .m-dl__value { stroke: currentColor; stroke-linecap: round; transition: stroke-dashoffset var(--motion-base) var(--ease); }
+
+/* Espacio en el teléfono por segmentos */
+.m-spacebar { display: flex; height: 12px; border-radius: var(--radius-full); overflow: hidden; background: var(--surface-container); }
+.m-spacebar span { display: block; height: 100%; }
+.m-legend { display: inline-flex; align-items: center; gap: 6px; font: 400 12px/16px var(--font-family); letter-spacing: .4px; color: var(--paragraph); }
+.m-legend i { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+
+/* Medios (imagen o video de la clase) */
+.m-media { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--space-2); border-radius: 12px; border: 0;
+  background: var(--surface-container); color: var(--on-surface-variant); font: inherit; width: 100%; }
+.m-media--dark { background: var(--inverse-surface); color: var(--inverse-on-surface); }
+.m-media__dur { position: absolute; right: 10px; bottom: 10px; padding: 2px var(--space-2); border-radius: var(--radius-full);
+  background: color-mix(in srgb, var(--inverse-surface) 72%, transparent); color: var(--inverse-on-surface); font: 500 12px/16px var(--font-family); }
+.m-play { width: 48px; height: 48px; border-radius: var(--radius-full); display: grid; place-items: center; background: var(--primary); color: var(--on-primary); }
+.m-media--dark .m-play { background: var(--surface-container-lowest); color: var(--primary); }
+
+/* Recurso (archivo) de la clase */
+.m-resource { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3); border-radius: 12px; border: 1px solid var(--outline-variant);
+  background: var(--surface-container-lowest); color: inherit; font: inherit; text-align: left; width: 100%; }
+button.m-resource { cursor: pointer; }
+button.m-resource:hover { background: var(--surface-tint-5-); }
+.m-resource--off { background: var(--surface-container-low); border-color: var(--surface-container-low); color: var(--muted); }
+
+/* Estado vacío centrado */
+.m-empty { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--space-4); padding: var(--space-5) var(--space-2); text-align: center; }
+.m-circle { flex: none; display: grid; place-items: center; width: var(--s, 56px); height: var(--s, 56px); border-radius: var(--radius-full); background: var(--tone-bg); color: var(--tone-fg); }
+
+/* Burbujas de conversación del Kit */
+.m-bubble { max-width: 280px; padding: var(--space-3) var(--space-4); border-radius: var(--radius-md); font: 400 14px/20px var(--font-family); letter-spacing: .25px; margin: 0; }
+.m-bubble--kit { align-self: flex-start; background: var(--surface-container-lowest); color: var(--paragraph); box-shadow: var(--shadow-card); border-bottom-left-radius: var(--radius-sm); }
+.m-bubble--me { align-self: flex-end; background: var(--primary); color: var(--on-primary); border-bottom-right-radius: var(--radius-sm); }
+
+/* Opción seleccionable de lista (radio o checkbox del sistema sobre una superficie) */
+.m-option { display: flex; align-items: center; min-height: 48px; padding: 0 14px; border-radius: 12px; background: var(--surface-container-low); }
+.m-option:has(input:checked) { background: var(--primary-container); }
+.m-option .ds-choice { flex: 1; min-height: 48px; }
+
+/* Los mensajes del sistema reciben ícono propio y acciones */
+.m-notice .ds-message__body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.m-notice__actions { display: flex; gap: var(--space-2); padding-top: 6px; flex-wrap: wrap; }
+
+/* ── Capas dentro del marco: hoja inferior, diálogo y snackbar ── */
+.m-scrim { position: absolute; z-index: 20; inset: 0; background: color-mix(in srgb, var(--scrim) 32%, transparent); animation: m-fade var(--motion-base) var(--ease); }
+.m-sheet { position: absolute; z-index: 21; left: 0; right: 0; bottom: 0; max-height: 88%; overflow-y: auto; display: flex; flex-direction: column; gap: var(--space-4);
+  padding: var(--space-3) var(--space-5) var(--space-5); border-radius: var(--radius-md) var(--radius-md) 0 0; background: var(--surface-container-lowest);
+  box-shadow: var(--elevation-2); animation: m-up var(--motion-base) var(--ease); }
+.m-sheet__handle { align-self: center; width: 36px; height: 4px; border-radius: var(--radius-full); background: var(--surface-container-highest); flex: none; }
+.m-dialog { position: absolute; z-index: 21; left: var(--space-5); right: var(--space-5); top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: var(--space-4);
+  padding: var(--space-5); border-radius: var(--radius-md); background: var(--surface-container-lowest); box-shadow: var(--elevation-2); animation: m-fade var(--motion-base) var(--ease); }
+.m-dialog__title, .m-sheet__title { margin: 0; color: var(--title); }
+.m-actions { display: flex; flex-direction: column; gap: var(--space-1); }
+.m-toast { position: absolute; z-index: 30; left: var(--space-4); right: var(--space-4); bottom: 96px; display: flex; justify-content: center; animation: m-up var(--motion-base) var(--ease); }
+.m-toast .ds-snackbar { width: 100%; min-width: 0; }
+@keyframes m-fade { from { opacity: 0; } }
+@keyframes m-up { from { transform: translateY(16px); opacity: 0; } }
+
+/* Botones a ancho completo en pantallas móviles */
+.m-phone .ds-btn--block { width: 100%; }

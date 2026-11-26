@@ -1,0 +1,43 @@
+/* Estilos propios del grupo «La clase» (D01–D12). Prefijo cl-, solo tokens. */
+
+/* Control de descarga en la barra superior */
+.cl-dl { display: inline-flex; padding-right: var(--space-1); }
+
+/* Botón de ícono con borde («Página anterior») */
+.m-pagerbar .cl-line { width: 44px; height: 44px; flex: none; border: 1px solid var(--outline-variant); color: var(--on-surface-variant); }
+
+/* Imagen de la clase con «Guardar en mi teléfono» encima */
+.cl-figure { position: relative; }
+.cl-img { min-height: 190px; cursor: pointer; }
+.cl-img:hover { background: var(--surface-container-high); }
+.cl-figure__save.ds-iconbtn { position: absolute; top: var(--space-2); right: var(--space-2); background: var(--surface-container-lowest); color: var(--on-surface-variant); }
+.cl-figure__save.ds-iconbtn:hover:not(:disabled) { background: var(--surface-container-low); }
+
+/* Video y audio */
+.cl-video { aspect-ratio: 16 / 9; text-align: center; padding: var(--space-4); }
+.cl-video .m-caption { color: var(--inverse-on-surface); }
+.cl-play { border: 0; cursor: pointer; flex: none; padding: 0; }
+.m-resource .ds-progress { flex: 1; }
+
+/* Infografía del interactivo con puntos numerados */
+.cl-infografia { min-height: 210px; }
+.cl-hotspot { position: absolute; width: 32px; height: 32px; border-radius: var(--radius-full); border: 2px solid var(--surface-container-lowest); cursor: pointer;
+  background: var(--primary); color: var(--on-primary); font: 500 14px/20px var(--font-family); padding: 0; }
+.cl-hotspot[aria-pressed='true'] { background: var(--secondary-container); color: var(--on-secondary-container); }
+.cl-hotspot--1 { top: 28px; left: 40px; }
+.cl-hotspot--2 { top: 60px; right: 48px; }
+.cl-hotspot--3 { bottom: 32px; left: 72px; }
+.cl-hotspot__label { position: absolute; bottom: var(--space-2); right: var(--space-2); padding: 2px var(--space-2); border-radius: var(--radius-full);
+  background: var(--surface-container-lowest); color: var(--title); }
+
+/* Imagen ampliada (D03): capa oscura sobre la clase */
+.cl-viewer { position: absolute; z-index: 22; inset: 0; display: flex; flex-direction: column; gap: var(--space-4);
+  background: var(--inverse-surface); color: var(--inverse-on-surface); animation: m-fade var(--motion-base) var(--ease); }
+.cl-viewer .ds-iconbtn { width: 44px; height: 44px; color: var(--inverse-on-surface); }
+.cl-viewer .ds-iconbtn:hover { background: color-mix(in srgb, var(--inverse-on-surface) 12%, transparent); }
+.cl-viewer__img.m-media { flex: 1; border-radius: 0; background: color-mix(in srgb, var(--inverse-on-surface) 8%, transparent); color: var(--inverse-on-surface); }
+.cl-viewer .ds-btn--outline { color: var(--inverse-primary); border-color: var(--inverse-primary); background: transparent; }
+
+/* Datos del cuestionario (fecha y tiempo) */
+.cl-info { color: var(--on-surface-variant); align-items: flex-start; }
+.cl-info p { margin: 0; }

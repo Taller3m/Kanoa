@@ -1,0 +1,10 @@
+/* Estilos propios del grupo «Ingreso y sesión» (A01–A06). Solo tokens del sistema. */
+
+.ing-scroll { gap: var(--space-5); padding: 40px var(--space-5); }
+.ing-logo { width: 88px; height: 114px; align-self: center; }
+.ing-mark { align-self: center; display: flex; }
+.ing-center { text-align: center; }
+.ing-actions { display: flex; flex-direction: column; align-items: center; gap: var(--space-1); }
+.ing-pasos { margin: 0; padding: 0; list-style: none; }
+.ing-pasos .m-li { min-height: 52px; }
+
