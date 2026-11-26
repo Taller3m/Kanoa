@@ -1,12 +1,14 @@
-# Publica el prototipo de juegos en GitHub Pages para que todo el equipo pueda verlo sin instalar nada.
-# Pages sirve la rama gh-pages: este workflow compila prototipo-juegos y reemplaza el contenido de esa rama.
-# Se ejecuta en cada push a master o a feature/prototipo-juegos que toque el prototipo, o a mano desde la pestaña Actions.
+# Publica los prototipos en GitHub Pages para que todo el equipo pueda verlos sin instalar nada.
+# Pages sirve la rama gh-pages: este workflow compila los dos proyectos y reemplaza el contenido de esa rama.
+#   - prototipo-juegos      → https://taller3m.github.io/Kanoa/
+#   - aplicacion-kanoa-lab  → https://taller3m.github.io/Kanoa/aplicacion/
+# Se ejecuta en cada push a master, feature/prototipo-juegos o diseño/aplicacion que toque alguno de los dos, o a mano desde la pestaña Actions.
 name: Desplegar prototipo
 
 on:
   push:
-    branches: [master, feature/prototipo-juegos]
-    paths: ['prototipo-juegos/**', '.github/workflows/deploy-prototipo.yml']
+    branches: [master, feature/prototipo-juegos, diseño/aplicacion]
+    paths: ['prototipo-juegos/**', 'aplicacion-kanoa-lab/**', '.github/workflows/deploy-prototipo.yml']
   workflow_dispatch:
 
 permissions:
@@ -25,17 +27,28 @@ jobs:
         with:
           node-version: 22
           cache: npm
-          cache-dependency-path: prototipo-juegos/package-lock.json
-      - name: Compilar
+          cache-dependency-path: |
+            prototipo-juegos/package-lock.json
+            aplicacion-kanoa-lab/package-lock.json
+      - name: Compilar prototipo de juegos
         working-directory: prototipo-juegos
         run: npm ci && npm run build
+      - name: Compilar aplicación Kanoa Lab
+        working-directory: aplicacion-kanoa-lab
+        run: npm ci && npm run build
+      - name: Unir los dos sitios
+        run: |
+          mkdir -p site
+          cp -r prototipo-juegos/dist/. site/
+          mkdir -p site/aplicacion
+          cp -r aplicacion-kanoa-lab/dist/. site/aplicacion/
       - name: Publicar en gh-pages
-        working-directory: prototipo-juegos/dist
+        working-directory: site
         run: |
           touch .nojekyll
           git init -q -b gh-pages
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
-          git commit -q -m "Despliega el prototipo (${GITHUB_REF_NAME} @ ${GITHUB_SHA::7})"
+          git commit -q -m "Despliega los prototipos (${GITHUB_REF_NAME} @ ${GITHUB_SHA::7})"
           git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" gh-pages
