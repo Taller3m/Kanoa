@@ -13,7 +13,7 @@ import { TipoContenido } from './screens/TipoContenido'
 import { ContenidoJuego, type ContDraft } from './screens/ContenidoJuego'
 import { useRoute, type Route } from './router'
 import { PreviewHost, previewBlocker } from './games/PreviewHost'
-import { activosIniciales, lugaresDe, microDe, seccionDe, seedContenidos, sinJuegos, type Activos, type Contenido, type EstadoCont, type TipoContenido as TC } from './portal/data'
+import { activosIniciales, lugarDe, lugaresDe, microDe, seccionDe, seedContenidos, sinJuegos, type Activos, type Contenido, type EstadoCont, type TipoContenido as TC } from './portal/data'
 import { PaginaSeccion } from './portal-web/PaginaSeccion'
 import { seccionPublica } from './portal-web/contrato'
 import './app.css'
@@ -339,11 +339,6 @@ export function App() {
         </nav>
 
         <ContextBar title={title} onBack={back} description={description}
-          badge={screen === 'editor' && draft ? (
-            <span title="El estado se calcula automáticamente">
-              {estadoDe(draft) === 'Completado' ? <StatusTag color="blue" dot>Completado</StatusTag> : <StatusTag type="prevent" dot>Borrador</StatusTag>}
-            </span>
-          ) : undefined}
           actions={<>
             {screen === 'lista' && <Button icon="add" onClick={() => go({ screen: 'tipo' })}>Crear juego</Button>}
             {screen === 'tipo' && <Button variant="outline" onClick={aLista}>Cancelar</Button>}
@@ -358,7 +353,13 @@ export function App() {
         )}
         {screen === 'tipo' && <Tipo onPick={nuevo} />}
         {screen === 'editor' && draft && (
-          <Asistente game={draft} paso={paso} setPaso={setPaso} nombreErr={nombreErr} update={update} toast={toast} clearNombreErr={() => setNombreErr(false)}
+          <div className="editor-estado t-body-md" title="El estado se calcula automáticamente">
+            <strong>Estado:</strong>
+            {estadoDe(draft) === 'Completado' ? <StatusTag color="blue" dot>Completado</StatusTag> : <StatusTag type="prevent" dot>Borrador</StatusTag>}
+          </div>
+        )}
+        {screen === 'editor' && draft && (
+          <Asistente key={`${draft.tipo}-${draft.id ?? 'nuevo'}`} game={draft} paso={paso} setPaso={setPaso} nombreErr={nombreErr} update={update} toast={toast} clearNombreErr={() => setNombreErr(false)}
             onNombreBlur={() => { const n = draft.nombre.trim().length; if (n > 0 && n < 3) setNombreErr(true) }} publicadoEn={publicadoEn(draft)} />
         )}
         {screen === 'secciones' && <Micrositios activos={activos} onAbrir={(m) => go({ screen: 'micrositio', micro: m })} onToggle={(m) => toggleActivo(m, 'micrositio')} onFueraDeAlcance={fueraDeAlcance} />}
@@ -372,7 +373,11 @@ export function App() {
             onVerPortal={() => go({ screen: 'portal', sec: sec.id })} />
         )}
         {screen === 'tipoCont' && <TipoContenido onPick={pickTipoCont} />}
-        {screen === 'contJuego' && cont && <ContenidoJuego draft={cont} setDraft={setContDraft} games={games} publicadoEn={publicadoEn} onVer={openPreview} />}
+        {screen === 'contJuego' && cont && <ContenidoJuego draft={cont} setDraft={setContDraft} games={games} publicadoEn={publicadoEn} onVer={openPreview}
+          edicion={(() => {
+            const c = route.screen === 'contJuego' && route.id != null ? contenidos.find((x) => x.id === route.id) : undefined
+            return c && sec ? { estado: c.estado, lugar: lugarDe(sec) } : undefined
+          })()} />}
       </main>
 
       {toastMsg && (

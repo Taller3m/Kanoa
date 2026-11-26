@@ -1,5 +1,6 @@
 import { Checkbox, Icon, IconButton, Message, TextField } from '../ui'
 import { OTag } from './Seccion'
+import type { EstadoCont } from '../portal/data'
 import { TIPOS, estadoDe } from '../games/registry'
 import { porModificacion } from '../games/base'
 import type { Game, TipoJuego } from '../games/types'
@@ -13,10 +14,12 @@ export interface ContenidoJuegoProps {
   games: Game[]
   publicadoEn: (g: Game) => string[]
   onVer: (g: Game) => void
+  /** Al editar: estado actual del contenido y dónde está, para avisar qué pasa al guardar. */
+  edicion?: { estado: EstadoCont; lugar: string }
 }
 
 /** Formulario «Crear contenido · Juego» (HU-PW-181). */
-export function ContenidoJuego({ draft, setDraft, games, publicadoEn, onVer }: ContenidoJuegoProps) {
+export function ContenidoJuego({ draft, setDraft, games, publicadoEn, onVer, edicion }: ContenidoJuegoProps) {
   const completos = (t: TipoJuego) => games.filter((g) => g.tipo === t && estadoDe(g) === 'Completado')
   // Solo Completados; al editar se conservan visibles los ya seleccionados aunque hoy estén en Borrador, para poder quitarlos.
   const disp = porModificacion(games.filter((g) => g.tipo === draft.tipo && (estadoDe(g) === 'Completado' || (g.id != null && draft.sel.includes(g.id)))))
@@ -25,6 +28,16 @@ export function ContenidoJuego({ draft, setDraft, games, publicadoEn, onVer }: C
   return (
     <section className="screen cont" aria-label="Contenido de tipo Juego">
       <div className="ds-panel cont__form">
+        {/* Propuesta para validar con el PO: la HU-PW-185 no define este aviso al editar un contenido Juego. */}
+        {edicion && (edicion.estado === 'Publicado' ? (
+          <Message title="Este contenido está publicado">
+            Está publicado en {edicion.lugar}. Los cambios se verán de inmediato en el portal al guardar.
+          </Message>
+        ) : (
+          <Message type="prevent" title={`Este contenido está ${edicion.estado.toLowerCase()}`}>
+            Al guardar, el contenido quedará Publicado y se mostrará en {edicion.lugar}. Todos sus juegos deben estar Completados.
+          </Message>
+        ))}
         <TextField label="Título (opcional)" value={draft.titulo} maxLength={150} counter={`${draft.titulo.length}/150`}
           placeholder="Ej. Juega y aprende sobre el café" help="Se muestra sobre el juego en la sección."
           onChange={(e) => { const v = e.target.value; setDraft((d) => ({ ...d, titulo: v })) }} />

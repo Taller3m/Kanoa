@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { Button, Icon, Message, TextArea, TextField } from '../ui'
 import { EDITORES, reqsOf } from '../games/registry'
 import type { Game } from '../games/types'
@@ -21,6 +22,16 @@ export function Asistente({ game, paso, setPaso, nombreErr, update, toast, clear
   const reqs = reqsOf(game)
   const detallesOk = game.nombre.trim().length >= 3
   const configOk = reqs.length > 0 && reqs.every((r) => r.ok)
+  // Un paso se marca con check al salir de él con los datos válidos, no mientras se escribe.
+  // Un juego ya guardado abre con ambos pasos recorridos.
+  const [recorridos, setRecorridos] = useState<{ 1: boolean; 2: boolean }>(() => ({ 1: !!game.id, 2: !!game.id }))
+  useEffect(() => {
+    // App solo deja entrar al paso 2 con el nombre válido, así que llegar ahí confirma Detalles.
+    if (paso === 2) setRecorridos((r) => (r[1] ? r : { ...r, 1: true }))
+    else setRecorridos((r) => (r[1] && !r[2] ? { ...r, 2: true } : r))
+  }, [paso])
+  const hecho = { 1: paso !== 1 && recorridos[1] && detallesOk, 2: paso !== 2 && recorridos[2] && configOk }
+  const pasos = [{ n: 1 as const, t: 'Detalles' }, { n: 2 as const, t: 'Configuración' }]
   return (
     <section className="screen" aria-label={`${game.id ? 'Edición' : 'Creación'} de ${game.tipo.toLowerCase()}`}>
       {publicadoEn.length > 0 && (
@@ -31,13 +42,15 @@ export function Asistente({ game, paso, setPaso, nombreErr, update, toast, clear
         </div>
       )}
       <nav className="stepper" aria-label="Pasos">
-        <button type="button" className={`stepper__step ${detallesOk ? 'stepper__step--done' : ''}`} aria-current={paso === 1 ? 'step' : undefined} onClick={() => setPaso(1)}>
-          <span className="stepper__dot">{detallesOk ? <Icon name="check" size={16} /> : 1}</span>Detalles
-        </button>
-        <span className="stepper__line" aria-hidden="true" />
-        <button type="button" className={`stepper__step ${configOk ? 'stepper__step--done' : ''}`} aria-current={paso === 2 ? 'step' : undefined} onClick={() => setPaso(2)}>
-          <span className="stepper__dot">{configOk ? <Icon name="check" size={16} /> : 2}</span>Configuración
-        </button>
+        {pasos.map(({ n, t }, i) => (
+          <span key={n} className="stepper__item">
+            {i > 0 && <span className="stepper__line" aria-hidden="true" />}
+            <button type="button" className={`stepper__step ${hecho[n] ? 'stepper__step--done' : ''}`} aria-current={paso === n ? 'step' : undefined} onClick={() => setPaso(n)}>
+              <span className="stepper__dot">{hecho[n] ? <Icon name="check" size={18} /> : n}</span>
+              {t}{hecho[n] && <span className="sr-only"> (completo)</span>}
+            </button>
+          </span>
+        ))}
       </nav>
 
       {paso === 1 && (
@@ -64,7 +77,7 @@ export function Asistente({ game, paso, setPaso, nombreErr, update, toast, clear
             <ul>
               {reqs.map((r) => (
                 <li key={r.t} className={r.ok ? 'ok' : undefined}>
-                  <Icon name={r.ok ? 'check_circle' : 'radio_button_unchecked'} size={18} />
+                  <span className="reqs__mark" aria-hidden="true">{r.ok ? <Icon name="check" size={14} /> : <span className="reqs__pend" />}</span>
                   <span><span className="sr-only">{r.ok ? 'Cumplido: ' : 'Pendiente: '}</span>{r.t}</span>
                 </li>
               ))}
