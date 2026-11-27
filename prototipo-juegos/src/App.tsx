@@ -282,9 +282,9 @@ export function App() {
   useEffect(() => { if (screen !== 'portal') document.title = title + ' · Kanoa Lab' }, [title, screen])
 
   const crumbs: Crumb[] = (() => {
-    if (screen === 'lista') return [{ label: RAIZ }, { label: 'Juegos' }]
-    if (screen === 'tipo') return [{ label: RAIZ }, { label: 'Juegos', go: aLista }, { label: 'Crear juego' }]
-    if (screen === 'editor') return [{ label: RAIZ }, { label: 'Juegos', go: cancelar }, { label: accion }]
+    if (screen === 'lista') return [{ label: 'Juegos' }]
+    if (screen === 'tipo') return [{ label: 'Juegos', go: aLista }, { label: 'Crear juego' }]
+    if (screen === 'editor') return [{ label: 'Juegos', go: cancelar }, { label: accion }]
     if (screen === 'micrositio' && micro) return [{ label: RAIZ }, { label: 'Micrositios', go: () => go({ screen: 'secciones' }) }, { label: micro.nombre }]
     if (screen === 'secciones' || !sec) return [{ label: RAIZ }, { label: 'Micrositios' }]
     const enForm = screen === 'contJuego'
